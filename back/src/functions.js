@@ -2,6 +2,7 @@ const { skus, items } = require('./skus');
 const axios = require('axios');
 const arrayChunk = require('array-chunk');
 const { db } = require('./db');
+const { token } = require('./ml');
 let stockResults = [];
 let i = 0;
 const baseUrl =
@@ -97,34 +98,35 @@ function setStock() {
 // updatePrice();
 setStock()
   .then(response => {
-    const token = new Promise((resolve, reject) => {
-      db.query('SELECT access_token FROM token', (err, results) => {
-        if (err) reject(err);
-        resolve(results[0].access_token);
-      });
-    });
+    db.end();
+    const accessToken = token();
+    return Promise.all([response, accessToken]);
+  })
+  .then(res => {
+    console.log(res[0].length);
+    console.log(res[1]);
 
-    return Promise.all([response, token])
-  })
-    .then(res => {
-      console.log(res[0].length)
-      console.log(res[1].length)
-        db.end();
-           Promise.all(res[0].map(item => {
-          return  axios.put(`https://api.mercadolibre.com/items/${item.itemid}`, {
+    Promise.all(
+      res[0].map(item => {
+        return axios.put(
+          `https://api.mercadolibre.com/items/${item.itemid}`,
+          {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${res[1]}`
-           },{
-             "variations": [{
-               "id" : `${item.variationid}`,
-               "available_quantity": `${item.stock}`
-             }]
-           })
-           
-         }))
-         .then(values => console.log(values))
-         .catch(err => console.log(err.response.data));
+            Authorization: `Bearer ${res[1]}`,
+          },
+          {
+            "variations": [
+              {
+                "id": item.variationid,
+                "available_quantity": item.stock,
+              },
+            ],
+          }
+        );
+      })
+    )
+      .then(values => console.log(values))
+      .catch(err => console.log(err.response.data));
   })
-  
+
   .catch(err => console.log(err));
-  
