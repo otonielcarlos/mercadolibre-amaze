@@ -80,7 +80,7 @@ function updatePrice() {
         });
     })
     .catch(error => {
-      console.log('Error en price', error);
+      console.log('Error en price', error.response.data);
       throw error;
     });
 }
@@ -111,21 +111,25 @@ setStock()
         return axios.put(
           `https://api.mercadolibre.com/items/${item.itemid}`,
           {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${res[1]}`,
-          },
-          {
             "variations": [
               {
                 "id": item.variationid,
-                "available_quantity": item.stock,
-              },
-            ],
+                "available_quantity": item.stock
+              }
+            ]
+          },
+          {
+            headers : {
+            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${res[1]}`
           }
+        }
         );
       })
     )
-      .then(values => console.log(values))
+      .then(values => {
+        values.forEach(value => {console.log(value.data.available_quantity)})
+      })
       .catch(err => console.log(err.response.data));
   })
 
