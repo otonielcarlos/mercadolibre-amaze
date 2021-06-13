@@ -103,9 +103,6 @@ setStock()
     return Promise.all([response, accessToken]);
   })
   .then(res => {
-    console.log(res[0].length);
-    console.log(res[1]);
-
     Promise.all(
       res[0].map(item => {
         return axios.put(
