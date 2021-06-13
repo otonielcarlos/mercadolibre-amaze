@@ -97,7 +97,7 @@ function setStock() {
 }
 // updatePrice();
 setStock()
-  .then(response => {
+.then(response => {
     db.end();
     const accessToken = token();
     return Promise.all([response, accessToken]);
@@ -108,26 +108,27 @@ setStock()
         return axios.put(
           `https://api.mercadolibre.com/items/${item.itemid}`,
           {
-            "variations": [
+            variations: [
               {
-                "id": item.variationid,
-                "available_quantity": item.stock
-              }
-            ]
+                id: item.variationid,
+                available_quantity: item.stock,
+              },
+            ],
           },
           {
-            headers : {
-            'Content-Type': 'application/json',
-            "Authorization": `Bearer ${res[1]}`
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${res[1]}`,
+            },
           }
-        }
         );
       })
     )
       .then(values => {
-        values.forEach(value => {console.log(value.data.available_quantity)})
+        values.forEach(value => {
+          console.log(value.data.id, value.data.available_quantity);
+        });
       })
       .catch(err => console.log(err.response.data));
   })
-
   .catch(err => console.log(err));
