@@ -126,7 +126,9 @@ const afterSetStock = response => {
       values.forEach(value => {
         console.log(value.data.id, value.data.available_quantity);
       });
-      console.log(Date.now());
+      const timeElapsed = Date.now();
+const today = new Date(timeElapsed);
+console.log(today.toDateString());
     })
     .catch(err => console.log(err.response.data));
 })
