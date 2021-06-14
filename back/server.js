@@ -14,7 +14,7 @@ updatePrice().then(() => {
   })
   .catch(err => console.log(err));
 
-app.listen(PORT, err => {
-  if (err) console.log(err);
-  console.log(`listening on port: ${PORT}`);
-});
+// app.listen(PORT, err => {
+//   if (err) console.log(err);
+//   console.log(`listening on port: ${PORT}`);
+// });
