@@ -132,8 +132,16 @@ const afterSetStock = response => {
 })
 }
 
-module.exports = {
-  updatePrice,
-  setStock,
-  afterSetStock
-}
+// module.exports = {
+//   updatePrice,
+//   setStock,
+//   afterSetStock
+// }
+
+updatePrice().then(() => {
+  setStock()
+  .then(response => {
+    afterSetStock(response); 
+  })
+})
+.catch(err => console.log(err));
