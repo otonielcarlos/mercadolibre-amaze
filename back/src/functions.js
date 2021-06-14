@@ -19,7 +19,7 @@ const skuChunks = arrayChunk(skus, 50);
 //GET STOCK
 
 // Get PNA Function
-function updatePrice() {
+const updatePrice = () => {
   return axios
     .post(tokenUrl, postFields, header)
     .then(response => response.data.access_token)
@@ -69,14 +69,14 @@ function updatePrice() {
             if (err) console.log(err);
 
             for (let i in data) {
-              let query = `UPDATE appleml SET stock = ${data[i].stock} WHERE sku = ${data[i].sku}`;
+              let query = `UPDATE appleml SET stock = '${data[i].stock}' WHERE sku = '${data[i].sku}'`;
               db.query(query, (err, results) => {
                 if (err) console.log(err.message);
                 console.log('updating...');
               });
             }
           });
-          db.end();
+          // db.end();
         });
     })
     .catch(error => {
@@ -85,7 +85,7 @@ function updatePrice() {
     });
 }
 
-function setStock() {
+const setStock = () => {
   return new Promise((resolve, reject) => {
     const result = [];
     db.query('SELECT * FROM appleml', (err, results) => {
@@ -95,40 +95,45 @@ function setStock() {
     });
   });
 }
-// updatePrice();
-setStock()
-.then(response => {
-    db.end();
-    const accessToken = token();
-    return Promise.all([response, accessToken]);
-  })
-  .then(res => {
-    Promise.all(
-      res[0].map(item => {
-        return axios.put(
-          `https://api.mercadolibre.com/items/${item.itemid}`,
-          {
-            variations: [
-              {
-                id: item.variationid,
-                available_quantity: item.stock,
-              },
-            ],
-          },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${res[1]}`,
+
+const afterSetStock = response => {
+  db.end();
+  const accessToken = token();
+  return Promise.all([response, accessToken])
+.then(res => {
+  Promise.all(
+    res[0].map(item => {
+      return axios.put(
+        `https://api.mercadolibre.com/items/${item.itemid}`,
+        {
+          variations: [
+            {
+              id: item.variationid,
+              available_quantity: item.stock,
             },
-          }
-        );
-      })
-    )
-      .then(values => {
-        values.forEach(value => {
-          console.log(value.data.id, value.data.available_quantity);
-        });
-      })
-      .catch(err => console.log(err.response.data));
-  })
-  .catch(err => console.log(err));
+          ],
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${res[1]}`,
+          },
+        }
+      );
+    })
+  )
+    .then(values => {
+      values.forEach(value => {
+        console.log(value.data.id, value.data.available_quantity);
+      });
+      console.log(Date.now());
+    })
+    .catch(err => console.log(err.response.data));
+})
+}
+
+module.exports = {
+  updatePrice,
+  setStock,
+  afterSetStock
+}

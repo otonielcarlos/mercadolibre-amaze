@@ -25,7 +25,7 @@ const token = () => {
     .catch(err => console.log(err));
 };
 
-token();
+// token();
 module.exports = {
   token,
 };
