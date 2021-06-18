@@ -72,7 +72,7 @@ const updatePrice = () => {
               let query = `UPDATE appleml SET stock = '${data[i].stock}' WHERE sku = '${data[i].sku}'`;
               db.query(query, (err, results) => {
                 if (err) console.log(err.message);
-                console.log('updating...');
+                console.log(`updating... ${data[i].sku} ${data[i].stock}`);
               });
             }
           });
@@ -100,9 +100,11 @@ const afterSetStock = response => {
   db.end();
   const accessToken = token();
   return Promise.all([response, accessToken])
-.then(res => {
+.then(async res => {
+  
   Promise.all(
     res[0].map(item => {
+      
       return axios.put(
         `https://api.mercadolibre.com/items/${item.itemid}`,
         {
@@ -121,7 +123,7 @@ const afterSetStock = response => {
         }
       );
     })
-  )
+    )
     .then(values => {
       values.forEach(value => {
         console.log(value.data.id, value.data.available_quantity);

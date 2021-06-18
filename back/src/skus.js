@@ -66,6 +66,7 @@ const skus = [
   { ingrampartnumber: '4831226', quantity: 1 },
   { ingrampartnumber: '5026953', quantity: 1 },
   { ingrampartnumber: '5027011', quantity: 1 },
+  { ingrampartnumber: '5027033', quantity: 1 },
 ];
 
 const items = [
