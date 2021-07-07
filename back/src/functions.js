@@ -136,12 +136,6 @@ console.log(today.toDateString());
 })
 }
 
-// module.exports = {
-//   updatePrice,
-//   setStock,
-//   afterSetStock
-// }
-
 updatePrice().then(() => {
   setStock()
   .then(response => {

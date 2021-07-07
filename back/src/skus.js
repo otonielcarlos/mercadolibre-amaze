@@ -67,6 +67,35 @@ const skus = [
   { ingrampartnumber: '5026953', quantity: 1 },
   { ingrampartnumber: '5027011', quantity: 1 },
   { ingrampartnumber: '5027033', quantity: 1 },
+  { ingrampartnumber: '5231310', quantity: 1},
+  { ingrampartnumber: '5231322', quantity: 1},
+  { ingrampartnumber: '5231323', quantity: 1},
+  { ingrampartnumber: '5231326', quantity: 1},
+  { ingrampartnumber: '5231324', quantity: 1},
+  { ingrampartnumber: '5231325', quantity: 1},
+  { ingrampartnumber: '5232019', quantity: 1},
+  { ingrampartnumber: '4487567', quantity: 1},
+  { ingrampartnumber: '5114196', quantity: 1},
+  { ingrampartnumber: '5114198', quantity: 1},
+  { ingrampartnumber: '5114200', quantity: 1},
+  { ingrampartnumber: '5063954', quantity: 1},
+  { ingrampartnumber: '5063956', quantity: 1},
+  { ingrampartnumber: '4878504', quantity: 1},
+  { ingrampartnumber: '4681714', quantity: 1},
+  { ingrampartnumber: '4682125', quantity: 1},
+  { ingrampartnumber: '4461906', quantity: 1},
+  { ingrampartnumber: '5026998', quantity: 1},
+  { ingrampartnumber: '5026997', quantity: 1},
+  { ingrampartnumber: '5027034', quantity: 1},
+  { ingrampartnumber: '4461908', quantity: 1},
+  { ingrampartnumber: '4348220', quantity: 1},
+  { ingrampartnumber: '3075291', quantity: 1},
+  { ingrampartnumber: '3578869', quantity: 1},
+  { ingrampartnumber: '3553553', quantity: 1},
+  { ingrampartnumber: '4682130', quantity: 1},
+  { ingrampartnumber: '2918147', quantity: 1},
+  { ingrampartnumber: '5231308', quantity: 1},
+  { ingrampartnumber: '5231309', quantity: 1},
 ];
 
 const items = [
@@ -139,3 +168,5 @@ const items = [
   { sku: '5027011', item: 'MPE445990192' },
 ];
 module.exports = { skus, items };
+
+
