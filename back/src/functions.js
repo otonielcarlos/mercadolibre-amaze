@@ -3,8 +3,9 @@ const axios = require('axios');
 const arrayChunk = require('array-chunk');
 const { db } = require('./db');
 const { token } = require('./ml');
-let stockResults = [];
+const { response } = require('express');
 let i = 0;
+let itemsChunk = [];
 const baseUrl =
   'https://api.ingrammicro.com:443/resellers/v5/catalog/priceandavailability';
 
@@ -15,8 +16,6 @@ const tokenUrl = 'https://api.ingrammicro.com:443/oauth/oauth30/token';
 const postFields =
   'grant_type=client_credentials&client_id=peCS1OtW2QSK8iCAm52bcE6Wl5R8oRci&client_secret=qk4KtGLAF4Qw0f7A';
 const skuChunks = arrayChunk(skus, 50);
-
-//GET STOCK
 
 // Get PNA Function
 const updatePrice = () => {
@@ -61,85 +60,134 @@ const updatePrice = () => {
               }
             )
           );
+
           return array;
         })
         .then(data => {
-          // console.log(data);
-          db.connect(err => {
-            if (err) console.log(err);
-
+          let n = 1;
             for (let i in data) {
+              
               let query = `UPDATE appleml SET stock = '${data[i].stock}' WHERE sku = '${data[i].sku}'`;
               db.query(query, (err, results) => {
+                n++;
                 if (err) console.log(err.message);
-                console.log(`updating... ${data[i].sku} ${data[i].stock}`);
+                console.log(n, 'updating...');
               });
             }
-          });
-          // db.end();
         });
     })
     .catch(error => {
-      console.log('Error en price', error.response.data);
+      console.log('Error en price', error);
       throw error;
     });
-}
-
-const setStock = () => {
+};
+// updatePrice();
+const setStockWithVariationId = () => {
   return new Promise((resolve, reject) => {
     const result = [];
-    db.query('SELECT * FROM appleml', (err, results) => {
-      if (err) reject(err);
-      const newp = results.map(prod => prod);
-      resolve(newp);
-    });
+    db.query(
+      'SELECT * FROM appleml WHERE itemid IS NOT NULL AND variationid IS NOT NULL',
+      (err, results) => {
+        if (err) reject(err);
+        const newp = results.map(prod => prod);
+        resolve(newp);
+      }
+    );
   });
-}
+};
 
-const afterSetStock = response => {
-  db.end();
+
+const afterSetStockVariation = response => {
+
   const accessToken = token();
   return Promise.all([response, accessToken])
-.then(async res => {
-  
-  Promise.all(
-    res[0].map(item => {
-      
-      return axios.put(
-        `https://api.mercadolibre.com/items/${item.itemid}`,
-        {
-          variations: [
-            {
-              id: item.variationid,
-              available_quantity: item.stock,
-            },
-          ],
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${res[1]}`,
-          },
-        }
-      );
-    })
-    )
-    .then(values => {
-      values.forEach(value => {
-        console.log(value.data.id, value.data.available_quantity);
-      });
-      const timeElapsed = Date.now();
-const today = new Date(timeElapsed);
-console.log(today.toDateString());
-    })
-    .catch(err => console.log(err.response.data));
-})
-}
-
-updatePrice().then(() => {
-  setStock()
-  .then(response => {
-    afterSetStock(response); 
+    .then(res => {
+      let respromises = [];
+          let p = 0;
+        for(let i in res[0]){ 
+          p++;
+          setTimeout(async () => {
+             try{
+              const result = await axios.put(`https://api.mercadolibre.com/items/${res[0][i].itemid}`, {variations: [{id: res[0][i].variationid, available_quantity: res[0][i].stock,},],},
+              {headers: {'Content-Type': 'application/json',Authorization: `Bearer ${res[1]}`,},})
+              respromises.push(result.data)
+              console.log(i,'success variation:' ,result.data.id ,'status: '+result.status);
+               }catch(err){
+                 console.log('failed variation',res[0][i].itemid,err.response.status)}
+                }, 1000 * i)
+            }
+          return respromises;
   })
+    .then(values => {
+      console.log(values.length);
+      let d = new Date();
+      let n = d.getHours();
+      let m = d.getMinutes();
+      console.log(`updated variations ${n}:${m}`)
+    })
+    .catch(err => console.log(err))
+
+};
+
+const setStockWithItemId = () => {
+  return new Promise((resolve, reject) => {
+    const result = [];
+    db.query(
+      'SELECT * FROM appleml WHERE itemid IS NOT NULL AND variationid IS NULL',
+      (err, results) => {
+        if (err) reject(err);
+        const newp = results.map(prod => prod);
+        resolve(newp);
+      }
+    );
+  });
+};
+
+
+const afterSetStockItem = response => {
+  const accessToken = token();
+  return Promise.all([response, accessToken])
+    .then(res => {
+      
+      let chunksOfProducts =  arrayChunk(res[0],60);
+      let respromises = [];
+      let p = 0;
+      for(let i in res[0]){ 
+        p++;
+        setTimeout(async () => {
+           try{
+            const result = await axios.put(`https://api.mercadolibre.com/items/${res[0][i].itemid}`, {available_quantity: res[0][i].stock},
+            {headers: {'Content-Type': 'application/json',Authorization: `Bearer ${res[1]}`,},})
+            respromises.push(result.data)
+            console.log(i,'success item:' ,result.data.id ,'status: ' + result.status);
+             }catch(err){
+               console.log(i, 'failed item: ',res[0][i].itemid,err.response.status)}
+              }, 1000 * i)
+          }
+        return respromises;
+  })
+    .then(values => {
+      console.log(values.length);
+      let d = new Date();
+      let n = d.getHours();
+      let m = d.getMinutes();
+      console.log(`updated variations ${n}:${m}`)
+    })
+    .catch(err => console.log(err.data))
+
+};
+
+updatePrice().then(async () => {
+ try
+  {
+    const response = await setStockWithVariationId();
+    afterSetStockVariation(response);
+    const response_2 = await setStockWithItemId();
+    afterSetStockItem(response_2);
+    return db.end();
+  } catch (err)
+  {
+    return console.log(err);
+  }
 })
 .catch(err => console.log(err));
