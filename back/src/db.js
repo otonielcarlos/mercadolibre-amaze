@@ -7,5 +7,15 @@ const db = mysql.createConnection({
   database: 'heroku_7e25e9ab702a7da',
 });
 
+const findOrder = id => {
+  return new Promise((resolve, reject) => {
+    db.query(`SELECT orderid from orders WHERE orderid = '${id}'`, (err, results) =>{
+      if(err) reject(err);
+      let result = results.length === 0 ? undefined : results[0].orderid;
+      resolve(result)
+    })
+    db.end();
+  })
+}
 
-module.exports = { db };
+module.exports = { db, findOrder };

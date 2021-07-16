@@ -1,7 +1,6 @@
-const { skus, items } = require('./skus');
 const axios = require('axios');
 const arrayChunk = require('array-chunk');
-const { db } = require('./db');
+const { findOrder } = require('./db');
 const { token } = require('./ml');
 const { response } = require('express');
 let i = 0;
@@ -15,179 +14,89 @@ const header = {
 const tokenUrl = 'https://api.ingrammicro.com:443/oauth/oauth30/token';
 const postFields =
   'grant_type=client_credentials&client_id=peCS1OtW2QSK8iCAm52bcE6Wl5R8oRci&client_secret=qk4KtGLAF4Qw0f7A';
-const skuChunks = arrayChunk(skus, 50);
+const mlUrl = 'https://api.mercadolibre.com/orders/search?seller=766642543';
 
-// Get PNA Function
-const updatePrice = () => {
-  return axios
-    .post(tokenUrl, postFields, header)
-    .then(response => response.data.access_token)
-    .then(token => {
-      return Promise.all(
-        skuChunks.map(chunk => {
-          let requestObject = {
-            servicerequest: {
-              requestpreamble: {
-                customernumber: '325831',
-                isocountrycode: 'PE',
-              },
-              priceandstockrequest: {
-                showwarehouseavailability: 'True',
-                extravailabilityflag: 'Y',
-                item: chunk,
-                includeallsystems: false,
-              },
-            },
-          };
-          return axios.post(baseUrl, requestObject, {
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
-          });
-        })
-      )
-        .then(res => {
-          let array = [];
-          res.forEach(prod =>
-            prod.data.serviceresponse.priceandstockresponse.details.forEach(
-              sku => {
-                array.push({
-                  sku: sku.ingrampartnumber,
-                  stock: sku.warehousedetails[0].availablequantity,
-                });
-              }
-            )
-          );
+async function getOrders() {
+  try {
+    let access_token = await token();
+    let orderId = await axios.get(mlUrl, { headers: {'Authorization': `Bearer ${access_token}`}})
+    const orderURL = `https://api.mercadolibre.com/orders/${orderId.data.results[0].payments[0].order_id}`
+    let order = await axios.get(orderURL,{ headers: {'Authorization': `Bearer ${access_token}`}})
+    let shippingURL = `https://api.mercadolibre.com/shipments/${order.data.shipping.id}`
+    let shipping = await axios.get(shippingURL, { headers: {'Authorization': `Bearer ${access_token}`}})
+    const id = order.data.id;
+    const NV = `ML_${id}`;
 
-          return array;
-        })
-        .then(data => {
-          let n = 1;
-            for (let i in data) {
-              
-              let query = `UPDATE appleml SET stock = '${data[i].stock}' WHERE sku = '${data[i].sku}'`;
-              db.query(query, (err, results) => {
-                n++;
-                if (err) console.log(err.message);
-                console.log(n, 'updating...');
-              });
-            }
-        });
-    })
-    .catch(error => {
-      console.log('Error en price', error);
-      throw error;
-    });
-};
-// updatePrice();
-const setStockWithVariationId = () => {
-  return new Promise((resolve, reject) => {
-    const result = [];
-    db.query(
-      'SELECT * FROM appleml WHERE itemid IS NOT NULL AND variationid IS NOT NULL',
-      (err, results) => {
-        if (err) reject(err);
-        const newp = results.map(prod => prod);
-        resolve(newp);
-      }
-    );
-  });
-};
+    const address = shipping.data.receiver_address.address_line;
+    const shipTo = address.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+    const fName = order.data.buyer.first_name;
+    const firstName = fName.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+    const sName = order.data.buyer.last_name;
+    const lastName = sName.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+    const phoneNumber = order.data.buyer.phone.number;
+    const zipCode = shipping.data.receiver_address.zip_code;
+    const sku = order.data.order_items[0].item.seller_sku;
+    let city = shipping.data.receiver_address.city.name;
 
+    switch (city) {
+      case 'Amazonas': city = "01"; break;
+      case 'Ancash': city = "02"; break;
+      case 'Apurimac': city = "03"; break;
+      case 'Arequipa': city = "04"; break;
+      case 'Ayacucho': city = "05"; break;
+      case 'Cajamarca': city = "06"; break;
+      case 'Callao': city = "07"; break;
+      case 'Cusco': city = "08"; break;
+      case 'Huancavelica': city = "09"; break;
+      case 'Huanuco': city = "10"; break;
+      case 'Ica': city = "11"; break;
+      case 'Junin': city = "12"; break;
+      case 'La Libertad': city = "13"; break;
+      case 'Lambayeque': city = "14"; break;
+      case 'Lima': city = "15"; break;
+      case 'Loreto': city = "16"; break;
+      case 'Madre de Dios': city = "17"; break;
+      case 'Moquegua': city = "18"; break;
+      case 'Pasco': city = "19"; break;
+      case 'Piura': city = "20"; break;
+      case 'Puno': city = "21"; break;
+      case 'San Martin': city = "22"; break;
+      case 'Tacna': city = "23"; break;
+      case 'Tumbes': city = "24"; break;
+      case 'Ucayali': city = "25"; break;
+    }
 
-const afterSetStockVariation = response => {
+    let addressline1 = '';
+    let addressline2 = '';
 
-  const accessToken = token();
-  return Promise.all([response, accessToken])
-    .then(res => {
-      let respromises = [];
-          let p = 0;
-        for(let i in res[0]){ 
-          p++;
-          setTimeout(async () => {
-             try{
-              const result = await axios.put(`https://api.mercadolibre.com/items/${res[0][i].itemid}`, {variations: [{id: res[0][i].variationid, available_quantity: res[0][i].stock,},],},
-              {headers: {'Content-Type': 'application/json',Authorization: `Bearer ${res[1]}`,},})
-              respromises.push(result.data)
-              console.log(i,'success variation:' ,result.data.id ,'status: '+result.status);
-               }catch(err){
-                 console.log('failed variation',res[0][i].itemid,err.response.status)}
-                }, 1000 * i)
-            }
-          return respromises;
-  })
-    .then(values => {
-      console.log(values.length);
-      let d = new Date();
-      let n = d.getHours();
-      let m = d.getMinutes();
-      console.log(`updated variations ${n}:${m}`)
-    })
-    .catch(err => console.log(err))
+    if(shipTo.length > 35){
+      addressline1 = shipTo.slice(0, 35);
+      addressline2 = shipTo.slice(36, shipTo.length);
+    } else {
+      addressline1 = shipTo
+      addressline2 = '';
+    }
 
-};
+let orderIdentifier = await findOrder(id);
 
-const setStockWithItemId = () => {
-  return new Promise((resolve, reject) => {
-    const result = [];
-    db.query(
-      'SELECT * FROM appleml WHERE itemid IS NOT NULL AND variationid IS NULL',
-      (err, results) => {
-        if (err) reject(err);
-        const newp = results.map(prod => prod);
-        resolve(newp);
-      }
-    );
-  });
-};
+if(orderIdentifier === undefined){
 
+  console.log('customerpo: ', NV);
+  console.log('name1:', firstName.concat(" ", lastName));
+  console.log('phonenumber: ', phoneNumber);
+  console.log('addressline1:', addressline1)
+  console.log('addressline2:', addressline2)
+  console.log('ZIP:', zipCode)
+  console.log('City:', city)
+  console.log('sku', sku);
+} else {
+  console.log( orderIdentifier,'ya está en base de datos')
+}
 
-const afterSetStockItem = response => {
-  const accessToken = token();
-  return Promise.all([response, accessToken])
-    .then(res => {
-      
-      let chunksOfProducts =  arrayChunk(res[0],60);
-      let respromises = [];
-      let p = 0;
-      for(let i in res[0]){ 
-        p++;
-        setTimeout(async () => {
-           try{
-            const result = await axios.put(`https://api.mercadolibre.com/items/${res[0][i].itemid}`, {available_quantity: res[0][i].stock},
-            {headers: {'Content-Type': 'application/json',Authorization: `Bearer ${res[1]}`,},})
-            respromises.push(result.data)
-            console.log(i,'success item:' ,result.data.id ,'status: ' + result.status);
-             }catch(err){
-               console.log(i, 'failed item: ',res[0][i].itemid,err.response.status)}
-              }, 1000 * i)
-          }
-        return respromises;
-  })
-    .then(values => {
-      console.log(values.length);
-      let d = new Date();
-      let n = d.getHours();
-      let m = d.getMinutes();
-      console.log(`updated variations ${n}:${m}`)
-    })
-    .catch(err => console.log(err.data))
-
-};
-
-updatePrice().then(async () => {
- try
-  {
-    const response = await setStockWithVariationId();
-    afterSetStockVariation(response);
-    const response_2 = await setStockWithItemId();
-    afterSetStockItem(response_2);
-    return db.end();
-  } catch (err)
-  {
-    return console.log(err);
+    
+  } catch (error) {
+    console.log(error);
   }
-})
-.catch(err => console.log(err));
+}
+
+getOrders();
