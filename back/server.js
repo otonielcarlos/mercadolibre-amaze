@@ -10,17 +10,17 @@ app.use(cors());
 app.use(express.json());
 const PORT = process.env.PORT || 4000;
 
-// app.post('/callbacks', async (req, res) => {
-//   try {
-//     const { resource, topic } = req.body
-//       res.status(200).send();
-//       await sendMessage(resource);
+app.post('/callbacks', async (req, res) => {
+  try {
+    const { resource, topic } = req.body
+      res.status(200).send();
+      // await sendMessage(resource);
+console.log(req.body);
 
-
-//   } catch (error) {
-//     console.log(error);
-//   }
-// })
+  } catch (error) {
+    console.log(error);
+  }
+})
 
 app.listen(PORT, err => {
   if (err) {
