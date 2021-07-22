@@ -19,7 +19,6 @@ app.post('/callbacks', async (req, res) => {
         // await sendMessage(resource);
         console.log(req.body);
       }
-
   } catch (error) {
     console.log(error);
   }
