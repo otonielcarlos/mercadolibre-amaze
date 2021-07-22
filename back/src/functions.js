@@ -119,7 +119,6 @@ const afterSetStockVariation = response => {
           return respromises;
   })
     .then(values => {
-      console.log(values.length);
       let d = new Date();
       let n = d.getHours();
       let m = d.getMinutes();
@@ -167,7 +166,6 @@ const afterSetStockItem = response => {
         return respromises;
   })
     .then(values => {
-      console.log(values.length);
       let d = new Date();
       let n = d.getHours();
       let m = d.getMinutes();

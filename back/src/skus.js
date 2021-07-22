@@ -96,6 +96,9 @@ const skus = [
   { ingrampartnumber: '2918147', quantity: 1},
   { ingrampartnumber: '5231308', quantity: 1},
   { ingrampartnumber: '5231309', quantity: 1},
+  { ingrampartnumber: '5196300', quantity: 1},
+  { ingrampartnumber: '5196299', quantity: 1},
+  { ingrampartnumber: '5196288', quantity: 1},
 ];
 
 const items = [
