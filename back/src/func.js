@@ -1,8 +1,7 @@
 const axios = require('axios');
 const arrayChunk = require('array-chunk');
-const { findOrder } = require('./db');
+const { findOrder, closeDB, db } = require('./db');
 const { token } = require('./ml');
-// const { response } = require('express');
 let i = 0;
 let itemsChunk = [];
 const baseUrl =
@@ -16,14 +15,15 @@ const postFields =
   'grant_type=client_credentials&client_id=peCS1OtW2QSK8iCAm52bcE6Wl5R8oRci&client_secret=qk4KtGLAF4Qw0f7A';
 const mlUrl = 'https://api.mercadolibre.com/orders/search?seller=766642543';
 
-async function getOrders() {
+const getOrders = async (resource) => {
   try {
     let access_token = await token();
     let orderId = await axios.get(mlUrl, { headers: {'Authorization': `Bearer ${access_token}`}})
-    const orderURL = `https://api.mercadolibre.com/orders/${orderId.data.results[0].payments[0].order_id}`
+    const orderURL = `https://api.mercadolibre.com/${resource}`
     let order = await axios.get(orderURL,{ headers: {'Authorization': `Bearer ${access_token}`}})
     let shippingURL = `https://api.mercadolibre.com/shipments/${order.data.shipping.id}`
     let shipping = await axios.get(shippingURL, { headers: {'Authorization': `Bearer ${access_token}`}})
+    let city = shipping.data.receiver_address.city.name;
     let state = shipping.data.receiver_address.city.name;
     switch (state) {
       case 'Amazonas': state = "01"; break;
@@ -51,6 +51,7 @@ async function getOrders() {
       case 'Tacna': state = "23"; break;
       case 'Tumbes': state = "24"; break;
       case 'Ucayali': state = "25"; break;
+      default: state = "15";
     }
     const id = order.data.id;
     const customerPo = `ML_${id}`;
@@ -60,9 +61,11 @@ async function getOrders() {
     const firstName = fName.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
     const sName = order.data.buyer.last_name;
     const lastName = sName.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+    const name1 = `${firstName} ${lastName}`
     const phoneNumber = order.data.buyer.phone.number;
     const zipCode = shipping.data.receiver_address.zip_code;
     const sku = order.data.order_items[0].item.seller_sku;
+    const quantity = order.data.order_items[0].quantity;  
     
     let addressline1 = '';
     let addressline2 = '';
@@ -86,14 +89,14 @@ if(orderIdentifier === undefined){
         "customernumber": "325831"
       },
       "ordercreatedetails": {
-        "customerponumber": `"${customerPo}"`,
+        "customerponumber": `${customerPo}`,
         "shiptoaddress": {
-          "name1": `"${name1}"`,
-          "addressline1": `"${addressline1}"`,
-          "addressline2": `"${addressline2}"`,
-          "city": "Long Beach",
-          "state": `"${state}"`,
-          "postalcode": `"${zipCode}"`,
+          "name1": `${name1}`,
+          "addressline1": `${addressline1}`,
+          "addressline2": `${addressline2}`,
+          "city": `${city}`,
+          "state": `${state}`,
+          "postalcode": `${zipCode}`,
           "countrycode": "PE"
         },
         "carriercode": "E1",
@@ -101,37 +104,33 @@ if(orderIdentifier === undefined){
           {
             "linetype": "P",
             "linenumber": "001",
-            "quantity": "1",
-            "ingrampartnumber": `"${sku}"`
+            "quantity": `${quantity}`,
+            "ingrampartnumber": `${sku}`
           }
         ]
       }
     }
 }
 
-  let ingramToken = await axios.post(tokenUrl, postFields, header)
-  let responseFromIngram = await axios.post(baseUrl, data, {
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${ingramToken}`,
-    },
-  }); 
+//   let ingramToken = await axios.post(tokenUrl, postFields, header)
+//   let responseFromIngram = await axios.post(baseUrl, data, {
+//     headers: {
+//       Accept: 'application/json',
+//       'Content-Type': 'application/json',
+//       Authorization: `Bearer ${ingramToken}`,
+//     },
+//   }); 
 
-  console.log('customerpo: ', customerPo);
-  console.log('name1:', firstName.concat(" ", lastName));
-  console.log('phonenumber: ', phoneNumber);
-  console.log('addressline1:', addressline1)
-  console.log('addressline2:', addressline2)
-  console.log('ZIP:', zipCode)
-  console.log('State:', state)
-  console.log('sku', sku);
+const typeRes = typeof data;
+return typeRes;
+
+  console.log({ data: data.ordercreaterequest.ordercreatedetails });
 } else {
-  console.log( orderIdentifier,'ya está en base de datos')
+  console.log(orderIdentifier,'ya está en base de datos')
 }
   } catch (error) {
     console.log(error);
   }
 }
 
-getOrders();
+module.exports = { getOrders };
