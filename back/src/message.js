@@ -17,14 +17,14 @@ const { token } = require('./ml');
         "to": {
           "user_id": `${res.data.buyer.id}`
         },
-        "text": `"¡Hola, gracias por tu compra! Para agilizar tu envio necesitamos tu ayuda con los siguientes datos:
+        "text": `¡Hola, gracias por tu compra! Para agilizar tu envio necesitamos tu ayuda con los siguientes datos:
         -  Nombre completo
         -  Dirección
         -  Número de celular
         -  DNI
         -  ¿Requieres factura? Compártenos tus datos fiscales.
         
-        Con gusto te atendemos de Lunes a Viernes de 9am a 6pm, cualquier duda, estamos para ayudarte. ¡Disfruta tu producto!"`
+        Con gusto te atendemos de Lunes a Viernes de 9am a 6pm, cualquier duda, estamos para ayudarte. ¡Disfruta tu producto!`
       }
        let orderId = res.data.id;
        let messUrl = `https://api.mercadolibre.com/messages/packs/${orderId}/sellers/766642543`
@@ -40,14 +40,14 @@ const { token } = require('./ml');
           "to": {
             "user_id": `${res.data.buyer.id}`
           },
-          "text": `"¡Hola, gracias por tu compra! Para agilizar tu envio necesitamos tu ayuda con los siguientes datos:
+          "text": `¡Hola, gracias por tu compra! Para agilizar tu envio necesitamos tu ayuda con los siguientes datos:
           -  Nombre completo
           -  Dirección
           -  Número de celular
           -  DNI
           -  ¿Requieres factura? Compártenos tus datos fiscales.
           
-          Con gusto te atendemos de Lunes a Viernes de 9am a 6pm, cualquier duda, estamos para ayudarte. ¡Disfruta tu producto!"`
+          Con gusto te atendemos de Lunes a Viernes de 9am a 6pm, cualquier duda, estamos para ayudarte. ¡Disfruta tu producto!`
         }
         let orderId = res.data.pack_id;
         let messUrl = `https://api.mercadolibre.com/messages/packs/${orderId}/sellers/766642543`
