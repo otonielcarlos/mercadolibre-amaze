@@ -19,7 +19,7 @@ app.post('/callbacks', async (req, res) => {
       console.log(responseMessage);
     } else {
       res.status(200).send();
-      console.log('send status to another post different than an order')
+      console.log('sent status to another post different than an order', req.body);
     }
   } catch (error) {
     console.log(error);
