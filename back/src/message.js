@@ -29,6 +29,8 @@ const { token } = require('./ml');
        let orderId = res.data.id;
        let messUrl = `https://api.mercadolibre.com/messages/packs/${orderId}/sellers/766642543`
        let messageResponse = await axios.post(messUrl, messageData, { headers: { 'Authorization': `Bearer ${access_token}`, 'cache-control': 'no-cache', 'content-type' : 'application/json' }})
+       console.log(messageResponse.data)
+       console.log('enviado con éxito')
        return messageResponse;
       } else {
         let messageData = {
@@ -50,6 +52,8 @@ const { token } = require('./ml');
         let orderId = res.data.pack_id;
         let messUrl = `https://api.mercadolibre.com/messages/packs/${orderId}/sellers/766642543`
         let messageResponse = await axios.post(messUrl, messageData, { headers: { 'Authorization': `Bearer ${access_token}`, 'cache-control': 'no-cache', 'content-type' : 'application/json' }})
+        console.log(messageResponse.data)
+        console.log('enviado con éxito')
         return messageResponse;
       }
      
