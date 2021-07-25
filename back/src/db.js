@@ -1,5 +1,5 @@
 const mysql = require('mysql2');
-mysql2://bluediamond:4getdBD2018@173.231.198.187/bluediamond_appleperu
+// mysql2://bluediamond:4getdBD2018@173.231.198.187/bluediamond_appleperu
 const db = mysql.createPool({
   host: '173.231.198.187',
   user: 'bluediamond',
