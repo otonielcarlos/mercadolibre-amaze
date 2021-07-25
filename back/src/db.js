@@ -1,5 +1,15 @@
 const mysql = require('mysql2');
+
 const db = mysql.createPool({
+  host: 'us-cdbr-east-04.cleardb.com',
+  user: 'b5335c6b8fd89c',
+  password: '57f435d5',
+  database: 'heroku_7e25e9ab702a7da',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
+});
+const db_ = mysql.createPool({
   host: '173.231.198.187',
   user: 'bluediamond_appleperu',
   password: '.-.bdi-2020.-.',
