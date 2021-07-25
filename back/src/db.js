@@ -1,4 +1,5 @@
 const mysql = require('mysql2');
+const { resource } = require('../server');
 
 const db = mysql.createPool({
   host: 'us-cdbr-east-04.cleardb.com',
@@ -33,10 +34,24 @@ const findOrder = id => {
   })
 }
 
-const closeDB = () => {
+const saveNewOrderID = (id) => {
   return new Promise((resolve, reject) => {
-    resolve(db.end())
+    
+    const saveDate = new Date()
+    let day = saveDate.toISOString().split('T')[0];
+
+    db.query(`INSERT INTO orders VALUES ('${id}', ${day})`, (err, results) => {
+      if(err) {
+        console.log(err);
+        reject(err);
+      }
+       console.log(results);
+       resolve(results);
+
+    })
+    db.end();
   })
+  
 }
 
-module.exports = { findOrder, db, closeDB };
+module.exports = { findOrder, db, saveNewOrderID };

@@ -2,7 +2,7 @@ const { default: axios } = require('axios');
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const { db } = require('./src/db');
+const { db, saveNewOrderID } = require('./src/db');
 // const { getOrders } = require('./src/func');
 const { sendMessage } = require('./src/message');
 
@@ -22,7 +22,9 @@ app.post('/callbacks', async (req, res) => {
 
       res.status(200).send();
       // let responseMessage = await sendMessage(resource);
-      console.log('New Order Alert', req.body);
+      let id = resource.slice(8, resource.length);
+      let saveId = await saveNewOrderID(id);
+      console.log('New Order Alert', saveId);
       // console.log(responseMessage);
     } else {
       res.status(200).send();
