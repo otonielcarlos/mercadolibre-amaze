@@ -1,10 +1,10 @@
 const mysql = require('mysql2');
-
+mysql2://bluediamond:4getdBD2018@173.231.198.187/bluediamond_appleperu
 const db = mysql.createPool({
-  host: 'us-cdbr-east-04.cleardb.com',
-  user: 'b5335c6b8fd89c',
-  password: '57f435d5',
-  database: 'heroku_7e25e9ab702a7da',
+  host: '173.231.198.187',
+  user: 'bluediamond',
+  password: '4getdBD2018',
+  database: 'bluediamond_appleperu',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0

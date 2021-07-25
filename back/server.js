@@ -12,17 +12,20 @@ const PORT = process.env.PORT || 4000;
 
 app.post('/callbacks', async (req, res) => {
   try {
-    const { resource, topic, applicationId } = req.body;
+    const { resource, topic } = req.body;
     res.status(200).send();
-    if (topic === 'orders_v2' && applicationId === '2796079999742920') {
-      let responseMessage = await sendMessage(resource);
-      console.log(responseMessage);
+    if (topic === 'orders_v2') {
+
+      res.status(200).send();
+      // let responseMessage = await sendMessage(resource);
+      console.log('New Order Alert', req.body);
+      // console.log(responseMessage);
     } else {
       res.status(200).send();
       console.log('sent status to another post different than an order', req.body);
     }
   } catch (error) {
-    console.log(error);
+    console.log(error); 
   }
 });
 
