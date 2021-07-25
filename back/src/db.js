@@ -1,16 +1,17 @@
 const mysql = require('mysql2');
 const { resource } = require('../server');
 
-const db = mysql.createPool({
+//DATABASE URL mysql2://bluediamond:4getdBD2018@173.231.198.187/bluediamond_appleperu?reconnect=true
+
+const db = mysql.createConnection({
+  connectionLimit: 10,
   host: 'us-cdbr-east-04.cleardb.com',
   user: 'b5335c6b8fd89c',
   password: '57f435d5',
   database: 'heroku_7e25e9ab702a7da',
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
+
 });
-const db_ = mysql.createPool({
+const db_last = mysql.createPool({
   host: '173.231.198.187',
   user: 'bluediamond_appleperu',
   password: '.-.bdi-2020.-.',
@@ -40,14 +41,14 @@ const saveNewOrderID = (id) => {
     const saveDate = new Date()
     let day = saveDate.toISOString().split('T')[0];
 
-    db.query(`INSERT INTO orders VALUES ('${id}', ${day})`, (err, results) => {
+    db.query(`INSERT INTO orders VALUES ('${id}', '${day}')`, (err, results) => {
       if(err) {
-        console.log(err);
-        reject(err);
+        console.log(`Id ${id} no insertado`,err);
+        reject(false);
+      }  else {
+       console.log(`Id ${id} insertado el ${day}`);
+       resolve(true);
       }
-       console.log(results);
-       resolve(results);
-
     })
     db.end();
   })

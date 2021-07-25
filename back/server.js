@@ -2,8 +2,8 @@ const { default: axios } = require('axios');
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const { db, saveNewOrderID } = require('./src/db');
-// const { getOrders } = require('./src/func');
+const { db, saveNewOrderID, findOrder } = require('./src/db');
+const { addOrder } = require('./src/func');
 const { sendMessage } = require('./src/message');
 
 app.use(cors());
@@ -17,14 +17,19 @@ app.get('/', (req, res) => {
 app.post('/callbacks', async (req, res) => {
   try {
     const { resource, topic } = req.body;
-    res.status(200).send();
-    if (topic === 'orders_v2') {
+    if (topic === "orders_v2") {
 
-      res.status(200).send();
+      res.status(200).send(req.body);
       // let responseMessage = await sendMessage(resource);
       let id = resource.slice(8, resource.length);
-      let saveId = await saveNewOrderID(id);
-      console.log('New Order Alert', saveId);
+      let isOrder = await findOrder(id);
+       if(isOrder === undefined){
+        // addOrder(id)
+        // let responseMessage = await sendMessage(resource);
+       await saveNewOrderID(id)
+        }
+      //console.log('New Order Alert', saveId);
+     
       // console.log(responseMessage);
     } else {
       res.status(200).send();
