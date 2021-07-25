@@ -11,7 +11,7 @@ app.use(express.json());
 const PORT = process.env.PORT || 4000;
 
 app.get('/', (req, res) => {
-  res.status(200).send('Ok');
+  res.status(200).send({"status": "OK"});
 })
 
 app.post('/callbacks', async (req, res) => {

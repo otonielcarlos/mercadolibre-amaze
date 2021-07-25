@@ -1,9 +1,8 @@
 const mysql = require('mysql2');
-// mysql2://bluediamond:4getdBD2018@173.231.198.187/bluediamond_appleperu
 const db = mysql.createPool({
   host: '173.231.198.187',
-  user: 'bluediamond',
-  password: '4getdBD2018',
+  user: 'bluediamond_appleperu',
+  password: '.-.bdi-2020.-.',
   database: 'bluediamond_appleperu',
   waitForConnections: true,
   connectionLimit: 10,
@@ -26,7 +25,7 @@ const findOrder = id => {
 
 const closeDB = () => {
   return new Promise((resolve, reject) => {
-    resolve(db.end)
+    resolve(db.end())
   })
 }
 
