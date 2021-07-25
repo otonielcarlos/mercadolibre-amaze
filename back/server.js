@@ -10,6 +10,10 @@ app.use(cors());
 app.use(express.json());
 const PORT = process.env.PORT || 4000;
 
+app.get('/', (req, res) => {
+  res.status(200).send('Ok');
+})
+
 app.post('/callbacks', async (req, res) => {
   try {
     const { resource, topic } = req.body;
