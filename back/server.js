@@ -23,14 +23,11 @@ app.post('/callbacks', async (req, res) => {
       // let responseMessage = await sendMessage(resource);
       let id = resource.slice(8, resource.length);
       let isOrder = await findOrder(id);
-       if(isOrder === undefined){
+       if(isOrder === 'undefined'){
         // addOrder(id)
         // let responseMessage = await sendMessage(resource);
        await saveNewOrderID(id)
         }
-      //console.log('New Order Alert', saveId);
-     
-      // console.log(responseMessage);
     } else {
       res.status(200).send();
       console.log('sent status to another post different than an order', req.body);

@@ -3,7 +3,7 @@ const { resource } = require('../server');
 
 //DATABASE URL mysql2://bluediamond:4getdBD2018@173.231.198.187/bluediamond_appleperu?reconnect=true
 
-const db = mysql.createConnection({
+const db = mysql.createPool({
   connectionLimit: 10,
   host: 'us-cdbr-east-04.cleardb.com',
   user: 'b5335c6b8fd89c',
@@ -22,25 +22,25 @@ const db_last = mysql.createPool({
 });
 
 const findOrder = id => {
+  // db.connect();
   return new Promise((resolve, reject) => {
     db.query(`SELECT orderid from orders WHERE orderid = '${id}'`, (err, results) => {
       if(err) {
         console.log(err);
         return reject(err)
       };
+      console.log(results);
       let result = results.length === 0 ? undefined : results[0].orderid;
-      resolve(result)
+      resolve(`${result}`)
     })
-    db.end();
+    // db.end();
   })
 }
 
 const saveNewOrderID = (id) => {
   return new Promise((resolve, reject) => {
-    
     const saveDate = new Date()
     let day = saveDate.toISOString().split('T')[0];
-
     db.query(`INSERT INTO orders VALUES ('${id}', '${day}')`, (err, results) => {
       if(err) {
         console.log(`Id ${id} no insertado`,err);
@@ -50,7 +50,6 @@ const saveNewOrderID = (id) => {
        resolve(true);
       }
     })
-    db.end();
   })
   
 }

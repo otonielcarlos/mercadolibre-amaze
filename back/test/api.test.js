@@ -3,6 +3,7 @@ const assert = require('assert');
 const app = require('../server.js');
 const { getOrders } = require('../src/func');
 const { sendMessage } = require('../src/message');
+const { findOrder, saveNewOrderID } = require('../src/db');
 
 describe(' /POST callbacks for orders and messages notifications', () => {
   it('responds with status 200', done => {
@@ -27,10 +28,17 @@ describe(' /POST callbacks for orders and messages notifications', () => {
       });
   });
 
-  it('function getOrders returns an object', async () => {
-    let res = await getOrders('/orders/4716241871')
-    assert.strictEqual( res, 'object');
+  it('function findOrder returns an ID found', async () => {
+    let res = await findOrder('4671168203')
+    assert.strictEqual( res, '4671168203');
   })
-
+  it('function findOrder returns undefinded when not found', async () => {
+    let res = await findOrder('4671168204')
+    assert.strictEqual( res, 'undefined');
+  })
+  it('function saveOrderID saves a new id', async () => {
+    let res = await saveNewOrderID('4671168204')
+    assert.strictEqual( res, true);
+  })
 
 });
