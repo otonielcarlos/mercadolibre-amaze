@@ -26,7 +26,9 @@ app.post('/callbacks', async (req, res) => {
        if(isOrder === 'undefined'){
         // addOrder(id)
        await saveNewOrderID(id)
-       console.log('id guardado con éxito', id);
+       console.log('id guardado con éxito ', id);
+      } else {
+          console.log('id ya existe ', id);
         }
     } else {
       res.status(200).send();

@@ -182,7 +182,7 @@ updatePrice().then(async () => {
     afterSetStockVariation(response);
     const response_2 = await setStockWithItemId();
     afterSetStockItem(response_2);
-    return db.end();
+    // return db.end();
   } catch (err)
   {
     return console.log(err);
