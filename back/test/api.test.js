@@ -33,11 +33,11 @@ describe(' /POST callbacks for orders and messages notifications', () => {
     assert.strictEqual( res, '4671168203');
   })
   it('function findOrder returns undefinded when not found', async () => {
-    let res = await findOrder('4671168204')
+    let res = await findOrder('4671168205')
     assert.strictEqual( res, 'undefined');
   })
   it('function saveOrderID saves a new id', async () => {
-    let res = await saveNewOrderID('4671168204')
+    let res = await saveNewOrderID('4671168205')
     assert.strictEqual( res, true);
   })
 

@@ -29,7 +29,6 @@ const findOrder = id => {
         console.log(err);
         return reject(err)
       };
-      console.log(results);
       let result = results.length === 0 ? undefined : results[0].orderid;
       resolve(`${result}`)
     })
@@ -43,10 +42,10 @@ const saveNewOrderID = (id) => {
     let day = saveDate.toISOString().split('T')[0];
     db.query(`INSERT INTO orders VALUES ('${id}', '${day}')`, (err, results) => {
       if(err) {
-        console.log(`Id ${id} no insertado`,err);
+        // console.log(`Id ${id} no insertado`,err);
         reject(false);
       }  else {
-       console.log(`Id ${id} insertado el ${day}`);
+      //  console.log(`Id ${id} insertado el ${day}`);
        resolve(true);
       }
     })

@@ -25,8 +25,8 @@ app.post('/callbacks', async (req, res) => {
       let isOrder = await findOrder(id);
        if(isOrder === 'undefined'){
         // addOrder(id)
-        // let responseMessage = await sendMessage(resource);
        await saveNewOrderID(id)
+       console.log('id guardado con éxito', id);
         }
     } else {
       res.status(200).send();
