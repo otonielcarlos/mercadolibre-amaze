@@ -1,6 +1,6 @@
 const axios = require('axios');
 const arrayChunk = require('array-chunk');
-const { findOrder, closeDB, db } = require('./db');
+// const { findOrder, db } = require('./db');
 const { token } = require('./ml');
 let i = 0;
 let itemsChunk = [];

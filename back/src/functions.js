@@ -113,7 +113,7 @@ const afterSetStockVariation = response => {
               respromises.push(result.data)
               console.log(i,'success variation:' ,result.data.id ,'status: '+result.status);
                }catch(err){
-                 console.log('failed variation',res[0][i].itemid,err.response.status)}
+                 console.log(i, 'failed variation', res[0][i].itemid, err.response.status)}
                 }, 1000 * i)
             }
           return respromises;
