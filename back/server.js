@@ -43,8 +43,7 @@ app.post('/callbacks', async (req, res) => {
           'hoy es ', 
           today, 
           ' y el pedido es del ', 
-          orderDate, 
-          ` pedido ${id}`);
+          orderDate);
       }
     } else {
       console.log(
