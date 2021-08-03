@@ -20,7 +20,7 @@ const sendMessage = async (resource) => {
         to: {
           user_id: `${res.data.buyer.id}`,
         },
-        text: `¡Hola, gracias por tu compra! Para agilizar tu envio necesitamos tu ayuda con los siguientes datos:
+        text: `¡Hola, gracias por tu compra! Para agilizar tu envío necesitamos tu ayuda con los siguientes datos:
         -  Nombre completo
         -  Dirección
         -  Número de celular
@@ -38,7 +38,8 @@ const sendMessage = async (resource) => {
         },
       });
       console.log('enviado con éxito');
-      return messageResponse.data;
+      console.log(messageResponse.data)
+      return true;
     } else {
       let orderId = res.data.pack_id;
       let messageData = {
@@ -68,11 +69,11 @@ const sendMessage = async (resource) => {
       });
       console.log(messageResponse.data);
       console.log('enviado con éxito');
-      return messageResponse.data;
+      return true;
     }
   } catch (error) {
     console.log(error.data);
-    return;
+    return false;
   }
 };
 

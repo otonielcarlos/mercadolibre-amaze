@@ -19,11 +19,11 @@ const addOrder = async (resource) => {
   try {
     let access_token = await token();
     let orderId = await axios.get(mlUrl, { headers: {'Authorization': `Bearer ${access_token}`}})
-    const orderURL = `https://api.mercadolibre.com/${resource}`
+    const orderURL = `https://api.mercadolibre.com/orders/${resource}`
     let order = await axios.get(orderURL,{ headers: {'Authorization': `Bearer ${access_token}`}})
     let shippingURL = `https://api.mercadolibre.com/shipments/${order.data.shipping.id}`
     let shipping = await axios.get(shippingURL, { headers: {'Authorization': `Bearer ${access_token}`}})
-    let city = shipping.data.receiver_address.city.name;
+    let citye = shipping.data.receiver_address.city.name;
     let state = shipping.data.receiver_address.city.name;
     switch (state) {
       case 'Amazonas': state = "01"; break;
@@ -80,7 +80,7 @@ const addOrder = async (resource) => {
 
 let orderIdentifier = await findOrder(id);
 
-if(orderIdentifier === undefined){
+if(orderIdentifier === 'undefined'){
 
   let data = {
     "ordercreaterequest": {
