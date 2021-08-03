@@ -30,10 +30,10 @@ app.post('/callbacks', async (req, res) => {
         let id = resource.slice(7, resource.length);
         let isOrder = await findOrder(id);
         if (isOrder === 'undefined') {
-          let responseMessage = await sendMessage(resource);
+          // let responseMessage = await sendMessage(resource);
           await saveNewOrderID(id);
           await sendMail(id)
-          console.log(responseMessage);
+          // console.log(responseMessage);
           console.log('id guardado con éxito ', id);
         } else {
           console.log('id ya existe ', isOrder);
