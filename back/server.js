@@ -27,10 +27,11 @@ app.post('/callbacks', async (req, res) => {
       let today = saveDate.toISOString().split('T')[0];
       let orderDate = await getDate(resource); 
       if (today === orderDate) {
-        let id = resource.slice(7, resource.length);
+        // let id = resource.slice(7, resource.length);
+        let id = resource.split('/', resource.length)[1];
         let isOrder = await findOrder(id);
         if (isOrder === 'undefined') {
-          // let responseMessage = await sendMessage(resource);
+          let responseMessage = await sendMessage(resource);
           await saveNewOrderID(id);
           await sendMail(id)
           // console.log(responseMessage);
