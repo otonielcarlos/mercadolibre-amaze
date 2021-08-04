@@ -31,9 +31,9 @@ app.post('/callbacks', async (req, res) => {
         let id = resource.split('/', resource.length)[1];
         let isOrder = await findOrder(id);
         if (isOrder === 'undefined') {
-          let responseMessage = await sendMessage(resource);
+          // let responseMessage = await sendMessage(resource);
           await saveNewOrderID(id);
-          await sendMail(id)
+          // await sendMail(id)
           // console.log(responseMessage);
           console.log('id guardado con éxito ', id);
         } else {
