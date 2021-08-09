@@ -33,10 +33,11 @@ const findOrder = id => {
 }
 
 const saveNewOrderID = (id) => {
+  console.log('the id: ', id);
+  const saveDate = new Date()
+  saveDate.setHours(saveDate.getHours() - 5);
+  let day = saveDate.toISOString().split('T')[0];
   return new Promise((resolve, reject) => {
-    const saveDate = new Date()
-    saveDate.setHours(saveDate.getHours() - 5);
-    let day = saveDate.toISOString().split('T')[0];
     db.query(`INSERT INTO orders VALUES ('${id}', '${day}')`, (err, results) => {
       if(err) {
         reject(false);

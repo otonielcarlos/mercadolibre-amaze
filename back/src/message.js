@@ -1,5 +1,4 @@
 const axios = require('axios');
-// const { findOrder, closeDB } = require('./db');
 const { token } = require('./ml');
 const messageUrl = 'https://api.mercadolibre.com/messages/';
 const ordersUrl = 'https://api.mercadolibre.com';

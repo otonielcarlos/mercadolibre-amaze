@@ -41,10 +41,21 @@ describe(' /POST callbacks for orders and messages notifications', () => {
     assert.strictEqual(res, 'undefined');
   })
 
-  // it('function saveOrderID saves a new id', async () => {
-  //   let res = await saveNewOrderID('4671168205')
-  //   assert.strictEqual( res, true);
-  // })
+  it('function saveOrderID saves a new id', async () => {
+    let post = {
+      "resource":"/orders/4773739219",
+      "user_id": 468424240,
+      "topic":"orders_v2",
+      "application_id": 5503910054141466,
+      "attempts":1,
+      "sent":"2019-10-30T16:19:20.129Z",
+      "received":"2019-10-30T16:19:20.106Z"
+    }
+let reso = post.resource
+    let idResource = reso.slice(8, reso.length);
+    let res = await saveNewOrderID(idResource)
+    assert.strictEqual( res, true);
+  })
   
   it('function getDate retrieves the date of the order posted on /callbacks via MLs API', async () => {
     let resource = "/orders/4759522622"
@@ -58,7 +69,7 @@ describe(' /POST callbacks for orders and messages notifications', () => {
   })
 
   it('sends email notification when message has been sent with success', async () => {
-    let resource = "orders/4759522622"
+    let resource = "orders/4773739219"
     let id = resource.slice(7, resource.length);
     let mailResponse = await sendMail(id)
     assert.strictEqual(mailResponse, true);

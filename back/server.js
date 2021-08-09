@@ -25,10 +25,13 @@ app.post('/callbacks', async (req, res) => {
       const saveDate = new Date();
       saveDate.setHours(saveDate.getHours() - 5);
       let today = saveDate.toISOString().split('T')[0];
-      let orderDate = await getDate(resource); 
+      let orderDate = await getDate(resource);
+      let idResource = resource.slice(8, resource.length);
+        let id = idResource;
+        console.log('the id in server.js: ', idResource); 
       if (today === orderDate) {
         // let id = resource.slice(7, resource.length);
-        let id = resource.split('/', resource.length)[1];
+        
         let isOrder = await findOrder(id);
         if (isOrder === 'undefined') {
           // let responseMessage = await sendMessage(resource);
@@ -49,7 +52,7 @@ app.post('/callbacks', async (req, res) => {
     } else {
       console.log(
         'sent status to another post different than an order',
-        req.body
+        req.body.topic
       );
     }
   } catch (error) {
