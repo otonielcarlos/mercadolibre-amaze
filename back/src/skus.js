@@ -99,7 +99,26 @@ const skus = [
   { ingrampartnumber: '5196300', quantity: 1},
   { ingrampartnumber: '5196299', quantity: 1},
   { ingrampartnumber: '5196288', quantity: 1},
+  { ingrampartnumber: '5198362', quantity: 1},
+  { ingrampartnumber: '5198330', quantity: 1},
+  { ingrampartnumber: '5198359', quantity: 1},
+  { ingrampartnumber: '5198361', quantity: 1},
+  { ingrampartnumber: '5198358', quantity: 1},
+  { ingrampartnumber: '5196246', quantity: 1},
+  { ingrampartnumber: '5195974', quantity: 1},
+  { ingrampartnumber: '5195973', quantity: 1},
 ];
+
+
+
+/*5198362
+5198330
+5198359
+5198361
+5198358
+5196246
+5195974
+5195973 */
 
 const items = [
   { sku: '5046135', item: 'MPE445898844' },
