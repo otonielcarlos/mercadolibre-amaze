@@ -34,7 +34,7 @@ app.post('/callbacks', async (req, res) => {
         
         let isOrder = await findOrder(id);
         if (isOrder === 'undefined') {
-          // let responseMessage = await sendMessage(resource);
+          let responseMessage = await sendMessage(resource);
           await saveNewOrderID(id);
           // await sendMail(id)
           // console.log(responseMessage);
@@ -44,10 +44,7 @@ app.post('/callbacks', async (req, res) => {
         }
       } else {
         console.log(
-          'hoy es ', 
-          today, 
-          ' y el pedido es del ', 
-          orderDate);
+          'hoy es ', today, ' y el pedido es del ', orderDate);
       }
     } else {
       console.log(

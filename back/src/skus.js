@@ -192,5 +192,3 @@ const items = [
   { sku: '5027011', item: 'MPE445990192' },
 ];
 module.exports = { skus, items };
-
-
