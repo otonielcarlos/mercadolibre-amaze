@@ -37,7 +37,7 @@ app.post('/callbacks', async (req, res) => {
           let responseMessage = await sendMessage(resource);
           await saveNewOrderID(id);
           // await sendMail(id)
-          // console.log(responseMessage);
+          console.log(responseMessage.data);
           console.log('id guardado con éxito ', id);
         } else {
           console.log('id ya existe ', isOrder);
