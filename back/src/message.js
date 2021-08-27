@@ -19,14 +19,12 @@ const sendMessage = async (resource) => {
         to: {
           user_id: `${res.data.buyer.id}`,
         },
-        text: `¡Hola, gracias por tu compra! Para agilizar tu envío necesitamos tu ayuda con los siguientes datos:
+        text: `¡Hola, gracias por tu compra! Necesitamos tu ayuda para verificar que la información de tu perfil esté actualizada, verifica que estén correctos los  datos en el detalle de tu compra:
         -  Nombre completo
-        -  Dirección
+        -  Dirección completa
         -  Número de celular
-        -  DNI
-        -  ¿Requieres factura? Compártenos tus datos fiscales.
-        
-        Con gusto te atendemos de Lunes a Viernes de 9am a 6pm, cualquier duda, estamos para ayudarte. ¡Disfruta tu producto!`,
+        -  DNI, ¿Requieres factura? Compártenos tus datos fiscales.
+        Atención L a V de 9am a 6pm`,
       };
       let messUrl = `https://api.mercadolibre.com/messages/packs/${orderId}/sellers/766642543`;
       let messageResponse = await axios.post(messUrl, messageData, {
@@ -48,14 +46,12 @@ const sendMessage = async (resource) => {
         to: {
           user_id: `${res.data.buyer.id}`,
         },
-        text: `¡Hola, gracias por tu compra! Para agilizar tu envio necesitamos tu ayuda con los siguientes datos:
-          -  Nombre completo
-          -  Dirección
-          -  Número de celular
-          -  DNI
-          -  ¿Requieres factura? Compártenos tus datos fiscales.
-          
-          Con gusto te atendemos de Lunes a Viernes de 9am a 6pm, cualquier duda, estamos para ayudarte. ¡Disfruta tu producto!`,
+        text: `¡Hola, gracias por tu compra! Necesitamos tu ayuda para verificar que la información de tu perfil esté actualizada, verifica que estén correctos los  datos en el detalle de tu compra:
+        -  Nombre completo
+        -  Dirección completa
+        -  Número de celular
+        -  DNI, ¿Requieres factura? Compártenos tus datos fiscales.
+        Atención L a V de 9am a 6pm`,
       };
       
       let messUrl = `https://api.mercadolibre.com/messages/packs/${orderId}/sellers/766642543`;
