@@ -24,6 +24,7 @@ const addOrder = async (resource) => {
     let shippingURL = `https://api.mercadolibre.com/shipments/${order.data.shipping.id}`
     let shipping = await axios.get(shippingURL, { headers: {'Authorization': `Bearer ${access_token}`}})
     let citye = shipping.data.receiver_address.city.name;
+    let cityFinal = shipping.data.receiver_address.city.name;
     let state = shipping.data.receiver_address.state.name;
     let stateFinal = shipping.data.receiver_address.state.name;
 
@@ -129,7 +130,7 @@ let data = {
         "name1": `${name1}`,
         "addressline1": `${addressline1}`,
         "addressline2": `${addressline2}`,
-        "city": `${citye}`,
+        "city": `${cityFinal}`,
         "state": `${state}`,
         "postalcode": `${zipCode}`,
         "countrycode": "PE"
