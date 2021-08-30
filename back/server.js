@@ -28,29 +28,25 @@ app.post('/callbacks', async (req, res) => {
       let orderDate = await getDate(resource);
       let idResource = resource.slice(8, resource.length);
         let id = idResource;
-        console.log('the id in server.js: ', idResource); 
+        console.log('the id in server.js: ', id); 
       if (today === orderDate) {
-        // let id = resource.slice(7, resource.length);
-        
         let isOrder = await findOrder(id);
         if (isOrder === 'undefined') {
           let responseMessage = await sendMessage(resource);
           await saveNewOrderID(id);
-          // await sendMail(id)
+          let orderRes = await addOrder(id);
+          await sendMail(id, orderRes) 
           console.log(responseMessage.data);
           console.log('id guardado con éxito ', id);
+          console.log(orderRes);
         } else {
           console.log('id ya existe ', isOrder);
         }
       } else {
-        console.log(
-          'hoy es ', today, ' y el pedido es del ', orderDate);
+        console.log('hoy es ', today, ' y el pedido es del ', orderDate);
       }
     } else {
-      console.log(
-        'sent status to another post different than an order',
-        req.body.topic
-      );
+      console.log('sent status to another post different than an order', req.body.topic);
     }
   } catch (error) {
     console.log(error);

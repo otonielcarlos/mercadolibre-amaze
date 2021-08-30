@@ -1,6 +1,6 @@
 const axios = require('axios');
 const arrayChunk = require('array-chunk');
-// const { findOrder, db } = require('./db');
+const { findOrder, db } = require('./db');
 const { token } = require('./ml');
 let i = 0;
 let itemsChunk = [];
@@ -18,14 +18,15 @@ const mlUrl = 'https://api.mercadolibre.com/orders/search?seller=766642543';
 const addOrder = async (resource) => {
   try {
     let access_token = await token();
-    let orderId = await axios.get(mlUrl, { headers: {'Authorization': `Bearer ${access_token}`}})
+    //let orderId = await axios.get(mlUrl, { headers: {'Authorization': `Bearer ${access_token}`}})
     const orderURL = `https://api.mercadolibre.com/orders/${resource}`
     let order = await axios.get(orderURL,{ headers: {'Authorization': `Bearer ${access_token}`}})
     let shippingURL = `https://api.mercadolibre.com/shipments/${order.data.shipping.id}`
     let shipping = await axios.get(shippingURL, { headers: {'Authorization': `Bearer ${access_token}`}})
     let citye = shipping.data.receiver_address.city.name;
-    let state = shipping.data.receiver_address.city.name;
-    switch (state) {
+    let state = shipping.data.receiver_address.state.name;
+
+    switch (citye) {
       case 'Amazonas': state = "01"; break;
       case 'Ancash': state = "02"; break;
       case 'Apurimac': state = "03"; break;
@@ -40,7 +41,7 @@ const addOrder = async (resource) => {
       case 'Junin': state = "12"; break;
       case 'La Libertad': state = "13"; break;
       case 'Lambayeque': state = "14"; break;
-      case 'Lima': state = "15"; break;
+      case 'Lima Metropolitana': state = "15"; break;
       case 'Loreto': state = "16"; break;
       case 'Madre de Dios': state = "17"; break;
       case 'Moquegua': state = "18"; break;
@@ -51,12 +52,45 @@ const addOrder = async (resource) => {
       case 'Tacna': state = "23"; break;
       case 'Tumbes': state = "24"; break;
       case 'Ucayali': state = "25"; break;
-      default: state = "15";
+      default: state = "00";
     }
+     
+if(citye === "00") {
+  switch (state) {
+    case 'Amazonas': state = "01"; break;
+    case 'Ancash': state = "02"; break;
+    case 'Apurimac': state = "03"; break;
+    case 'Arequipa': state = "04"; break;
+    case 'Ayacucho': state = "05"; break;
+    case 'Cajamarca': state = "06"; break;
+    case 'Callao': state = "07"; break;
+    case 'Cusco': state = "08"; break;
+    case 'Huancavelica': state = "09"; break;
+    case 'Huanuco': state = "10"; break;
+    case 'Ica': state = "11"; break;
+    case 'Junin': state = "12"; break;
+    case 'La Libertad': state = "13"; break;
+    case 'Lambayeque': state = "14"; break;
+    case 'Lima Metropolitana': state = "15"; break;
+    case 'Loreto': state = "16"; break;
+    case 'Madre de Dios': state = "17"; break;
+    case 'Moquegua': state = "18"; break;
+    case 'Pasco': state = "19"; break;
+    case 'Piura': state = "20"; break;
+    case 'Puno': state = "21"; break;
+    case 'San Martin': state = "22"; break;
+    case 'Tacna': state = "23"; break;
+    case 'Tumbes': state = "24"; break;
+    case 'Ucayali': state = "25"; break;
+    default: state = "15";
+  }
+}
+
+   
     const id = order.data.id;
     const customerPo = `ML_${id}`;
     const address = shipping.data.receiver_address.address_line;
-    const shipTo = address.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+    const shipTo = address.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
     const fName = order.data.buyer.first_name;
     const firstName = fName.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
     const sName = order.data.buyer.last_name;
@@ -78,9 +112,6 @@ const addOrder = async (resource) => {
       addressline2 = '';
     }
 
-let orderIdentifier = await findOrder(id);
-
-if(orderIdentifier === 'undefined'){
 
   let data = {
     "ordercreaterequest": {
@@ -112,22 +143,19 @@ if(orderIdentifier === 'undefined'){
     }
 }
 
-//   let ingramToken = await axios.post(tokenUrl, postFields, header)
-//   let responseFromIngram = await axios.post(baseUrl, data, {
-//     headers: {
-//       Accept: 'application/json',
-//       'Content-Type': 'application/json',
-//       Authorization: `Bearer ${ingramToken}`,
-//     },
-//   }); 
+let ingramToken = await axios.post(tokenUrl, postFields, header)
+let responseFromIngram = await axios.post(baseUrl, data, {
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${ingramToken}`,
+  }, 
+}); 
 
 const typeRes = typeof data;
-return typeRes;
+console.log({ data: data.ordercreaterequest.ordercreatedetails });
 
-  console.log({ data: data.ordercreaterequest.ordercreatedetails });
-} else {
-  console.log(orderIdentifier,'ya está en base de datos')
-}
+return data.ordercreaterequest.ordercreatedetails;
   } catch (error) {
     console.log(error);
   }

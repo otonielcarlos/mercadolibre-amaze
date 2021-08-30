@@ -9,15 +9,15 @@ const db = mysql.createPool({
   database: 'heroku_7e25e9ab702a7da',
 
 });
-const db_last = mysql.createPool({
-  host: '173.231.198.187',
-  user: 'bluediamond_appleperu',
-  password: '.-.bdi-2020.-.',
-  database: 'bluediamond_appleperu',
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
-});
+// const db_last = mysql.createPool({
+//   host: '173.231.198.187',
+//   user: 'bluediamond_appleperu',
+//   password: '.-.bdi-2020.-.',
+//   database: 'bluediamond_appleperu',
+//   waitForConnections: true,
+//   connectionLimit: 10,
+//   queueLimit: 0
+// });
 
 const findOrder = id => {
   return new Promise((resolve, reject) => {

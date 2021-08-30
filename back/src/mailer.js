@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer')
-const sendMail = async (id) => {
+const sendMail = async (id, orderResponse) => {
     try {
          // create reusable transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({
@@ -16,11 +16,14 @@ const sendMail = async (id) => {
   let info = await transporter.sendMail({
     from: '"Apple Peru Mercadolibre" <marketplaces@bluediamondinnovation.com>', // sender address
     to: "carlos@bluediamondinnovation.com", // list of receivers
-    subject: "Nuevo mensaje enviado ✔", // Subject line
+    subject: "Nueva orden y mensaje enviados ✔", // Subject line
     text: "Se ha enviado un mensaje automaticamente", // plain text body
     html: ` <h3>Se ha enviado un mensaje automaticamente</h3>
     <p>Orden ${id}</p>
-    <p>Link <a href="https://www.mercadolibre.com.pe/ventas/listado?actions&encryptSelect&filters=&page=1&search=${id}&sort=DATE_CLOSED_DESC">Orden en Mercadolibre</a>`, // html body
+    <p>Link <a href="https://www.mercadolibre.com.pe/ventas/listado?actions&encryptSelect&filters=&page=1&search=${id}&sort=DATE_CLOSED_DESC">Orden en Mercadolibre</a>
+    <h4>En Ingram: </h4>
+    <pre>${orderResponse} </pre>`
+    , // html body
   });
 
 return true;
