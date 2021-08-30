@@ -158,9 +158,9 @@ let responseFromIngram = await axios.post(baseUrl, data, {
 const typeRes = typeof data;
 console.log({ data: data.ordercreaterequest.ordercreatedetails });
 
-return data.ordercreaterequest.ordercreatedetails;
+return responseFromIngram.data;
   } catch (error) {
-    console.log(error);
+    console.log(error.data);
   }
 }
 

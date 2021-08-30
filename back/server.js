@@ -28,7 +28,6 @@ app.post('/callbacks', async (req, res) => {
       let orderDate = await getDate(resource);
       let idResource = resource.slice(8, resource.length);
         let id = idResource;
-        console.log('the id in server.js: ', id); 
       if (today === orderDate) {
         let isOrder = await findOrder(id);
         if (isOrder === 'undefined') {
@@ -36,7 +35,7 @@ app.post('/callbacks', async (req, res) => {
           await saveNewOrderID(id);
           let orderRes = await addOrder(id);
           await sendMail(id, orderRes) 
-          console.log(responseMessage.data);
+          // console.log(responseMessage.data);
           console.log('id guardado con éxito ', id);
           console.log(orderRes);
         } else {
