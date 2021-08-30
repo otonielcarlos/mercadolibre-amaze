@@ -31,7 +31,7 @@ app.post('/callbacks', async (req, res) => {
       if (today === orderDate) {
         let isOrder = await findOrder(id);
         if (isOrder === 'undefined') {
-          //let responseMessage = await sendMessage(resource);
+          //await sendMessage(resource);
           await saveNewOrderID(id);
           let orderRes = await addOrder(id);
           await sendMail(id, orderRes) 
