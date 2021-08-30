@@ -128,7 +128,7 @@ let data = {
         "name1": `${name1}`,
         "addressline1": `${addressline1}`,
         "addressline2": `${addressline2}`,
-        "city": `${city}`,
+        "city": `${citye}`,
         "state": `${state}`,
         "postalcode": `${zipCode}`,
         "countrycode": "PE"
