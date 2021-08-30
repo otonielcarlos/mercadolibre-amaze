@@ -2,6 +2,7 @@ const axios = require('axios');
 const arrayChunk = require('array-chunk');
 const { findOrder, db } = require('./db');
 const { token } = require('./ml');
+
 let i = 0;
 let itemsChunk = [];
 const baseUrl =
@@ -160,7 +161,7 @@ console.log({ data: data.ordercreaterequest.ordercreatedetails });
 
 return responseFromIngram.data;
   } catch (error) {
-    console.log(error.response.data);
+    console.log(error);
   }
 }
 

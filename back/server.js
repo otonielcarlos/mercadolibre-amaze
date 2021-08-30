@@ -31,13 +31,13 @@ app.post('/callbacks', async (req, res) => {
       if (today === orderDate) {
         let isOrder = await findOrder(id);
         if (isOrder === 'undefined') {
-          //await sendMessage(resource);
+          await sendMessage(resource);
           await saveNewOrderID(id);
-          let orderRes = await addOrder(id);
-          await sendMail(id, orderRes) 
+          // let orderRes = await addOrder(id);
+          // await sendMail(id, orderRes) 
           // console.log(responseMessage.data);
           console.log('id guardado con éxito ', id);
-          console.log(orderRes);
+          // console.log(orderRes);
         } else {
           console.log('id ya existe ', isOrder);
         }
