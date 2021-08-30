@@ -113,37 +113,38 @@ if(citye === "00") {
     }
 
 
-  let data = {
-    "ordercreaterequest": {
-      "requestpreamble": {
-        "isocountrycode": "PE",
-        "customernumber": "325831"
-      },
-      "ordercreatedetails": {
-        "customerponumber": `${customerPo}`,
-        "shiptoaddress": {
-          "name1": `${name1}`,
-          "addressline1": `${addressline1}`,
-          "addressline2": `${addressline2}`,
-          "city": `${city}`,
-          "state": `${state}`,
-          "postalcode": `${zipCode}`,
-          "countrycode": "PE"
-        },
-        "carriercode": "E1",
-        "lines": [
-          {
-            "linetype": "P",
-            "linenumber": "001",
-            "quantity": `${quantity}`,
-            "ingrampartnumber": `${sku}`
-          }
-        ]
-      }
-    }
-}
+  
 
 let ingramToken = await axios.post(tokenUrl, postFields, header)
+let data = {
+  "ordercreaterequest": {
+    "requestpreamble": {
+      "isocountrycode": "PE",
+      "customernumber": "325831"
+    },
+    "ordercreatedetails": {
+      "customerponumber": `${customerPo}`,
+      "shiptoaddress": {
+        "name1": `${name1}`,
+        "addressline1": `${addressline1}`,
+        "addressline2": `${addressline2}`,
+        "city": `${city}`,
+        "state": `${state}`,
+        "postalcode": `${zipCode}`,
+        "countrycode": "PE"
+      },
+      "carriercode": "E1",
+      "lines": [
+        {
+          "linetype": "P",
+          "linenumber": "001",
+          "quantity": `${quantity}`,
+          "ingrampartnumber": `${sku}`
+        }
+      ]
+    }
+  }
+}
 let responseFromIngram = await axios.post(baseUrl, data, {
   headers: {
     Accept: 'application/json',
