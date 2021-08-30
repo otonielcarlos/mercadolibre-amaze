@@ -160,7 +160,7 @@ console.log({ data: data.ordercreaterequest.ordercreatedetails });
 
 return responseFromIngram.data;
   } catch (error) {
-    console.log(error.data);
+    console.log(error.response.data);
   }
 }
 
