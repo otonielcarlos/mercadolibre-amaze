@@ -34,7 +34,7 @@ app.post('/callbacks', async (req, res) => {
         if (isOrder === 'undefined') {
           //let responseMessage = await sendMessage(resource);
           await saveNewOrderID(id);
-          // let orderRes = await addOrder(id);
+          let orderRes = await addOrder(id);
           await sendMail(id, orderRes) 
           console.log(responseMessage.data);
           console.log('id guardado con éxito ', id);
