@@ -25,6 +25,7 @@ const addOrder = async (resource) => {
     let shipping = await axios.get(shippingURL, { headers: {'Authorization': `Bearer ${access_token}`}})
     let citye = shipping.data.receiver_address.city.name;
     let state = shipping.data.receiver_address.state.name;
+    let stateFinal = shipping.data.receiver_address.state.name;
 
     switch (citye) {
       case 'Amazonas': state = "01"; break;
@@ -56,7 +57,7 @@ const addOrder = async (resource) => {
     }
      
 if(citye === "00") {
-  switch (state) {
+  switch (stateFinal) {
     case 'Amazonas': state = "01"; break;
     case 'Ancash': state = "02"; break;
     case 'Apurimac': state = "03"; break;
