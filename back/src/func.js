@@ -96,7 +96,7 @@ if(citye === "00") {
     const sName = order.data.buyer.last_name;
     const lastName = sName.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
     const name1 = `${firstName} ${lastName}`
-    const phoneNumber = order.data.buyer.phone.number;
+    //const phoneNumber = order.data.buyer.phone.number === undefined ? null : order.data.buyer.phone.number;
     const zipCode = shipping.data.receiver_address.zip_code;
     const sku = order.data.order_items[0].item.seller_sku;
     const quantity = order.data.order_items[0].quantity;  
