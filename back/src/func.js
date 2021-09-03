@@ -2,7 +2,7 @@ const axios = require('axios');
 const arrayChunk = require('array-chunk');
 const { findOrder, db } = require('./db');
 const { token } = require('./ml');
-const { sendMail } = require('./src/mailer');
+const { sendMail } = require('./mailer');
 
 let i = 0;
 let itemsChunk = [];
