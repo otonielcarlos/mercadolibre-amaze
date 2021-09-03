@@ -39,7 +39,7 @@ app.post('/callbacks', async (req, res) => {
           let orderRes = await addOrder(id);
           console.log('id guardado con éxito ', id);
           console.log('Customerponumber: ', orderRes.serviceresponse.ordersummary.customerponumber)
-          console.log(responseFromIngram.data.serviceresponse.ordersummary.ordercreateresponse[0]);
+          console.log(orderRes.serviceresponse.ordersummary.ordercreateresponse[0]);
           
         } else {
           console.log('id ya existe ', isOrder);
