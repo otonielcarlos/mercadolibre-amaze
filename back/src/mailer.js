@@ -16,12 +16,12 @@ const sendMail = async (id, orderResponse) => {
   let info = await transporter.sendMail({
     from: '"Apple Peru Mercadolibre" <marketplaces@bluediamondinnovation.com>', // sender address
     to: "carlos@bluediamondinnovation.com", // list of receivers
-    subject: "Nueva orden y mensaje enviados ✔", // Subject line
-    text: "Se ha enviado un mensaje automaticamente", // plain text body
-    html: ` <h3>Se ha enviado un mensaje automaticamente</h3>
+    subject: "Orden No Enviada A Ingram", // Subject line
+    text: "Se ha encontrado un error en la última orden", // plain text body
+    html: ` <h3>Favor de Introducir Manualmente</h3>
     <p>Orden ${id}</p>
     <p>Link <a href="https://www.mercadolibre.com.pe/ventas/listado?actions&encryptSelect&filters=&page=1&search=${id}&sort=DATE_CLOSED_DESC">Orden en Mercadolibre</a>
-    <h4>En Ingram: </h4>
+    <h4>Error en Ingram: </h4>
     <pre>${orderResponse} </pre>`
     , // html body
   });

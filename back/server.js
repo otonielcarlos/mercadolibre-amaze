@@ -7,7 +7,6 @@ const { addOrder } = require('./src/func');
 const { sendMessage } = require('./src/message');
 const { token } = require('./src/ml');
 const { getDate } = require('./src/date');
-const { sendMail } = require('./src/mailer');
 
 app.use(cors());
 app.use(express.json());
@@ -19,25 +18,28 @@ app.get('/', (req, res) => {
 
 app.post('/callbacks', async (req, res) => {
   res.status(200).send(req.body);
+
   try {
     const { resource, topic } = req.body;
+
     if (topic === 'orders_v2') {
       const saveDate = new Date();
       saveDate.setHours(saveDate.getHours() - 5);
       let today = saveDate.toISOString().split('T')[0];
       let orderDate = await getDate(resource);
       let idResource = resource.slice(8, resource.length);
-        let id = idResource;
+      let id = idResource;
+
       if (today === orderDate) {
         let isOrder = await findOrder(id);
+
         if (isOrder === 'undefined') {
           await sendMessage(resource);
           await saveNewOrderID(id);
-          // let orderRes = await addOrder(id);
-          // await sendMail(id, orderRes) 
-          // console.log(responseMessage.data);
+          let orderRes = await addOrder(id);
           console.log('id guardado con éxito ', id);
-          // console.log(orderRes);
+          console.log(orderRes.serviceresponse.ordersummary.customerponumber)
+          
         } else {
           console.log('id ya existe ', isOrder);
         }
@@ -45,7 +47,7 @@ app.post('/callbacks', async (req, res) => {
         console.log('hoy es ', today, ' y el pedido es del ', orderDate);
       }
     } else {
-      console.log('sent status to another post different than an order', req.body.topic);
+      console.log('callback de', req.body.topic);
     }
   } catch (error) {
     console.log(error);
