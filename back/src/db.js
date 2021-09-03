@@ -48,4 +48,16 @@ const saveNewOrderID = (id) => {
   })
 }
 
-module.exports = { findOrder, db, saveNewOrderID };
+const saveIngram = nv => {
+  return new Promise((resolve, reject) => {
+    db.query(`INSERT INTO ingramorders VALUES ('${nv}')`, (err, results) => {
+      if(err) {
+        reject(false);
+      }  else {
+       resolve(true);
+      }
+    })
+  })
+}
+
+module.exports = { findOrder, db, saveNewOrderID, saveIngram };

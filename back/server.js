@@ -2,7 +2,7 @@ const { default: axios } = require('axios');
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const { db, saveNewOrderID, findOrder } = require('./src/db');
+const { db, saveNewOrderID, findOrder, saveIngram } = require('./src/db');
 const { addOrder } = require('./src/func');
 const { sendMessage } = require('./src/message');
 const { token } = require('./src/ml');
@@ -37,6 +37,7 @@ app.post('/callbacks', async (req, res) => {
           await sendMessage(resource);
           await saveNewOrderID(id);
           let orderRes = await addOrder(id);
+          await saveIngram(orderRes.serviceresponse.ordersummary.ordercreateresponse[0].globalorderid)
           console.log('id guardado con éxito ', id);
           console.log('Customerponumber: ', orderRes.serviceresponse.ordersummary.customerponumber)
           console.log(orderRes.serviceresponse.ordersummary.ordercreateresponse[0]);
