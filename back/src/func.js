@@ -92,7 +92,7 @@ if(citye === "00") {
   }
 }
 
-   
+   let envio = (state === "15") ? '5035104' : '5035165';
     const id = order.data.id;
     const customerPo = `ML_${id}`;
 
@@ -148,7 +148,19 @@ let data = {
           "linenumber": "001",
           "quantity": `${quantity}`,
           "ingrampartnumber": `${sku}`
-        }
+        },
+        {
+          "linetype": "P",
+          "linenumber": "002",
+          "quantity": "1",
+          "ingrampartnumber": `${envio}`
+        },
+        {
+          "linetype": "P",
+          "linenumber": "003",
+          "quantity": "1",
+          "ingrampartnumber": '5035103'
+        },
       ]
     }
   }
