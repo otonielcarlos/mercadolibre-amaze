@@ -52,8 +52,9 @@ const saveIngram = (nv, customerpo) => {
   saveDate.setHours(saveDate.getHours() - 5);
   let day = saveDate.toISOString().split('T')[0];
   return new Promise((resolve, reject) => {
-    db.query(`INSERT INTO ingramorders VALUES ('${nv}', ${customerpo},'${day}')`, (err, results) => {
+    db.query(`INSERT INTO ingramorders VALUES ('${nv}', '${customerpo}','${day}')`, (err, results) => {
       if(err) {
+        console.log('err saving ingramorders ', err)
         reject(false);
       }  else {
        resolve(true);
