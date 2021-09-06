@@ -47,12 +47,12 @@ const saveNewOrderID = (id) => {
   })
 }
 
-const saveIngram = nv => {
+const saveIngram = (nv, customerPO) => {
   const saveDate = new Date()
   saveDate.setHours(saveDate.getHours() - 5);
   let day = saveDate.toISOString().split('T')[0];
   return new Promise((resolve, reject) => {
-    db.query(`INSERT INTO ingramorders VALUES ('${nv}', '${day}')`, (err, results) => {
+    db.query(`INSERT INTO ingramorders VALUES ('${nv}', ${customerPO},'${day}')`, (err, results) => {
       if(err) {
         reject(false);
       }  else {

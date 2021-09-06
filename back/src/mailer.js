@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer')
-const sendMail = async (id, orderResponse) => {
+const sendMail = async (id) => {
     try {
          // create reusable transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({

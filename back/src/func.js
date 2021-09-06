@@ -148,19 +148,7 @@ let data = {
           "linenumber": "001",
           "quantity": `${quantity}`,
           "ingrampartnumber": `${sku}`
-        },
-        {
-          "linetype": "P",
-          "linenumber": "002",
-          "quantity": "1",
-          "ingrampartnumber": `${envio}`
-        },
-        {
-          "linetype": "P",
-          "linenumber": "003",
-          "quantity": "1",
-          "ingrampartnumber": '5035103'
-        },
+        }
       ]
     }
   }
@@ -177,7 +165,7 @@ let responseFromIngram = await axios.post(baseUrl, data, {
 return responseFromIngram.data;
   } catch (error) {
     console.log(error.response.data);
-    sendMail(id , error.response.data)
+    sendMail(id)
   }
 }
 
