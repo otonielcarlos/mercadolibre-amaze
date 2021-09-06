@@ -37,7 +37,7 @@ app.post('/callbacks', async (req, res) => {
           await sendMessage(resource);
           await saveNewOrderID(id);
           let orderRes = await addOrder(id);
-          await saveIngram(orderRes.serviceresponse.ordersummary.ordercreateresponse[0].globalorderid, orderRes.serviceresponse.ordersummary.customerponumber)
+          await saveIngram(orderRes.serviceresponse.ordersummary.ordercreateresponse[0].globalorderid , orderRes.serviceresponse.ordersummary.customerponumber)
           console.log('id guardado con éxito ', id);
           console.log('Customerponumber: ', orderRes.serviceresponse.ordersummary.customerponumber)
           console.log(orderRes.serviceresponse.ordersummary.ordercreateresponse[0]);
