@@ -20,9 +20,7 @@ const sendMail = async (id) => {
     text: "Se ha encontrado un error en la última orden", // plain text body
     html: ` <h3>Favor de Introducir Manualmente</h3>
     <p>Orden ${id}</p>
-    <p>Link <a href="https://www.mercadolibre.com.pe/ventas/listado?actions&encryptSelect&filters=&page=1&search=${id}&sort=DATE_CLOSED_DESC">Orden en Mercadolibre</a>
-    <h4>Error en Ingram: </h4>
-    <pre>${orderResponse} </pre>`
+    <p>Link <a href="https://www.mercadolibre.com.pe/ventas/listado?actions&encryptSelect&filters=&page=1&search=${id}&sort=DATE_CLOSED_DESC">Orden en Mercadolibre</a>`
     , // html body
   });
 
