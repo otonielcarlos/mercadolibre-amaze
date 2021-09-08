@@ -61,7 +61,7 @@ const addOrder = async (resource) => {
       default: state = "00";
     }
      
-if(citye === "00") {
+if(state === "00") {
   switch (stateFinal) {
     case 'Amazonas': state = "01"; break;
     case 'Ancash': state = "02"; break;
