@@ -13,11 +13,12 @@ const header = {
 };
 const tokenUrl = 'https://api.ingrammicro.com:443/oauth/oauth30/token';
 const postFields =
-  'grant_type=client_credentials&client_id=peCS1OtW2QSK8iCAm52bcE6Wl5R8oRci&client_secret=qk4KtGLAF4Qw0f7A';
+  'grant_type=client_credentials&client_id=Phu1nRZrziGC3H12ztAGktGmXxKFI4WZ&client_secret=fBnyFNRo1uBhe8X1';
 const mlUrl = 'https://api.mercadolibre.com/orders/search?seller=766642543';
 
 const addOrder = async (resource) => {
-  try {
+  try {y
+    
     let access_token = await token();
     //let orderId = await axios.get(mlUrl, { headers: {'Authorization': `Bearer ${access_token}`}})
     const orderURL = `https://api.mercadolibre.com/orders/${resource}`
@@ -165,6 +166,9 @@ console.log(responseFromIngram.data.serviceresponse.ordersummary.ordercreateresp
   }
 }
 
-addOrder('4836312584');
+// addOrder('4836312584');
 
 
+axios.post(tokenUrl, postFields, header)
+.then(res => console.log(res.data))
+.catch(err => console.log(errr));

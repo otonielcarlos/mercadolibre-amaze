@@ -7,6 +7,7 @@ const db = mysql.createPool({
   user: 'b5335c6b8fd89c',
   password: '57f435d5',
   database: 'heroku_7e25e9ab702a7da',
+  multipleStatements: true,
 
 });
 // const db_last = mysql.createPool({

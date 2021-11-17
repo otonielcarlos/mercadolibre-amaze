@@ -7,6 +7,7 @@ const { addOrder } = require('./src/func');
 const { sendMessage } = require('./src/message');
 const { token } = require('./src/ml');
 const { getDate } = require('./src/date');
+const { sendMail } = require('./src/mailer')
 
 app.use(cors());
 app.use(express.json());
@@ -29,7 +30,6 @@ app.post('/callbacks', async (req, res) => {
       let orderDate = await getDate(resource);
       let idResource = resource.slice(8, resource.length);
       let id = idResource;
-
       if (today === orderDate) {
         let isOrder = await findOrder(id);
 
@@ -37,7 +37,12 @@ app.post('/callbacks', async (req, res) => {
           await sendMessage(resource);
           await saveNewOrderID(id);
           let orderRes = await addOrder(id);
-          await saveIngram(orderRes.serviceresponse.ordersummary.ordercreateresponse[0].globalorderid , orderRes.serviceresponse.ordersummary.customerponumber)
+          let nvID = orderRes.serviceresponse.ordersummary.ordercreateresponse[0].globalorderid ;
+          let customerPO = orderRes.serviceresponse.ordersummary.customerponumber;
+          if(nvID === undefined || nvID === 'undefined'){
+            sendMail(id);
+          }
+          await saveIngram(nvID , customerPO)
           console.log('id guardado con éxito ', id);
           console.log('Customerponumber: ', orderRes.serviceresponse.ordersummary.customerponumber)
           console.log(orderRes.serviceresponse.ordersummary.ordercreateresponse[0]);

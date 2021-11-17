@@ -91,8 +91,6 @@ if(state === "00") {
     default: state = "15";
   }
 }
-
-   let envio = (state === "15") ? '5035104' : '5035165';
     const id = order.data.id;
     const customerPo = `ML_${id}`;
 

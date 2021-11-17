@@ -64,16 +64,16 @@ const updatePrice = () => {
           return array;
         })
         .then(data => {
-          let n = 1;
+          let query= '';
             for (let i in data) {
               
-              let query = `UPDATE appleml SET stock = '${data[i].stock}' WHERE sku = '${data[i].sku}'`;
-              db.query(query, (err, results) => {
-                n++;
-                if (err) console.log(err.message);
-                console.log(n, 'updating...');
-              });
+              query += `UPDATE appleml SET stock = '${data[i].stock}' WHERE sku = '${data[i].sku}'; `;
+            
             }
+            db.query(query, (err, results) => {
+              if (err) console.log(err.message);
+              console.log('actualizado');
+            });
         });
     })
     .catch(error => {
@@ -113,7 +113,7 @@ const afterSetStockVariation = response => {
               respromises.push(result.data)
               console.log(i,'success variation:' ,result.data.id ,'status: '+result.status);
                }catch(err){
-                 console.log(i, 'failed variation', res[0][i].itemid, err.response.status)}
+                 console.log(i, 'failed variation', res[0][i].itemid, err.response.data.message)}
                 }, 1000 * i)
             }
           return respromises;
@@ -160,7 +160,7 @@ const afterSetStockItem = response => {
             respromises.push(result.data)
             console.log(i,'success item:' ,result.data.id ,'status: ' + result.status);
              }catch(err){
-               console.log(i, 'failed item: ',res[0][i].itemid,err.response.status)}
+               console.log(i, 'failed item: ',res[0][i].itemid,err.response.data.message)}
               }, 1000 * i)
           }
         return respromises;
