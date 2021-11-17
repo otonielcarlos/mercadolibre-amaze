@@ -54,7 +54,7 @@ app.post('/callbacks', async (req, res) => {
         console.log('hoy es ', today, ' y el pedido es del ', orderDate);
       }
     } else {
-      console.log('callback de', req.body.topic);
+      // console.log('callback de', req.body.topic);
     }
   } catch (error) {
     console.log(error);
