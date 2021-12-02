@@ -3,21 +3,16 @@ const { token } = require('../ml');
 const log = console.log;
 const fs = require('fs')
 // const writer = fs.createWriteStream('./ticket.pdf')
+const { savePdfToServer } = require('../saveFtp')
 
 
-const getTicket = async () => {
+const getTicket = async (shipmentId) => {
   try {
     const accessToken = await token();
 
     let url =
-      'https://api.mercadolibre.com/shipment_labels?shipment_ids=41009544296';
-    const config = {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/pdf",
-        "responseType": "stream"
-      },
-    };
+      `https://api.mercadolibre.com/shipment_labels?shipment_ids=${shipmentId}`;
+    
     // const ticket = await axios.get(url, config);
     axios.defaults.headers.common['Authorization'] = 'Bearer '+ accessToken;
 
@@ -28,12 +23,12 @@ const getTicket = async () => {
     })
     const preName = ticket.headers['content-disposition'].split('=')[1];
     const name = preName.split('"')[1];
-    ticket.data.pipe(fs.createWriteStream(`./${name}`))
-
+    ticket.data.pipe(fs.createWriteStream(`./back/src/etiqueta/${name}`))
+    await savePdfToServer(name)
   } catch (error) {
     log(error);
   }
   //   log(ticket.headers['content-disposition'].split("=")[1]);
 };
 
-getTicket();
+getTicket(41006579058);
