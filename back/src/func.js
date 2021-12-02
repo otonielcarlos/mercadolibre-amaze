@@ -92,7 +92,7 @@ if(state === "00") {
   }
 }
     const id = order.data.id;
-    const customerPo = `ML_${id}`;
+    const customerPo = `MLAPPLE_${id}`;
 
     const address = shipping.data.receiver_address.address_line;
     const shipTo = address.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
