@@ -158,7 +158,7 @@ let responseFromIngram = await axios.post(baseUrl, data, {
     Authorization: `Bearer ${ingramToken.data.access_token}`,
   }, 
 }); 
-await getTicket(order.data.shipping.id, access_token)
+await getTicket(customerPO, order.data.shipping.id, access_token)
 
 const dataToReturn = {
   globalorderid: responseFromIngram.data.serviceresponse.ordersummary.ordercreateresponse[0].globalorderid,
@@ -166,7 +166,6 @@ const dataToReturn = {
   trackingNumber: trackingNumber,
   orderId: id
 }
-// console.log(responseFromIngram.data)
 return dataToReturn;
   } catch (error) {
     console.log(error.response.data);
