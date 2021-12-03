@@ -5,19 +5,13 @@ const fs = require('fs')
 // const writer = fs.createWriteStream('./ticket.pdf')
 
 
-const getTicket = async () => {
+const getTicket = async (shipmentId, accessToken) => {
   try {
     const accessToken = await token();
 
     let url =
-      'https://api.mercadolibre.com/shipment_labels?shipment_ids=41009544296';
-    const config = {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/pdf",
-        "responseType": "stream"
-      },
-    };
+      `https://api.mercadolibre.com/shipment_labels?shipment_ids=${shipmentId}`;
+ 
     // const ticket = await axios.get(url, config);
     axios.defaults.headers.common['Authorization'] = 'Bearer '+ accessToken;
 
@@ -36,4 +30,7 @@ const getTicket = async () => {
   //   log(ticket.headers['content-disposition'].split("=")[1]);
 };
 
-getTicket();
+// getTicket();
+module.exports = {
+  getTicket
+}
