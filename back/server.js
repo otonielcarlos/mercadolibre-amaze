@@ -37,15 +37,16 @@ app.post('/callbacks', async (req, res) => {
           await sendMessage(resource);
           await saveNewOrderID(id);
           let orderRes = await addOrder(id);
-          let nvID = orderRes.serviceresponse.ordersummary.ordercreateresponse[0].globalorderid ;
-          let customerPO = orderRes.serviceresponse.ordersummary.customerponumber;
-          if(nvID === undefined || nvID === 'undefined'){
+          let nvID = orderRes.globalorderid ;
+          let customerPO = orderRes.customerPO;
+          let trackingNumber = orderRes.trackingNumber;
+          if(typeof nvID === "undefined"){
             sendMail(id);
           }
-          await saveIngram(nvID , customerPO)
+          await saveIngram(nvID , customerPO, trackingNumber, id)
           console.log('id guardado con éxito ', id);
-          console.log('Customerponumber: ', orderRes.serviceresponse.ordersummary.customerponumber)
-          console.log(orderRes.serviceresponse.ordersummary.ordercreateresponse[0]);
+          console.log('Customerponumber: ', customerPO, 'nv', nvID)
+          // console.log(orderRes.serviceresponse.ordersummary.ordercreateresponse[0]);
           
         } else {
           console.log('id ya existe ', isOrder);

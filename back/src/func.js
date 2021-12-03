@@ -3,6 +3,7 @@ const arrayChunk = require('array-chunk');
 const { findOrder, db } = require('./db');
 const { token } = require('./ml');
 const { sendMail } = require('./mailer');
+const { getTicket } = require('./etiqueta/printTicket')
 
 let i = 0;
 let itemsChunk = [];
@@ -120,7 +121,6 @@ if(state === "00") {
       addressline2 = '';
     }
 
-
 let ingramToken = await axios.post(tokenUrl, postFields, header)
 let data = {
   "ordercreaterequest": {
@@ -158,9 +158,15 @@ let responseFromIngram = await axios.post(baseUrl, data, {
     Authorization: `Bearer ${ingramToken.data.access_token}`,
   }, 
 }); 
+await getTicket(customerPO, order.data.shipping.id, access_token)
 
-// console.log(responseFromIngram.data)
-return responseFromIngram.data;
+const dataToReturn = {
+  globalorderid: responseFromIngram.data.serviceresponse.ordersummary.ordercreateresponse[0].globalorderid,
+  customerPO: responseFromIngram.data.serviceresponse.ordersummary.customerponumber,
+  trackingNumber: trackingNumber,
+  orderId: id
+}
+return dataToReturn;
   } catch (error) {
     console.log(error.response.data);
     sendMail(id)
