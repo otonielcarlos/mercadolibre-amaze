@@ -161,7 +161,8 @@ const afterSetStockItem = response => {
             respromises.push(result.data)
             // console.log(i,'success item:' ,result.data.id ,'status: ' + result.status);
              }catch(err){
-              //  console.log(i, 'failed item: ',res[0][i].itemid,err.response.data.message)}
+              //  console.log(i, 'failed item: ',res[0][i].itemid,err.response.data.message)
+            }
               }, 1000 * i)
           }
         return respromises;
