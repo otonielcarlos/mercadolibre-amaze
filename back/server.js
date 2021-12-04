@@ -37,6 +37,7 @@ app.post('/callbacks', async (req, res) => {
           // await sendMessage(resource);
           await saveNewOrderID(id);
           let orderRes = await addOrder(id);
+          console.log(orderRes);
           let nvID = orderRes.globalorderid ;
           let customerPO = orderRes.customerPO;
           let trackingNumber = orderRes.trackingNumber;
