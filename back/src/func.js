@@ -158,6 +158,7 @@ let responseFromIngram = await axios.post(baseUrl, data, {
   }, 
 }); 
 // console.log(responseFromIngram.data);
+let customerPO = responseFromIngram.data.serviceresponse.ordersummary.customerponumber;
 let trackingNumber = (typeof shipping.data.tracking_number === "undefined") ? false : shipping.data.tracking_number
 if(trackingNumber){
   await getTicket(customerPO, order.data.shipping.id, access_token)
@@ -174,7 +175,7 @@ console.log(dataToReturn);
 return dataToReturn;
   } catch (error) {
     console.log(error);
-    sendMail(id)
+    // sendMail(id)
   }
 }
 
