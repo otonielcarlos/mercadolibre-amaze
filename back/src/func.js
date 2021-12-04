@@ -157,7 +157,7 @@ let responseFromIngram = await axios.post(baseUrl, data, {
     Authorization: `Bearer ${ingramToken.data.access_token}`,
   }, 
 }); 
-console.log(responseFromIngram.data);
+// console.log(responseFromIngram.data);
 let trackingNumber = (typeof shipping.data.tracking_number === "undefined") ? false : shipping.data.tracking_number
 if(trackingNumber){
   await getTicket(customerPO, order.data.shipping.id, access_token)
@@ -170,6 +170,7 @@ const dataToReturn = {
   trackingNumber: trackingNumber,
   orderId: id
 }
+console.log(dataToReturn);
 return dataToReturn;
   } catch (error) {
     console.log(error);
