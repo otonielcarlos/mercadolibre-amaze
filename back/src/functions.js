@@ -111,9 +111,10 @@ const afterSetStockVariation = response => {
               const result = await axios.put(`https://api.mercadolibre.com/items/${res[0][i].itemid}`, {variations: [{id: res[0][i].variationid, available_quantity: res[0][i].stock,},],},
               {headers: {'Content-Type': 'application/json',Authorization: `Bearer ${res[1]}`,},})
               respromises.push(result.data)
-              console.log(i,'success variation:' ,result.data.id ,'status: '+result.status);
+              // console.log(i,'success variation:' ,result.data.id ,'status: '+result.status);
                }catch(err){
-                 console.log(i, 'failed variation', res[0][i].itemid, err.response.data.message)}
+                //  console.log(i, 'failed variation', res[0][i].itemid, err.response.data.message)
+              }
                 }, 1000 * i)
             }
           return respromises;
@@ -158,9 +159,9 @@ const afterSetStockItem = response => {
             const result = await axios.put(`https://api.mercadolibre.com/items/${res[0][i].itemid}`, {available_quantity: res[0][i].stock},
             {headers: {'Content-Type': 'application/json',Authorization: `Bearer ${res[1]}`,},})
             respromises.push(result.data)
-            console.log(i,'success item:' ,result.data.id ,'status: ' + result.status);
+            // console.log(i,'success item:' ,result.data.id ,'status: ' + result.status);
              }catch(err){
-               console.log(i, 'failed item: ',res[0][i].itemid,err.response.data.message)}
+              //  console.log(i, 'failed item: ',res[0][i].itemid,err.response.data.message)}
               }, 1000 * i)
           }
         return respromises;

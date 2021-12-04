@@ -168,7 +168,7 @@ const dataToReturn = {
 }
 return dataToReturn;
   } catch (error) {
-    console.log(error.response.data);
+    console.log(error);
     sendMail(id)
   }
 }
