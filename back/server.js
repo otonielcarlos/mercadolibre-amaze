@@ -34,7 +34,7 @@ app.post('/callbacks', async (req, res) => {
         let isOrder = await findOrder(id);
 
         if (isOrder === 'undefined') {
-          await sendMessage(resource);
+          // await sendMessage(resource);
           await saveNewOrderID(id);
           let orderRes = await addOrder(id);
           let nvID = orderRes.globalorderid ;
