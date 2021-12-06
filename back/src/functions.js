@@ -4,6 +4,7 @@ const arrayChunk = require('array-chunk');
 const { db } = require('./db');
 const { token } = require('./ml');
 const { response } = require('express');
+const { getTicket, checkTickets } = require('./etiqueta/printTicket');
 let i = 0;
 let itemsChunk = [];
 const baseUrl =
@@ -184,7 +185,8 @@ updatePrice().then(async () => {
     afterSetStockVariation(response);
     const response_2 = await setStockWithItemId();
     afterSetStockItem(response_2);
-    // return db.end();
+    await checkTickets();
+
   } catch (err)
   {
     return console.log(err);

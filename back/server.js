@@ -2,7 +2,7 @@ const { default: axios } = require('axios');
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const { db, saveNewOrderID, findOrder, saveIngram } = require('./src/db');
+const { db, saveNewOrderID, findOrder, saveIngram, getTickets } = require('./src/db');
 const { addOrder } = require('./src/func');
 const { sendMessage } = require('./src/message');
 const { token } = require('./src/ml');
@@ -16,6 +16,16 @@ const PORT = process.env.PORT || 4000;
 app.get('/', (req, res) => {
   res.status(200).send({ status: 'OK' });
 });
+
+app.get('/guias', async(req,res) => {
+  try {
+    const guias = await getTickets();
+    res.status(200).json(guias);
+    
+  } catch (error) {
+    console.log(error);
+  }
+})
 
 app.post('/callbacks', async (req, res) => {
   res.status(200).send(req.body);
