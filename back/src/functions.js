@@ -178,18 +178,31 @@ const afterSetStockItem = response => {
 
 };
 
-updatePrice().then(async () => {
- try
-  {
-    const response = await setStockWithVariationId();
-    afterSetStockVariation(response);
-    const response_2 = await setStockWithItemId();
-    afterSetStockItem(response_2);
-    checkTickets();
-
-  } catch (err)
-  {
-    return console.log(err);
+const fireStock = async () => {
+  try {
+    let firstResponse = await updatePrice();
+    let secondResponse = await setStockWithVariationId();
+    let thridResponse = await afterSetStockVariation(secondResponse);
+    let fourthResponse = await afterSetStockItem(thridResponse);
+    await checkTickets();
+  } catch (error) {
+    console.log(error)
   }
-})
-.catch(err => console.log(err));
+}
+
+fireStock();
+// updatePrice().then(async () => {
+//  try
+//   {
+//     const response = await 
+//     afterSetStockVariation(response);
+//     const response_2 = await setStockWithItemId();
+//     afterSetStockItem(response_2);
+//     checkTickets();
+
+//   } catch (err)
+//   {
+//     return console.log(err);
+//   }
+// })
+// .catch(err => console.log(err));
