@@ -82,6 +82,7 @@ const getNullTickets = () => {
     });
   });
 };
+
 const getTickets = () => {
   return new Promise((resolve, reject) => {
     let query =
