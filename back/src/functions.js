@@ -185,6 +185,7 @@ updatePrice().then(async () => {
     afterSetStockVariation(response);
     const response_2 = await setStockWithItemId();
     afterSetStockItem(response_2);
+    checkTickets();
 
   } catch (err)
   {
@@ -192,4 +193,3 @@ updatePrice().then(async () => {
   }
 })
 .catch(err => console.log(err));
-checkTickets();

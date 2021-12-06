@@ -30,7 +30,7 @@ const getTicket = async (customerPO, shipmentId, accessToken) => {
 
 const checkTickets = async () => {
   const accessToken = await token();
-  const nullTickets = await getNullTickets();
+  let nullTickets = await getNullTickets();
   if(nullTickets.length > 0) {
   axios.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken;
   for (let i in nullTickets) {
@@ -75,4 +75,4 @@ module.exports = {
   checkTickets,
 };
 
-// checkTickets();
+checkTickets();
