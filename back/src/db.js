@@ -85,7 +85,7 @@ const getNullTickets = () => {
 const getTickets = () => {
   return new Promise((resolve, reject) => {
     let query =
-      "SELECT * from ingramorders WHERE tracking != 'cancelled' and tracking != 'null' and tracking IS NOT NULL";
+      "SELECT nv as 'nota_de_venta', id as 'id_mercadolibre', customerpo, tracking as 'guia_rastreo' from ingramorders WHERE tracking != 'cancelled' and tracking != 'null' and tracking IS NOT NULL";
     db.query(query, (err, results) => {
       if (err) reject(err);
       resolve(results);
