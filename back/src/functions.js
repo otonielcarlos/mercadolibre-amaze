@@ -180,7 +180,7 @@ const afterSetStockItem = response => {
 
 const fireStock = async () => {
   try {
-    let firstResponse = await updatePrice();
+    await updatePrice();
     let secondResponse = await setStockWithVariationId();
     let thridResponse = await afterSetStockVariation(secondResponse);
     let fourthResponse = await afterSetStockItem(thridResponse);
@@ -190,7 +190,7 @@ const fireStock = async () => {
   }
 }
 
-fireStock();
+fireStock()
 // updatePrice().then(async () => {
 //  try
 //   {
