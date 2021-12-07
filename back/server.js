@@ -17,15 +17,7 @@ app.get('/', (req, res) => {
   res.status(200).send({ status: 'OK' });
 });
 
-app.get('/guias', async(req,res) => {
-  try {
-    const guias = await getTickets();
-    res.status(200).json(guias);
-    
-  } catch (error) {
-    console.log(error);
-  }
-})
+
 
 app.post('/callbacks', async (req, res) => {
   res.status(200).send(req.body);
@@ -72,6 +64,16 @@ app.post('/callbacks', async (req, res) => {
     console.log(error);
   }
 });
+
+app.get('/guias', async(req,res) => {
+  try {
+    const guias = await getTickets();
+    res.status(200).json(guias);
+    
+  } catch (error) {
+    console.log(error);
+  }
+})
 
 app.listen(PORT, err => {
   if (err) {
