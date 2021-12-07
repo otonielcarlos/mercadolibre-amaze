@@ -31,7 +31,7 @@ const getTicket = async (customerPO, shipmentId, accessToken) => {
 const checkTickets = async () => {
   const accessToken = await token();
   // let nullTickets = await getNullTickets();
-  db.query('SELECT * FROM ingramorders WHERE tracking = "null"', (err, results) => {
+  db.query('SELECT * FROM ingramorders WHERE tracking = "null"', async (err, results) => {
     if(err) log(err);
     if(results.length > 0) {
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken;
