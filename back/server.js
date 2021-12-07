@@ -75,6 +75,37 @@ app.get('/guias', async(req,res) => {
   }
 })
 
+app.post('/orderid/:id',(req,res) => {
+
+  try {
+    const { resource, topic } = req.body;
+      const saveDate = new Date();
+      saveDate.setHours(saveDate.getHours() - 5);
+      let today = saveDate.toISOString().split('T')[0];
+      let orderDate = await getDate(resource);
+      let idResource = resource.slice(8, resource.length);
+      let id = req.params.id;
+    
+          let orderRes = await addOrder(id);
+          console.log(orderRes);
+          let nvID = orderRes.globalorderid ;
+          let customerPO = orderRes.customerPO;
+          let trackingNumber = orderRes.trackingNumber;
+          await saveIngram(nvID , customerPO, trackingNumber, id)
+          console.log('id guardado con éxito ', id);
+          console.log('Customerponumber: ', customerPO, 'nv', nvID)
+          
+        // } else {
+        //   console.log('id ya existe ', isOrder);
+        // }
+      // } else {
+      //   console.log('hoy es ', today, ' y el pedido es del ', orderDate);
+      // }
+  } catch (error) {
+    console.log(error);
+  }
+})
+
 app.listen(PORT, err => {
   if (err) {
     console.log(err);
