@@ -1,5 +1,5 @@
 const mysql = require('mysql2');
-const { resource } = require('../server');
+// const { resource } = require('../server');
 const log = console.log;
 
 const db = mysql.createPool({
