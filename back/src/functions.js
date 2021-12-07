@@ -79,7 +79,6 @@ const updatePrice = () => {
     })
     .catch(error => {
       console.log('Error en price', error);
-      throw error;
     });
 };
 // updatePrice();
@@ -174,7 +173,7 @@ const afterSetStockItem = response => {
       let m = d.getMinutes();
       console.log(`updated variations ${n}:${m}`)
     })
-    .catch(err => console.log(err.data))
+    .catch(err => console.log(err))
 
 };
 
