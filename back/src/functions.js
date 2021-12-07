@@ -123,7 +123,7 @@ const afterSetStockVariation = response => {
       let d = new Date();
       let n = d.getHours();
       let m = d.getMinutes();
-      console.log(`updated variations ${n}:${m}`)
+      console.log(`updated first variations ${n}:${m}`)
     })
     .catch(err => console.log(err))
 
@@ -149,7 +149,7 @@ const afterSetStockItem = response => {
   return Promise.all([response, accessToken])
     .then(res => {
       
-      let chunksOfProducts =  arrayChunk(res[0],60);
+      // let chunksOfProducts =  arrayChunk(res[0],60);
       let respromises = [];
       let p = 0;
       for(let i in res[0]){ 
@@ -171,7 +171,7 @@ const afterSetStockItem = response => {
       let d = new Date();
       let n = d.getHours();
       let m = d.getMinutes();
-      console.log(`updated variations ${n}:${m}`)
+      console.log(`updated second variations ${n}:${m}`)
     })
     .catch(err => console.log(err))
 
