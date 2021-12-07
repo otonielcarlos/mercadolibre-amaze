@@ -75,4 +75,3 @@ module.exports = {
   checkTickets,
 };
 
-checkTickets();
