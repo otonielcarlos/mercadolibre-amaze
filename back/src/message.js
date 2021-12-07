@@ -4,8 +4,8 @@ const messageUrl = 'https://api.mercadolibre.com/messages/';
 const ordersUrl = 'https://api.mercadolibre.com';
 
 const sendMessage = async (resource) => {
+  const access_token = await token();
   try {
-    const access_token = await token();
     const res = await axios.get(`${ordersUrl}${resource}`, {
       headers: { Authorization: `Bearer ${access_token}` },
     });

@@ -1,4 +1,5 @@
 const axios = require('axios');
+const log = console.log
 const body = {
   grant_type: 'refresh_token',
   client_id: '2796079999742920',
