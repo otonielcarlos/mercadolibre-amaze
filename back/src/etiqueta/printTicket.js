@@ -30,47 +30,43 @@ const getTicket = async (customerPO, shipmentId, accessToken) => {
 
 const checkTickets = async () => {
   const accessToken = await token();
-  // let nullTickets = await getNullTickets();
-  db.query('SELECT * FROM ingramorders WHERE tracking = "null"', async (err, results) => {
-    if(err) log(err);
-    if(results.length > 0) {
-    axios.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken;
-    for (let i in results) {
-      try {
-        let shipmentId = await axios.get(
-          `https://api.mercadolibre.com/orders/${results[i].id}`
-        );
-        let urlShipments =
-          'https://api.mercadolibre.com/shipment_labels?shipment_ids=' +
-          shipmentId.data.shipping.id;
-        const ticket = await axios({
-          url: urlShipments,
-          method: 'GET',
-          responseType: 'stream',
-        });
-        ticket.data.pipe(
-          fs.createWriteStream(
-            `back/src/etiqueta/${results[i].customerpo}.pdf`
-          )
-        );
-        await savePdfToServer(`${results[i].customerpo}.pdf`);
-        let trackingNumber = await axios.get(
-          `https://api.mercadolibre.com/shipments/${shipmentId.data.shipping.id}`
-        );
-        await updateTracking(
-          trackingNumber.data.tracking_number,
-          results[i].id
-        );
-      } catch (error) {
-        setCancel(results[i].id);
-      }
+  let nullTickets = await getNullTickets();
+  if(nullTickets.length > 0) {
+  axios.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken;
+  for (let i in nullTickets) {
+    try {
+      let shipmentId = await axios.get(
+        `https://api.mercadolibre.com/orders/${nullTickets[i].id}`
+      );
+      let urlShipments =
+        'https://api.mercadolibre.com/shipment_labels?shipment_ids=' +
+        shipmentId.data.shipping.id;
+      const ticket = await axios({
+        url: urlShipments,
+        method: 'GET',
+        responseType: 'stream',
+      });
+      ticket.data.pipe(
+        fs.createWriteStream(
+          `back/src/etiqueta/${nullTickets[i].customerpo}.pdf`
+        )
+      );
+      await savePdfToServer(`${nullTickets[i].customerpo}.pdf`);
+      let trackingNumber = await axios.get(
+        `https://api.mercadolibre.com/shipments/${shipmentId.data.shipping.id}`
+      );
+      await updateTracking(
+        trackingNumber.data.tracking_number,
+        nullTickets[i].id
+      );
+    } catch (error) {
+      setCancel(nullTickets[i].id);
     }
   }
-  else{
-    log('no hay nuevas etiquetas')
-  }
-
-  })
+}
+else{
+  log('no hay nuevas etiquetas')
+}
 };
 
 // getTicket('ML_5067780851','41013952983','APP_USR-2796079999742920-120317-8eae4ba83d7fcc20ca662be0d746ac45-766642543');
@@ -79,4 +75,4 @@ module.exports = {
   checkTickets,
 };
 
-// checkTickets();
+checkTickets();

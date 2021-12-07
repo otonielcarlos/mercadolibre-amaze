@@ -112,8 +112,8 @@ const setCancel = id => {
   });
 };
 module.exports = {
-  findOrder,
   db,
+  findOrder,
   saveNewOrderID,
   saveIngram,
   getNullTickets,
