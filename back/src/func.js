@@ -167,7 +167,7 @@ if(trackingNumber !== "nulo"){
 const dataToReturn = {
   globalorderid: responseFromIngram.data.serviceresponse.ordersummary.ordercreateresponse[0].globalorderid,
   customerPO: responseFromIngram.data.serviceresponse.ordersummary.customerponumber,
-  trackingNumber: trackingNumber,
+  trackingNumber: "null",
   orderId: id
 }
 console.log(dataToReturn);
