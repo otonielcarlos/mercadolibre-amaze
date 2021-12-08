@@ -89,7 +89,7 @@ app.get('/orderid/:id', async (req,res) => {
           await saveIngram(nvID , customerPO, trackingNumber, id)
           console.log('id guardado con éxito ', id);
           console.log('Customerponumber: ', customerPO, 'nv', nvID)
-          
+          res.status(200).json(orderRes)
         // } else {
         //   console.log('id ya existe ', isOrder);
         // }
