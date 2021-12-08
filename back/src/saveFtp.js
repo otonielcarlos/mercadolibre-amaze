@@ -5,10 +5,11 @@ async function savePdfToServer(name) {
   // client.ftp.verbose = true
   try {
     await client.access({
-      host: '173.231.198.187',
+      host: 'amaze.com.pe',
       user: 'amazecom',
       password: '6vB2YVxW5=%r',
       secure: false,
+      timeout: 50000
     });
 
     await client.list();
