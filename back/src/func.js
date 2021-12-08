@@ -173,7 +173,7 @@ const dataToReturn = {
 console.log(dataToReturn);
 return dataToReturn;
   } catch (error) {
-    console.log(error);
+    console.log(error.data);
     // sendMail(id)
   }
 }
