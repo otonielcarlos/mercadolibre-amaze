@@ -75,15 +75,10 @@ app.get('/guias', async(req,res) => {
   }
 })
 
-app.post('/orderid/:id',(req,res) => {
-
+app.get('/orderid/:id', (req,res) => {
   try {
-    const { resource, topic } = req.body;
-      const saveDate = new Date();
-      saveDate.setHours(saveDate.getHours() - 5);
-      let today = saveDate.toISOString().split('T')[0];
-      let orderDate = await getDate(resource);
-      let idResource = resource.slice(8, resource.length);
+    // const { resource, topic } = req.body;
+     
       let id = req.params.id;
     
           let orderRes = await addOrder(id);
