@@ -75,7 +75,7 @@ app.get('/guias', async(req,res) => {
   }
 })
 
-app.get('/orderid/:id', (req,res) => {
+app.get('/orderid/:id', async (req,res) => {
   try {
     // const { resource, topic } = req.body;
      
