@@ -96,9 +96,9 @@ app.post('/callbacks', async (req, res) => {
 app.get('/guias', async (req, res) => {
   try {
     const guias = await getTickets();
-    for (let i in guias) {
-      guias[i].fecha.slice(0, 10);
-    }
+    // for (let i in guias) {
+    //   guias[i].fecha.slice(0, 10);
+    // }
     res.status(200).json(guias);
   } catch (error) {
     console.log(error);
