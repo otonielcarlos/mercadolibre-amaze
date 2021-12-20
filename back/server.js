@@ -97,8 +97,10 @@ app.get('/guias', async (req, res) => {
   try {
     const guias = await getTickets();
     for (let i in guias) {
-      let guia = JSON.stringify(guias[i].fecha);
-      guias[i].fecha = guia.slice(1, 11);
+      let guia = guias[i].fecha.toISOString();
+      // let guia = JSON.stringify(guias[i].fecha);
+      // guias[i].fecha = guia.slice(1, 11);
+      guias[i].fecha = guia.split('T')[0];
     }
     console.log(guias[0]);
     res.status(200).json(guias);
