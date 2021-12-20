@@ -2,12 +2,17 @@ const { default: axios } = require('axios');
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const { saveNewOrderID, findOrder, saveIngram, getTickets } = require('./src/db');
+const {
+  saveNewOrderID,
+  findOrder,
+  saveIngram,
+  getTickets,
+} = require('./src/db');
 const { addOrder } = require('./src/func');
 const { sendMessage } = require('./src/message');
 const { token } = require('./src/ml');
 const { getDate } = require('./src/date');
-const { sendMail } = require('./src/mailer')
+const { sendMail } = require('./src/mailer');
 
 app.use(cors());
 app.use(express.json());
@@ -17,32 +22,31 @@ app.get('/', (req, res) => {
   res.status(200).send({ status: 'OK' });
 });
 
-app.get('/orderid/:id', async (req,res) => {
+app.get('/orderid/:id', async (req, res) => {
   try {
     // const { resource, topic } = req.body;
-     
-      let id = req.params.id;
-    
-          let orderRes = await addOrder(id);
-          // console.log(orderRes);
-          let nvID = orderRes.globalorderid ;
-          let customerPO = orderRes.customerPO;
-          let trackingNumber = orderRes.trackingNumber;
-          await saveIngram(nvID , customerPO, trackingNumber, id)
-          console.log('id guardado con éxito ', id);
-          console.log('Customerponumber: ', customerPO, 'nv', nvID)
-          res.status(200).json(orderRes)
-        // } else {
-        //   console.log('id ya existe ', isOrder);
-        // }
-      // } else {
-      //   console.log('hoy es ', today, ' y el pedido es del ', orderDate);
-      // }
+
+    let id = req.params.id;
+
+    let orderRes = await addOrder(id);
+    // console.log(orderRes);
+    let nvID = orderRes.globalorderid;
+    let customerPO = orderRes.customerPO;
+    let trackingNumber = orderRes.trackingNumber;
+    await saveIngram(nvID, customerPO, trackingNumber, id);
+    console.log('id guardado con éxito ', id);
+    console.log('Customerponumber: ', customerPO, 'nv', nvID);
+    res.status(200).json(orderRes);
+    // } else {
+    //   console.log('id ya existe ', isOrder);
+    // }
+    // } else {
+    //   console.log('hoy es ', today, ' y el pedido es del ', orderDate);
+    // }
   } catch (error) {
     console.log(error);
   }
-})
-
+});
 
 app.post('/callbacks', async (req, res) => {
   res.status(200).send(req.body);
@@ -65,17 +69,16 @@ app.post('/callbacks', async (req, res) => {
           await saveNewOrderID(id);
           let orderRes = await addOrder(id);
           console.log(orderRes);
-          let nvID = orderRes.globalorderid ;
+          let nvID = orderRes.globalorderid;
           let customerPO = orderRes.customerPO;
           let trackingNumber = orderRes.trackingNumber;
-          if(typeof nvID === "undefined"){
+          if (typeof nvID === 'undefined') {
             sendMail(id);
           }
-          await saveIngram(nvID , customerPO, trackingNumber, id)
+          await saveIngram(nvID, customerPO, trackingNumber, id);
           console.log('id guardado con éxito ', id);
-          console.log('Customerponumber: ', customerPO, 'nv', nvID)
+          console.log('Customerponumber: ', customerPO, 'nv', nvID);
           // console.log(orderRes.serviceresponse.ordersummary.ordercreateresponse[0]);
-          
         } else {
           console.log('id ya existe ', isOrder);
         }
@@ -90,17 +93,17 @@ app.post('/callbacks', async (req, res) => {
   }
 });
 
-app.get('/guias', async(req,res) => {
+app.get('/guias', async (req, res) => {
   try {
     const guias = await getTickets();
+    for (let i in guias) {
+      guias[i].fecha.slice(0, 10);
+    }
     res.status(200).json(guias);
-    
   } catch (error) {
     console.log(error);
   }
-})
-
-
+});
 
 app.listen(PORT, err => {
   if (err) {
