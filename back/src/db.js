@@ -76,17 +76,20 @@ const saveIngram = (nv, customerpo, trackingNumber, id) => {
 const getNullTickets = () => {
   return new Promise((resolve, reject) => {
     // let query = `SELECT * from ingramorders WHERE tracking = 'null'`;
-    db.query('SELECT * from ingramorders WHERE tracking = "null"', (err, results) => {
-      if (err) reject(err);
-      resolve(results);
-    });
+    db.query(
+      'SELECT * from ingramorders WHERE tracking = "null"',
+      (err, results) => {
+        if (err) reject(err);
+        resolve(results);
+      }
+    );
   });
 };
 
 const getTickets = () => {
   return new Promise((resolve, reject) => {
     let query =
-      "SELECT nv as 'nota_de_venta', id as 'id_mercadolibre', customerpo, tracking as 'guia_rastreo', date as 'fecha' from ingramorders WHERE tracking != 'cancelled' and tracking != 'null' and tracking IS NOT NULL";
+      "SELECT nv as 'nota_de_venta', id as 'id_mercadolibre', customerpo, tracking as 'guia_rastreo', date as 'fecha' from ingramorders WHERE tracking != 'cancelled' and tracking != 'null' and tracking IS NOT NULL ORDER BY fecha DESC";
     db.query(query, (err, results) => {
       if (err) reject(err);
       resolve(results);
