@@ -70,7 +70,7 @@ const checkTickets = async () => {
 
 // getTicket('ML_5067780851','41013952983','APP_USR-2796079999742920-120317-8eae4ba83d7fcc20ca662be0d746ac45-766642543');
 module.exports = {
-  getTicket,
+  //getTicket,
   checkTickets,
 };
-//checkTickets();
+checkTickets();

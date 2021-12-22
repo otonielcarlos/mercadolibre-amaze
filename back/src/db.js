@@ -75,14 +75,11 @@ const saveIngram = (nv, customerpo, trackingNumber, id) => {
 
 const getNullTickets = () => {
   return new Promise((resolve, reject) => {
-    // let query = `SELECT * from ingramorders WHERE tracking = 'null'`;
-    db.query(
-      'SELECT * from ingramorders WHERE tracking = "null"',
-      (err, results) => {
-        if (err) reject(err);
-        resolve(results);
-      }
-    );
+    let query = "SELECT * from ingramorders WHERE tracking = 'null'";
+    db.query(query, (err, results) => {
+      if (err) reject(err);
+      resolve(results);
+    });
   });
 };
 
