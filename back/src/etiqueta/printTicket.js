@@ -15,7 +15,6 @@ const checkTickets = async () => {
 		for (let i in nullTickets) {
 			try {
         let shipmentId = await axios.get(`https://api.mercadolibre.com/orders/${nullTickets[i].id}`);
-        
 				let urlShipments = 'https://api.mercadolibre.com/shipment_labels?shipment_ids=' + shipmentId.data.shipping.id;
         
         const ticket = await axios({

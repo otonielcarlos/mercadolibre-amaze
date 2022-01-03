@@ -13,6 +13,8 @@ const { sendMessage } = require('./src/message');
 const { token } = require('./src/ml');
 const { getDate } = require('./src/date');
 const { sendMail } = require('./src/mailer');
+const { setDisplay, showAll } = require('./src/db')
+const log = console.log;
 
 app.use(cors());
 app.use(express.json());
@@ -29,22 +31,22 @@ app.get('/orderid/:id', async (req, res) => {
 		let id = req.params.id;
 
 		let orderRes = await addOrder(id);
-		// console.log(orderRes);
+		// log(orderRes);
 		let nvID = orderRes.globalorderid;
 		let customerPO = orderRes.customerPO;
 		let trackingNumber = orderRes.trackingNumber;
 		await saveIngram(nvID, customerPO, trackingNumber, id);
-		console.log('id guardado con éxito ', id);
-		console.log('Customerponumber: ', customerPO, 'nv', nvID);
+		log('id guardado con éxito ', id);
+		log('Customerponumber: ', customerPO, 'nv', nvID);
 		res.status(200).json(orderRes);
 		// } else {
-		//   console.log('id ya existe ', isOrder);
+		//   log('id ya existe ', isOrder);
 		// }
 		// } else {
-		//   console.log('hoy es ', today, ' y el pedido es del ', orderDate);
+		//   log('hoy es ', today, ' y el pedido es del ', orderDate);
 		// }
 	} catch (error) {
-		console.log(error);
+		log(error);
 	}
 });
 
@@ -55,7 +57,7 @@ app.post('/callbacks', async (req, res) => {
 		const { resource, topic } = req.body;
 
 		if (topic === 'orders_v2') {
-      console.log(req.body)
+      log(req.body)
 			const saveDate = new Date();
 			saveDate.setHours(saveDate.getHours() - 5);
 			let today = saveDate.toISOString().split('T')[0];
@@ -68,7 +70,7 @@ app.post('/callbacks', async (req, res) => {
 					await sendMessage(resource);
 					await saveNewOrderID(id);
 					let orderRes = await addOrder(id);
-					console.log(orderRes);
+					log(orderRes);
 					let nvID = orderRes.globalorderid;
 					let customerPO = orderRes.customerPO;
 					let trackingNumber = orderRes.trackingNumber;
@@ -76,20 +78,20 @@ app.post('/callbacks', async (req, res) => {
 						sendMail(id);
 					}
 					await saveIngram(nvID, customerPO, trackingNumber, id);
-					console.log('id guardado con éxito ', id);
-					console.log('Customerponumber: ', customerPO, 'nv', nvID);
-					// console.log(orderRes.serviceresponse.ordersummary.ordercreateresponse[0]);
+					log('id guardado con éxito ', id);
+					log('Customerponumber: ', customerPO, 'nv', nvID);
+					// log(orderRes.serviceresponse.ordersummary.ordercreateresponse[0]);
 				} else {
-					console.log('id ya existe ', isOrder);
+					log('id ya existe ', isOrder);
 				}
 			} else {
-				console.log('hoy es ', today, ' y el pedido es del ', orderDate);
+				log('hoy es ', today, ' y el pedido es del ', orderDate);
 			}
 		} else {
-			// console.log('callback de', req.body.topic);
+			// log('callback de', req.body.topic);
 		}
 	} catch (error) {
-		console.log(error);
+		log(error);
 	}
 });
 
@@ -100,18 +102,51 @@ app.get('/guias', async (req, res) => {
 			let guia = guias[i].fecha.toISOString();
 			guias[i].fecha = guia.split('T')[0];
 		}
-		console.log(guias[0]);
 		res.status(200).json(guias);
 	} catch (error) {
-		console.log(error);
+		log(error);
 	}
 });
 
+app.get('/todos', async (req, res) => {
+  try {
+    const results = await showAll();
+    for(let i in results){
+      let result = results[i].fecha.toISOString();
+      results[i].fecha = result.split('T')[0];
+    }
+    res.status(200).json(results)
+  } catch (error) {
+    log(error)
+    res.status(404).json(
+      {
+        "error": "something went wrong",
+        "data": error
+      }
+    );
+  }
+})
+
+app.delete('/borrar/:guia', async (req, res) => {
+  try {
+    const { guia } = req.params
+    const result = await setDisplay(guia);
+    if(result === 1) {
+      log(guia);
+      res.status(202).json({"message": `guia ${ guia } eliminada con éxito`})
+    } else {
+      res.status(404).json({"message": `guia ${guia} not found`})
+    } 
+  } catch (error) {
+    log(error)
+  }
+})
+
 app.listen(PORT, err => {
 	if (err) {
-		console.log(err);
+		log(err);
 	}
-	console.log(`listening on port: ${PORT}`);
+	log(`listening on port: ${PORT}`);
 });
 
 module.exports = app;

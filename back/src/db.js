@@ -86,7 +86,7 @@ const getNullTickets = () => {
 const getTickets = () => {
   return new Promise((resolve, reject) => {
     let query =
-      "SELECT nv as 'nota_de_venta', id as 'id_mercadolibre', customerpo, tracking as 'guia_rastreo', date as 'fecha' from ingramorders WHERE tracking != 'cancelled' and tracking != 'null' and tracking IS NOT NULL ORDER BY fecha DESC";
+      "SELECT nv as 'nota_de_venta', id as 'id_mercadolibre', customerpo, tracking as 'guia_rastreo', date as 'fecha' from ingramorders WHERE display = 'true' ORDER BY date DESC";
     db.query(query, (err, results) => {
       if (err) reject(err);
       resolve(results);
@@ -111,6 +111,31 @@ const setCancel = id => {
     log(results);
   });
 };
+
+const setDisplay = id => {
+  return new Promise((resolve, reject) => {
+    let query = `UPDATE ingramorders SET display = "false" WHERE customerpo = '${id}'`
+    db.query(query, (err, results) => {
+      if(err) console.log(err)
+    if(results.affectedRows === 1) {
+      resolve(1)
+    } else {
+      resolve(0)
+    }
+    })
+  })
+}
+
+const showAll = () => {
+  return new Promise((resolve, reject) => {
+    let query = "SELECT nv as 'nota_de_venta', id as 'id_mercadolibre', customerpo, tracking as 'guia_rastreo', date as 'fecha' from ingramorders WHERE tracking IS NOT NULL and tracking != 'cancelled' ORDER BY date DESC"
+    db.query(query, (err, results) => {
+      if(err) console.log(err);
+      resolve(results);
+    })
+  })
+}
+
 module.exports = {
   db,
   findOrder,
@@ -120,4 +145,6 @@ module.exports = {
   updateTracking,
   setCancel,
   getTickets,
+  setDisplay,
+  showAll
 };
