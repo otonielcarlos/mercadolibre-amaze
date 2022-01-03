@@ -26,12 +26,8 @@ app.get('/', (req, res) => {
 
 app.get('/orderid/:id', async (req, res) => {
 	try {
-		// const { resource, topic } = req.body;
-
 		let id = req.params.id;
-
 		let orderRes = await addOrder(id);
-		// log(orderRes);
 		let nvID = orderRes.globalorderid;
 		let customerPO = orderRes.customerPO;
 		let trackingNumber = orderRes.trackingNumber;
@@ -39,12 +35,6 @@ app.get('/orderid/:id', async (req, res) => {
 		log('id guardado con éxito ', id);
 		log('Customerponumber: ', customerPO, 'nv', nvID);
 		res.status(200).json(orderRes);
-		// } else {
-		//   log('id ya existe ', isOrder);
-		// }
-		// } else {
-		//   log('hoy es ', today, ' y el pedido es del ', orderDate);
-		// }
 	} catch (error) {
 		log(error);
 	}
@@ -55,7 +45,6 @@ app.post('/callbacks', async (req, res) => {
 
 	try {
 		const { resource, topic } = req.body;
-
 		if (topic === 'orders_v2') {
       log(req.body)
 			const saveDate = new Date();
