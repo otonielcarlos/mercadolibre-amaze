@@ -60,7 +60,7 @@ const saveIngram = (nv, customerpo, trackingNumber, id) => {
   let day = saveDate.toISOString().split('T')[0];
   return new Promise((resolve, reject) => {
     db.query(
-      `INSERT INTO ingramorders VALUES ('${nv}', '${id}','${customerpo}','${trackingNumber}','${day}')`,
+      `INSERT INTO ingramorders VALUES ('${nv}', '${id}','${customerpo}','${trackingNumber}', 'false','${day}')`,
       (err, results) => {
         if (err) {
           console.log('err saving ingramorders ', err);
@@ -96,7 +96,7 @@ const getTickets = () => {
 
 const updateTracking = (trackingNumber, id) => {
   return new Promise((resolve, reject) => {
-    let query = `UPDATE ingramorders SET tracking = '${trackingNumber}' WHERE id = ${id}`;
+    let query = `UPDATE ingramorders SET tracking = '${trackingNumber}', display = 'true' WHERE id = ${id}`;
     db.query(query, (err, results) => {
       if (err) reject(err);
       resolve(results);
