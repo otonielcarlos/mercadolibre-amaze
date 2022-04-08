@@ -1,3 +1,4 @@
+// @ts-nocheck
 const ftp = require('basic-ftp');
 
 async function savePdfToServer(name) {

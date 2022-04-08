@@ -1,5 +1,6 @@
+// @ts-nocheck
 const axios = require('axios');
-const { token } = require('../ml');
+const { token } = require('../tokens/ml');
 const log = console.log;
 const fs = require('fs');
 const { savePdfToServer } = require('../saveFtp');

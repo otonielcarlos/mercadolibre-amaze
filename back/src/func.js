@@ -1,21 +1,13 @@
+// @ts-nocheck
 const axios = require('axios');
 const arrayChunk = require('array-chunk');
 const { findOrder, db } = require('./db');
-const { token } = require('./ml');
+const { token } = require('./tokens/ml');
+const { ingramToken } = require('./tokens/ingramToken')
 const { sendMail } = require('./mailer');
-const { getTicket } = require('./etiqueta/printTicket')
+// const { getTicket } = require('./etiqueta/printTicket')
 
-let i = 0;
-let itemsChunk = [];
-const baseUrl =
-  'https://api.ingrammicro.com:443/resellers/v5/orders';
-
-const header = {
-  'Content-Type': 'application/x-www-form-urlencoded',
-};
-const tokenUrl = 'https://api.ingrammicro.com:443/oauth/oauth30/token';
-const postFields =
-  'grant_type=client_credentials&client_id=peCS1OtW2QSK8iCAm52bcE6Wl5R8oRci&client_secret=qk4KtGLAF4Qw0f7A';
+const baseUrl = 'https://api.ingrammicro.com:443/resellers/v5/orders';
 
 const addOrder = async (resource) => {
   try {
@@ -120,7 +112,8 @@ if(state === "00") {
       addressline2 = '';
     }
 
-let ingramToken = await axios.post(tokenUrl, postFields, header)
+// let ingramToken = await axios.post(tokenUrl, postFields, header)
+let imToken = await ingramToken();
 let data = {
   "ordercreaterequest": {
     "requestpreamble": {
@@ -154,7 +147,7 @@ let responseFromIngram = await axios.post(baseUrl, data, {
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${ingramToken.data.access_token}`,
+    Authorization: `Bearer ${imToken}`,
   }, 
 }); 
 let customerPO = responseFromIngram.data.serviceresponse.ordersummary.customerponumber;

@@ -1,9 +1,10 @@
 const axios = require('axios');
-const { token } = require('./ml');
+const { token } = require('./tokens/ml');
 const log = console.log;
 const getDate = async resource => {
 	try {
 		let accessToken = await token();
+		// @ts-ignore
 		let resDate = await axios.get(`https://api.mercadolibre.com/${resource}`, {
 			headers: { Authorization: `Bearer ${accessToken}` },
 		});

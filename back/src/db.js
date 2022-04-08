@@ -1,4 +1,6 @@
+// @ts-nocheck
 const mysql = require('mysql2');
+const { resolveHostname } = require('nodemailer/lib/shared');
 // const { resource } = require('../server');
 const log = console.log;
 
@@ -136,6 +138,69 @@ const showAll = () => {
   })
 }
 
+const getAllSkus = () => {
+  return new Promise((resolve, reject) => {
+    let query = 'SELECT sku from appleml';
+    db.query(query, (err, results) => {
+      if(err) console.log(err);
+      let returnedArray = []
+      results.forEach(product => {
+        returnedArray.push(product.sku)
+      })
+      let filteredArray = returnedArray.filter((c, index) => {
+        return returnedArray.indexOf(c) === index;
+    });
+      resolve(filteredArray);
+    })
+  })  
+}
+
+const updatePrevStock = () => {
+  return new Promise ((resolve, reject) => {
+  let query = 'UPDATE appleml set prevstock = stock'
+  db.query(query, (err, results) => {
+    if(err) console.log(err);
+
+    resolve ('status: update prev stock')
+  })
+})
+}
+
+const updateStock = query => {
+  return new Promise((resolve,reject) =>{
+    db.query(query, (err, results) => {
+      if(err) console.log(err);
+
+      resolve(true)
+    })
+  })
+}
+
+const getAllVariations = () => {
+  return new Promise((resolve, reject) => {
+    let query = 'SELECT * FROM appleml WHERE itemid IS NOT NULL AND variationid IS NOT NULL AND stock != prevstock';
+    db.query(query, (err, results) => {
+      if(err) console.log(err);
+
+      resolve(results);
+    })
+  })
+}
+const getAllNoVariations = () => {
+  return new Promise((resolve, reject) => {
+    let query = 'SELECT * FROM appleml WHERE itemid IS NOT NULL AND variationid IS NULL AND stock != prevstock';
+    let resolvedArray = [];
+    db.query(query, (err, results) => {
+      if(err) console.log(err);
+
+results.forEach(result => {
+  resolvedArray.push({itemid: result.itemid, data: {'available_quantity': result.stock}})
+})
+      resolve(resolvedArray);
+    })
+  })
+}
+
 module.exports = {
   db,
   findOrder,
@@ -146,5 +211,10 @@ module.exports = {
   setCancel,
   getTickets,
   setDisplay,
-  showAll
+  showAll,
+  getAllSkus,
+  updateStock,
+  updatePrevStock,
+  getAllVariations,
+  getAllNoVariations,
 };
