@@ -11,7 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "array-chunk": "^1.0.0",
-    "axios": "^0.21.1",
+    "axios": "^0.21.4",
     "basic-ftp": "^4.6.6",
     "cors": "^2.8.5",
     "express": "^4.17.1",
