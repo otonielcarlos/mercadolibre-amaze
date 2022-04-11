@@ -1,5 +1,5 @@
 
-const axios = require('axios');
+const { default: axios } = require('axios');
 const arrayChunk = require('array-chunk');
 const { findOrder, db } = require('./db');
 const { token } = require('./tokens/ml');
