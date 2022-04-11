@@ -1,5 +1,5 @@
 const { token } = require('./tokens/ml');
-const { getIngramToken } = require('./tokens/ingramToken')
+const { ingramToken } = require('./tokens/ingramToken')
 const { getAllSkus, updateStock, updatePrevStock, getAllVariations, getAllNoVariations } = require('./db');
 const { skusChunks } = require('./helpers/chunks')
 const { requestAPI } = require('./helpers/requests')

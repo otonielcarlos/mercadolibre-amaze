@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 const axios = require('axios');
 const arrayChunk = require('array-chunk');
 const { findOrder, db } = require('./db');

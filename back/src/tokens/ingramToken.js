@@ -9,7 +9,7 @@ const headers = {
     },
   }
 
-const getIngramToken = async () => {
+const ingramToken = async () => {
   // @ts-ignore
   const request = await axios.post(tokenUrl, postFields, headers);
   const token = request.data.access_token;
@@ -17,5 +17,5 @@ const getIngramToken = async () => {
 }
 
 module.exports = {
-  getIngramToken
+  ingramToken
 }
