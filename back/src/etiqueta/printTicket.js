@@ -1,5 +1,5 @@
 // @ts-nocheck
-const axios = require('axios');
+const { default: axios } = require('axios');
 const { token } = require('../tokens/ml');
 const log = console.log;
 const fs = require('fs');
