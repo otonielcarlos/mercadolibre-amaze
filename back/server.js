@@ -42,7 +42,7 @@ app.get('/orderid/:id', async (req, res) => {
 
 app.post('/callbacks', async (req, res) => {
 	res.status(200).send();
-
+	console.log(req.body)
 	try {
 		const { resource, topic } = req.body;
 		if (topic === 'orders_v2') {
