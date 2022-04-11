@@ -133,7 +133,7 @@ app.delete('/borrar/:guia', async (req, res) => {
 
 app.listen(PORT, err => {
 	if (err) {
-		log(err);
+		log('error listening',err);
 	}
 	log(`listening on port: ${PORT}`);
 });
