@@ -1,5 +1,5 @@
 // @ts-nocheck
-const axios = require('axios');
+const { default: axios } = require('axios');
 const { token } = require('./tokens/ml');
 const messageUrl = 'https://api.mercadolibre.com/messages/';
 const ordersUrl = 'https://api.mercadolibre.com';

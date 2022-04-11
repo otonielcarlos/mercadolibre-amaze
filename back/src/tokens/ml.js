@@ -1,4 +1,4 @@
-const axios = require('axios');
+const { default: axios } = require('axios');
 const log = console.log;
 
 const body = {
