@@ -156,7 +156,9 @@ const dataToReturn = {
   globalorderid: responseFromIngram.data.serviceresponse.ordersummary.ordercreateresponse[0].globalorderid,
   customerPO: responseFromIngram.data.serviceresponse.ordersummary.customerponumber,
   trackingNumber: "null",
-  orderId: id
+  orderId: id,
+  request: data,
+  ingram: responseFromIngram.data
 }
 console.log(dataToReturn);
 return dataToReturn;
