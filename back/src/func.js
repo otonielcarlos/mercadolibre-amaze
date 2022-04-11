@@ -101,8 +101,9 @@ if(state === "00") {
     const sku = order.data.order_items[0].item.seller_sku;
     const quantity = order.data.order_items[0].quantity;  
     
-    let addressline1 = '';
+    let addressline1 = '' 
     let addressline2 = '';
+    let addressline3 = '';
 
     if(shipTo.length > 35){
       addressline1 = shipTo.slice(0, 35);
@@ -110,6 +111,14 @@ if(state === "00") {
     } else {
       addressline1 = shipTo
       addressline2 = '';
+    }
+    
+    if(addressline2.length > 40) {
+      addressline2 = shipTo.slice(36, 70);
+      addressline3 = shipTo.slice(70, shipTo.length);
+    } else{
+      addressline2 = shipTo.slice(36, 70);
+      addressline3 = ''
     }
 
 // let ingramToken = await axios.post(tokenUrl, postFields, header)
@@ -126,6 +135,7 @@ let data = {
         "name1": `${name1}`,
         "addressline1": `${addressline1}`,
         "addressline2": `${addressline2}`,
+        "addressline3": `${addressline3}`,
         "city": `${cityFinal}`,
         "state": `${state}`,
         "postalcode": `${zipCode}`,
