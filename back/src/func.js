@@ -167,8 +167,8 @@ const dataToReturn = {
   customerPO: responseFromIngram.data.serviceresponse.ordersummary.customerponumber,
   trackingNumber: "null",
   orderId: id,
-  request: data,
-  ingram: responseFromIngram.data
+ // request: data,
+ // ingram: responseFromIngram.data
 }
 console.log(dataToReturn);
 return dataToReturn;

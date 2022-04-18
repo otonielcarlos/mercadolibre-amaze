@@ -18,10 +18,12 @@ const log = console.log;
 
 app.use(cors());
 app.use(express.json());
+app.set('json spaces', 2)
 const PORT = process.env.PORT || 4000;
 
 app.get('/', (req, res) => {
 	res.status(200).send({ status: 'OK' });
+	console.log({status: 'OK'})
 });
 
 app.get('/orderid/:id', async (req, res) => {
