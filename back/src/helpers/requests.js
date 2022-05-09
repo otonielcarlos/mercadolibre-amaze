@@ -1,12 +1,12 @@
 const axios = require('axios');
-const { getIngramToken } = require('../tokens/ingramToken');
+const { ingramToken } = require('../tokens/ingramToken');
 const url = 'https://api.ingrammicro.com:443/resellers/v6/catalog/priceandavailability?includeAvailability=true&includePricing=false&includeProductAttributes=true'
 
 const requestAPI = async(skusForAPI) => {
   try {
     let responseArray = [];
     let query = '';
-  const token = await getIngramToken();
+  const token = await ingramToken();
   const config = {
     headers: {
       "IM-CustomerNumber": "325831",
