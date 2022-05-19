@@ -1,28 +1,27 @@
 
-const { default: axios } = require('axios');
-const arrayChunk = require('array-chunk');
-const { findOrder, db } = require('./db');
-const { token } = require('./tokens/ml');
+const { default: axios } = require('axios')
+const arrayChunk = require('array-chunk')
+const { findOrder, db } = require('./db')
+const { token } = require('./tokens/ml')
 const { ingramToken } = require('./tokens/ingramToken')
-const { sendMail } = require('./mailer');
+const { sendMail } = require('./mailer')
 // const { getTicket } = require('./etiqueta/printTicket')
 
-const baseUrl = 'https://api.ingrammicro.com:443/resellers/v5/orders';
+const baseUrl = 'https://api.ingrammicro.com:443/resellers/v5/orders'
 
 const addOrder = async (resource) => {
   try {
-    let access_token = await token();
+    let access_token = await token()
 
     const orderURL = `https://api.mercadolibre.com/orders/${resource}`
-    let order = await axios.get(orderURL,{ headers: {'Authorization': `Bearer ${access_token}`}});
+    let order = await axios.get(orderURL,{ headers: {'Authorization': `Bearer ${access_token}`}})
 
-    let shippingURL = `https://api.mercadolibre.com/shipments/${order.data.shipping.id}`;
-    let shipping = await axios.get(shippingURL, { headers: {'Authorization': `Bearer ${access_token}`}});
-    let citye = shipping.data.receiver_address.city.name;
-    let cityFinal = shipping.data.receiver_address.city.name;
-    
-    let state = shipping.data.receiver_address.state.name;
-    let stateFinal = shipping.data.receiver_address.state.name;
+    let shippingURL = `https://api.mercadolibre.com/shipments/${order.data.shipping.id}`
+    let shipping = await axios.get(shippingURL, { headers: {'Authorization': `Bearer ${access_token}`}})
+    let citye = shipping.data.receiver_address.city.name
+    let cityFinal = shipping.data.receiver_address.city.name
+    let state = shipping.data.receiver_address.state.name
+    let stateFinal = shipping.data.receiver_address.state.name
 
     switch (citye) {
       case 'Amazonas': state = "01"; break;
@@ -159,8 +158,8 @@ let responseFromIngram = await axios.post(baseUrl, data, {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${imToken}`,
   }, 
-}); 
-let customerPO = responseFromIngram.data.serviceresponse.ordersummary.customerponumber;
+}) 
+let customerPO = responseFromIngram.data.serviceresponse.ordersummary.customerponumber
 
 const dataToReturn = {
   globalorderid: responseFromIngram.data.serviceresponse.ordersummary.ordercreateresponse[0].globalorderid,
@@ -170,12 +169,12 @@ const dataToReturn = {
  // request: data,
  // ingram: responseFromIngram.data
 }
-console.log(dataToReturn);
-return dataToReturn;
+console.log(dataToReturn)
+return dataToReturn
   } catch (error) {
-    console.log(error.data);
+    console.log(error.data)
     // sendMail(id)
   }
 }
 
-module.exports = { addOrder };
+module.exports = { addOrder }

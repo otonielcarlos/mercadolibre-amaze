@@ -21,7 +21,7 @@ const getPrices = async () => {
     await putStock(items);
 
   } catch(err){
-    log(err)
+    console.error(err.response.data)
   }
     
 }

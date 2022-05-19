@@ -140,7 +140,7 @@ const showAll = () => {
 
 const getAllSkus = () => {
   return new Promise((resolve, reject) => {
-    let query = 'SELECT sku from appleml';
+    let query = 'SELECT sku from appleml WHERE sku is NOT NULL AND sku != ""';
     db.query(query, (err, results) => {
       if(err) console.log(err);
       let returnedArray = []
