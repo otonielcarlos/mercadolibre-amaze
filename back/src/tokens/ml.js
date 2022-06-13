@@ -1,12 +1,13 @@
 const { default: axios } = require('axios');
 const log = console.log;
 
-const body = {
-	grant_type: 'refresh_token',
-	client_id: '2796079999742920',
-	client_secret: 'iVV5i9dJyklUQoFwgxP83H8EqdmdZhFN',
-	refresh_token: 'TG-61b77106eae786001b26a457-766642543',
+const body ={
+	"grant_type": "refresh_token",
+	"client_id": "2796079999742920",
+	"client_secret": "iVV5i9dJyklUQoFwgxP83H8EqdmdZhFN",
+	"refresh_token": "TG-62a770a0847ce100148f5017-766642543"
 };
+
 const body_1 = {
 	grant_type: 'authorization_code',
 	client_id: '2796079999742920',
@@ -23,6 +24,7 @@ const token = async () => {
 				'content-type': 'application/x-www-form-urlencoded',
 			},
 		})
+		console.log(tokenData.data)
 		const token = tokenData.data.access_token
 		return token;
 	}

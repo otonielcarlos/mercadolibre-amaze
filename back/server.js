@@ -28,8 +28,9 @@ app.get('/', (req, res) => {
 
 app.get('/orderid/:id', async (req, res) => {
 	try {
+		console.log(req.params)
 		let id = req.params.id;
-		let orderRes = await addOrder(id);
+		const orderRes = await addOrder(id);
 		let nvID = orderRes.globalorderid;
 		let customerPO = orderRes.customerPO;
 		let trackingNumber = orderRes.trackingNumber;

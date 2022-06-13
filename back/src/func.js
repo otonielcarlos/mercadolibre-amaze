@@ -12,10 +12,10 @@ const baseUrl = 'https://api.ingrammicro.com:443/resellers/v5/orders'
 const addOrder = async (resource) => {
   try {
     let access_token = await token()
-
+    console.log(access_token)
     const orderURL = `https://api.mercadolibre.com/orders/${resource}`
     let order = await axios.get(orderURL,{ headers: {'Authorization': `Bearer ${access_token}`}})
-
+    console.log(orderURL)
     let shippingURL = `https://api.mercadolibre.com/shipments/${order.data.shipping.id}`
     let shipping = await axios.get(shippingURL, { headers: {'Authorization': `Bearer ${access_token}`}})
     let citye = shipping.data.receiver_address.city.name
@@ -152,6 +152,8 @@ let data = {
     }
   }
 }
+
+console.log(JSON.stringify(data))
 let responseFromIngram = await axios.post(baseUrl, data, {
   headers: {
     Accept: 'application/json',
