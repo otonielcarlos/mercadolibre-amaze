@@ -1,3 +1,4 @@
+// @ts-ignore
 const { default: axios } = require('axios');
 const express = require('express');
 const cors = require('cors');
@@ -10,6 +11,7 @@ const {
 } = require('./src/db');
 const { addOrder } = require('./src/func');
 const { sendMessage } = require('./src/message');
+// @ts-ignore
 const { token } = require('./src/tokens/ml');
 const { getDate } = require('./src/date');
 const { sendMail } = require('./src/mailer');
@@ -21,6 +23,7 @@ app.use(express.json());
 app.set('json spaces', 2)
 const PORT = process.env.PORT || 4000;
 
+// @ts-ignore
 app.get('/', (req, res) => {
 	res.status(200).send({ status: 'OK' });
 	console.log({status: 'OK'})
@@ -31,8 +34,11 @@ app.get('/orderid/:id', async (req, res) => {
 		console.log(req.params)
 		let id = req.params.id;
 		const orderRes = await addOrder(id);
+		// @ts-ignore
 		let nvID = orderRes.globalorderid;
+		// @ts-ignore
 		let customerPO = orderRes.customerPO;
+		// @ts-ignore
 		let trackingNumber = orderRes.trackingNumber;
 		await saveIngram(nvID, customerPO, trackingNumber, id);
 		log('id guardado con éxito ', id);
@@ -62,8 +68,11 @@ app.post('/callbacks', async (req, res) => {
 					await saveNewOrderID(id);
 					let orderRes = await addOrder(id);
 					log(orderRes);
+					// @ts-ignore
 					let nvID = orderRes.globalorderid;
+					// @ts-ignore
 					let customerPO = orderRes.customerPO;
+					// @ts-ignore
 					let trackingNumber = orderRes.trackingNumber;
 					if (typeof nvID === 'undefined') {
 						sendMail(id);
@@ -86,6 +95,7 @@ app.post('/callbacks', async (req, res) => {
 	}
 });
 
+// @ts-ignore
 app.get('/guias', async (req, res) => {
 	try {
 		const guias = await getTickets();
@@ -99,6 +109,7 @@ app.get('/guias', async (req, res) => {
 	}
 });
 
+// @ts-ignore
 app.get('/todos', async (req, res) => {
   try {
     const results = await showAll();

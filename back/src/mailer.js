@@ -15,7 +15,7 @@ const sendMail = async (id) => {
   // send mail with defined transport object
   let info = await transporter.sendMail({
     from: '"Apple Peru Mercadolibre" <marketplaces@bluediamondinnovation.com>', // sender address
-    to: "carlos@bluediamondinnovation.com, eva@bluediamondinnovation.com, diego@bluediamondinnovation.com, karen@bluediamondinnovation.com, montserrat@bluediamondinnovation.com", // list of receivers
+    to: "tom@bluediamondinnovation.com, eva@bluediamondinnovation.com, diego@bluediamondinnovation.com, montserrat@bluediamondinnovation.com", // list of receivers
     subject: "Orden No Enviada A Ingram", // Subject line
     text: "Se ha encontrado un error en la última orden", // plain text body
     html: ` <h3>Favor de Introducir Manualmente</h3>
