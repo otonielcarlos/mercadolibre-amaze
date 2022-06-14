@@ -24,7 +24,7 @@ const token = async () => {
 				'content-type': 'application/x-www-form-urlencoded',
 			},
 		})
-		console.log(tokenData.data)
+		// console.log(tokenData.data)
 		const token = tokenData.data.access_token
 		return token;
 	}
