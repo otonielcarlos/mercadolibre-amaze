@@ -189,7 +189,7 @@ const fireStock = async () => {
   }
 }
 
-fireStock()
+//fireStock()
 // updatePrice().then(async () => {
 //  try
 //   {

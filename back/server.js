@@ -1,121 +1,115 @@
 // @ts-ignore
-const { default: axios } = require('axios');
-const express = require('express');
-const cors = require('cors');
-const app = express();
+const { default: axios } = require('axios')
+const express = require('express')
+const cors = require('cors')
+const app = express()
 const {
 	saveNewOrderID,
 	findOrder,
 	saveIngram,
 	getTickets,
-} = require('./src/db');
-const { addOrder } = require('./src/func');
-const { sendMessage } = require('./src/message');
+} = require('./src/db')
+const { addOrder } = require('./src/func')
+const { sendMessage } = require('./src/message')
 // @ts-ignore
-const { token } = require('./src/tokens/ml');
-const { getDate } = require('./src/date');
-const { sendMail } = require('./src/mailer');
+const { token } = require('./src/tokens/ml')
+const { getDate } = require('./src/date')
+const { sendMail } = require('./src/mailer')
 const { setDisplay, showAll } = require('./src/db')
-const log = console.log;
+ 
+const {isOrderInIngram} = require('./src/IngramFunctions/checkIngramOrder')
+const log = console.log
 
-app.use(cors());
-app.use(express.json());
+app.use(cors())
+app.use(express.json())
 app.set('json spaces', 2)
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4000
 
 // @ts-ignore
 app.get('/', (req, res) => {
-	res.status(200).send({ status: 'OK' });
+	res.status(200).send({ status: 'OK' })
 	console.log({status: 'OK'})
-});
+})
 
 app.get('/orderid/:id', async (req, res) => {
 	try {
 		console.log(req.params)
-		let id = req.params.id;
-		const orderRes = await addOrder(id);
+		let id = req.params.id
+		const orderRes = await addOrder(id)
 		// @ts-ignore
-		let nvID = orderRes.globalorderid;
+		let nvID = orderRes.globalorderid
 		// @ts-ignore
-		let customerPO = orderRes.customerPO;
+		let customerPO = orderRes.customerPO
 		// @ts-ignore
-		let trackingNumber = orderRes.trackingNumber;
-		await saveIngram(nvID, customerPO, trackingNumber, id);
-		log('id guardado con éxito ', id);
-		log('Customerponumber: ', customerPO, 'nv', nvID);
-		res.status(200).json(orderRes);
+		let trackingNumber = orderRes.trackingNumber
+		await saveIngram(nvID, customerPO, trackingNumber, id)
+		log('id guardado con éxito ', id)
+		log('Customerponumber: ', customerPO, 'nv', nvID)
+		res.status(200).json(orderRes)
 	} catch (error) {
-		log(error);
+		log(error)
 	}
-});
+})
 
 app.post('/callbacks', async (req, res) => {
-	res.status(200).send();
+	res.status(200).send()
 	try {
-		const { resource, topic } = req.body;
+		const { resource, topic } = req.body
 		if (topic === 'orders_v2') {
       log(req.body)
-			const saveDate = new Date();
-			saveDate.setHours(saveDate.getHours() - 5);
-			let today = saveDate.toISOString().split('T')[0];
-			let orderDate = await getDate(resource);
-			let id = resource.slice(8, resource.length);
-			if (today === orderDate) {
-				let isOrder = await findOrder(id);
+		
+			let id = resource.slice(8, resource.length)
+			
+				let isOrder = await isOrderInIngram(id)
 
-				if (isOrder === 'undefined') {
-					await sendMessage(resource);
-					await saveNewOrderID(id);
-					let orderRes = await addOrder(id);
-					log(orderRes);
+				if (!isOrder) {
+					await sendMessage(resource)
+					await saveNewOrderID(id)
+					let orderRes = await addOrder(id)
+					log(orderRes)
 					// @ts-ignore
-					let nvID = orderRes.globalorderid;
+					let nvID = orderRes.globalorderid
 					// @ts-ignore
-					let customerPO = orderRes.customerPO;
+					let customerPO = orderRes.customerPO
 					// @ts-ignore
-					let trackingNumber = orderRes.trackingNumber;
+					let trackingNumber = orderRes.trackingNumber
 					if (typeof nvID === 'undefined') {
-						sendMail(id);
+						sendMail(id)
 					}
-					await saveIngram(nvID, customerPO, trackingNumber, id);
-					log('id guardado con éxito ', id);
-					log('Customerponumber: ', customerPO, 'nv', nvID);
-					// log(orderRes.serviceresponse.ordersummary.ordercreateresponse[0]);
+					await saveIngram(nvID, customerPO, trackingNumber, id)
+					log('id guardado con éxito ', id)
+					log('Customerponumber: ', customerPO, 'nv', nvID)
+					// log(orderRes.serviceresponse.ordersummary.ordercreateresponse[0])
 				} else {
-					log('id ya existe ', isOrder);
+					log('id ya existe ', id)
 				}
-			} else {
-				log('hoy es ', today, ' y el pedido es del ', orderDate);
-			}
-		} else {
-			// log('callback de', req.body.topic);
-		}
+		} 
 	} catch (error) {
-		log(error);
+		log(error)
 	}
-});
+})
 
 // @ts-ignore
 app.get('/guias', async (req, res) => {
 	try {
-		const guias = await getTickets();
+		const guias = await getTickets()
 		for (let i in guias) {
-			let guia = guias[i].fecha.toISOString();
-			guias[i].fecha = guia.split('T')[0];
+			let guia = guias[i].fecha.toISOString()
+			guias[i].fecha = guia.split('T')[0]
 		}
-		res.status(200).json(guias);
+		res.status(200).json(guias)
 	} catch (error) {
-		log(error);
+		log(error)
 	}
-});
+})
 
 // @ts-ignore
 app.get('/todos', async (req, res) => {
   try {
-    const results = await showAll();
+    const results = await showAll()
     for(let i in results){
-      let result = results[i].fecha.toISOString();
-      results[i].fecha = result.split('T')[0];
+      let result = results[i].fecha.toISOString()
+      results[i].fecha = result.split('T')[0]
     }
     res.status(200).json(results)
   } catch (error) {
@@ -125,16 +119,16 @@ app.get('/todos', async (req, res) => {
         "error": "something went wrong",
         "data": error
       }
-    );
+    )
   }
 })
 
 app.delete('/borrar/:guia', async (req, res) => {
   try {
     const { guia } = req.params
-    const result = await setDisplay(guia);
+    const result = await setDisplay(guia)
     if(result === 1) {
-      log(guia);
+      log(guia)
       res.status(202).json({"message": `guia ${ guia } eliminada con éxito`})
     } else {
       res.status(404).json({"message": `guia ${guia} not found`})
@@ -146,9 +140,9 @@ app.delete('/borrar/:guia', async (req, res) => {
 
 app.listen(PORT, err => {
 	if (err) {
-		log('error listening',err);
+		log('error listening',err)
 	}
-	log(`listening on port: ${PORT}`);
-});
+	log(`listening on port: ${PORT}`)
+})
 
-module.exports = app;
+module.exports = app

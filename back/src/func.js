@@ -4,10 +4,11 @@ const arrayChunk = require('array-chunk')
 const { findOrder, db } = require('./db')
 const { token } = require('./tokens/ml')
 const { ingramToken } = require('./tokens/ingramToken')
+const { IngramHeaders } = require('./headers/ingramHeaders')
 const { sendMail } = require('./mailer')
 // const { getTicket } = require('./etiqueta/printTicket')
 
-const baseUrl = 'https://api.ingrammicro.com:443/resellers/v5/orders'
+const baseUrl = 'https://api.ingrammicro.com:443/resellers/v6/orders'
 
 const addOrder = async (resource) => {
   try {
@@ -121,51 +122,49 @@ if(state === "00") {
     }
 
 // let ingramToken = await axios.post(tokenUrl, postFields, header)
-let imToken = await ingramToken();
+let config = await IngramHeaders();
 let data = {
-  "ordercreaterequest": {
-    "requestpreamble": {
-      "isocountrycode": "PE",
-      "customernumber": "325831"
-    },
-    "ordercreatedetails": {
-      "customerponumber": `${customerPo}`,
-      "shiptoaddress": {
-        "name1": `${name1}`,
-        "addressline1": `${addressline1}`,
-        "addressline2": `${addressline2}`,
-        "addressline3": `${addressline3}`,
-        "city": `${cityFinal}`,
-        "state": `${state}`,
-        "postalcode": `${zipCode}`,
-        "countrycode": "PE"
+  "customerOrderNumber":`${customerPo}`,
+  "notes": "",
+  "shipToInfo": {
+      "contact": `${name1}`,
+      "companyName": `${name1}`,
+      "name1": `${name1}`,
+      "addressLine1": `${addressline1}`,
+      "addressLine2": `${addressline2}`,
+      "addressLine3": `${addressline3}`,
+      "city":`${cityFinal}`,
+      "state": `${state}`,
+      "countryCode": "PE"
+  },
+  "lines": [
+      {
+          "customerLineNumber": 1,
+          "ingramPartNumber":  `${sku}`,
+          "quantity": "1",
+      }
+  ],
+  "additionalAttributes": [
+      {
+          "attributeName": "allowDuplicateCustomerOrderNumber",
+          "attributeValue": "false"
       },
-      "carriercode": "E1",
-      "lines": [
-        {
-          "linetype": "P",
-          "linenumber": "001",
-          "quantity": `${quantity}`,
-          "ingrampartnumber": `${sku}`
-        }
-      ]
-    }
-  }
+      {
+          "attributeName": "allowOrderOnCustomerHold",
+          "attributeValue": "true"
+      }
+  ]
 }
 
+
 console.log(JSON.stringify(data))
-let responseFromIngram = await axios.post(baseUrl, data, {
-  headers: {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${imToken}`,
-  }, 
-}) 
+let responseFromIngram = await axios.post(baseUrl, data, config)
+
 let customerPO = responseFromIngram.data.serviceresponse.ordersummary.customerponumber
 
 const dataToReturn = {
-  globalorderid: responseFromIngram.data.serviceresponse.ordersummary.ordercreateresponse[0].globalorderid,
-  customerPO: responseFromIngram.data.serviceresponse.ordersummary.customerponumber,
+  globalorderid: responseFromIngram.data.orders[0].ingramOrderNumber,
+  customerPO: responseFromIngram.data.customerOrderNumber,
   trackingNumber: "null",
   orderId: id,
  request: data,

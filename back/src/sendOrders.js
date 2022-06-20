@@ -4,22 +4,25 @@ let url = 'https://appleamaze.herokuapp.com/orderid/'
 
 async function asyncPromOrders(arr) { 
   try {
-    let orders = arr.map(order => {
-      // return  axios.get(`https://amazeml.herokuapp.com/orderid/${order}`)
-      return  axios.get(`https://appleamaze.herokuapp.com/orderid/${order}`)
-    })
-    let ordersRes = await Promise.all(orders) 
-    for(let res of ordersRes) {
-      console.log(res.data.customerPO, res.data.globalorderid)
+    for(let order of arr){
+      let url = `https://appleamaze.herokuapp.com/orderid/${order}`
+      const orderResponse = await axios.get(url,{headers: {'Accept': 'application/json'}})
+      console.log(orderResponse.data.customerPO, ' - ', orderResponse.data.globalorderid)
     }
   } catch (error) {
     console.log(error.response)
   }
 }
 
-let leftOrders = ['5426462169',
-'5426625204',
-'5426622398',
-'5418758680',]
+let leftOrders = [
+'2000003744500040',
+'2000003744462932',
+'2000003737628740',
+'2000003740692402',
+]
 
 asyncPromOrders(leftOrders);
+
+
+
+
