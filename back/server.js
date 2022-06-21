@@ -60,22 +60,11 @@ app.post('/callbacks', async (req, res) => {
 		
 			let id = resource.slice(8, resource.length)
 			
-				// let isOrder = await isOrderInIngram(id)
+				let isOrder = await isOrderInIngram(id)
 
 				if (!isOrder.isFound) {
 					await sendMessage(id)
-					// await saveNewOrderID(id)
-					let orderRes = await addOrder(id)
-					log(orderRes)
-					// @ts-ignore
-					// let nvID = orderRes.globalorderid
-					// @ts-ignore
-					// let customerPO = orderRes.customerPO
-					// @ts-ignore
-					// let trackingNumber = orderRes.trackingNumber
-					// if (typeof nvID === 'undefined') {
-					// 	sendMail(id)
-					// }
+					await addOrder(id)
 				} else {
 					log('id ya existe ', `MLAPPLE_${id}`, isOrder.ingramOrderNumber)
 				}
