@@ -159,7 +159,7 @@ let data = {
 
 console.log(JSON.stringify(data))
 let responseFromIngram = await axios.post(baseUrl, data, config)
-
+console.log(responseFromIngram.data)
 let customerPO = responseFromIngram.data.serviceresponse.ordersummary.customerponumber
 
 const dataToReturn = {
