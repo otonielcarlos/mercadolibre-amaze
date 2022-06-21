@@ -36,15 +36,6 @@ app.get('/orderid/:id', async (req, res) => {
 		console.log(req.params)
 		let id = req.params.id
 		const orderRes = await addOrder(id)
-		// @ts-ignore
-		let nvID = orderRes.globalorderid
-		// @ts-ignore
-		let customerPO = orderRes.customerPO
-		// @ts-ignore
-		let trackingNumber = orderRes.trackingNumber
-		await saveIngram(nvID, customerPO, trackingNumber, id)
-		log('id guardado con éxito ', id)
-		log('Customerponumber: ', customerPO, 'nv', nvID)
 		res.status(200).json(orderRes)
 	} catch (error) {
 		log(error)
@@ -57,17 +48,14 @@ app.post('/callbacks', async (req, res) => {
 		const { resource, topic } = req.body
 		if (topic === 'orders_v2') {
       // log(req.body)
-		
 			let id = resource.slice(8, resource.length)
-			
-				let isOrder = await isOrderInIngram(id)
-
-				if (!isOrder.isFound) {
-					await sendMessage(id)
-					await addOrder(id)
-				} else {
-					log('id ya existe ', `MLAPPLE_${id}`, isOrder.ingramOrderNumber)
-				}
+			let isOrder = await isOrderInIngram(id)
+			if (!isOrder.isFound) {
+				await sendMessage(id)
+				await addOrder(id)
+			} else {
+				log('id ya existe ', `MLAPPLE_${id}`, isOrder.ingramOrderNumber)
+			}
 		} 
 	} catch (error) {
 		log(error)
