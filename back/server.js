@@ -60,10 +60,10 @@ app.post('/callbacks', async (req, res) => {
 		
 			let id = resource.slice(8, resource.length)
 			
-				let isOrder = await isOrderInIngram(id)
+				// let isOrder = await isOrderInIngram(id)
 
 				if (!isOrder.isFound) {
-					await sendMessage(resource)
+					await sendMessage(id)
 					// await saveNewOrderID(id)
 					let orderRes = await addOrder(id)
 					log(orderRes)
