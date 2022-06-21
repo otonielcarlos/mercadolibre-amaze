@@ -13,10 +13,10 @@ const baseUrl = 'https://api.ingrammicro.com:443/resellers/v6/orders'
 const addOrder = async (resource) => {
   try {
     let access_token = await token()
-    console.log(access_token)
+    // console.log(access_token)
     const orderURL = `https://api.mercadolibre.com/orders/${resource}`
     let order = await axios.get(orderURL,{ headers: {'Authorization': `Bearer ${access_token}`}})
-    console.log(orderURL)
+    // console.log(orderURL)
     let shippingURL = `https://api.mercadolibre.com/shipments/${order.data.shipping.id}`
     let shipping = await axios.get(shippingURL, { headers: {'Authorization': `Bearer ${access_token}`}})
     let citye = shipping.data.receiver_address.city.name
@@ -157,10 +157,9 @@ let data = {
 }
 
 
-console.log(JSON.stringify(data))
+// console.log(JSON.stringify(data))
 let responseFromIngram = await axios.post(baseUrl, data, config)
-console.log(responseFromIngram.data)
-let customerPO = responseFromIngram.data.serviceresponse.ordersummary.customerponumber
+console.log(responseFromIngram.data.orders)
 
 const dataToReturn = {
   globalorderid: responseFromIngram.data.orders[0].ingramOrderNumber,
@@ -170,7 +169,7 @@ const dataToReturn = {
  request: data,
  ingram: responseFromIngram.data
 }
-console.log(dataToReturn)
+// console.log(dataToReturn)
 return dataToReturn
   } catch (error) {
     console.log(error.data)

@@ -9,9 +9,16 @@ async function isOrderInIngram(customerpo){
     const {status} = checkOrder
 
     if(status === 200){
-      return true
+      const data = {
+        isFound: true,
+        ingramOrderNumber: checkOrder.data.orders[0].ingramOrderNumber
+      }
+      return data
     }
-    return false
+    const data = {
+      isFound: false,
+    }
+    return data
   } catch (error) {
     console.log(error.response.data)
   }

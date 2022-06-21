@@ -56,32 +56,28 @@ app.post('/callbacks', async (req, res) => {
 	try {
 		const { resource, topic } = req.body
 		if (topic === 'orders_v2') {
-      log(req.body)
+      // log(req.body)
 		
 			let id = resource.slice(8, resource.length)
 			
 				let isOrder = await isOrderInIngram(id)
 
-				if (!isOrder) {
+				if (!isOrder.isFound) {
 					await sendMessage(resource)
-					await saveNewOrderID(id)
+					// await saveNewOrderID(id)
 					let orderRes = await addOrder(id)
 					log(orderRes)
 					// @ts-ignore
-					let nvID = orderRes.globalorderid
+					// let nvID = orderRes.globalorderid
 					// @ts-ignore
-					let customerPO = orderRes.customerPO
+					// let customerPO = orderRes.customerPO
 					// @ts-ignore
-					let trackingNumber = orderRes.trackingNumber
-					if (typeof nvID === 'undefined') {
-						sendMail(id)
-					}
-					await saveIngram(nvID, customerPO, trackingNumber, id)
-					log('id guardado con éxito ', id)
-					log('Customerponumber: ', customerPO, 'nv', nvID)
-					// log(orderRes.serviceresponse.ordersummary.ordercreateresponse[0])
+					// let trackingNumber = orderRes.trackingNumber
+					// if (typeof nvID === 'undefined') {
+					// 	sendMail(id)
+					// }
 				} else {
-					log('id ya existe ', id)
+					log('id ya existe ', `MLAPPLE_${id}`, isOrder.ingramOrderNumber)
 				}
 		} 
 	} catch (error) {
