@@ -127,9 +127,9 @@ let data = {
   "customerOrderNumber":`${customerPo}`,
   "notes": "",
   "shipToInfo": {
-      "contact": `${name1}`,
-      "companyName": `${name1}`,
-      "name1": `${name1}`,
+      "contact": `${name1.substring(0,35)}`,
+      "companyName": `${name1.substring(0,35)}`,
+      "name1": `${name1.substring(0,35)}`,
       "addressLine1": `${addressline1}`,
       "addressLine2": `${addressline2}`,
       "addressLine3": `${addressline3}`,
@@ -157,7 +157,7 @@ let data = {
 }
 
 
-// console.log(JSON.stringify(data))
+console.log(JSON.stringify(data))
 let responseFromIngram = await axios.post(baseUrl, data, config)
 console.log(responseFromIngram.data.orders)
 
