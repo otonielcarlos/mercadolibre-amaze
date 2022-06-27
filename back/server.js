@@ -54,7 +54,8 @@ app.post('/callbacks', async (req, res) => {
 				await sendMessage(id)
 				await addOrder(id)
 			} else {
-				log('id ya existe ', `MLAPPLE_${id}`, isOrder.ingramOrderNumber)
+				// log('id ya existe ', `MLAPPLE_${id}`, isOrder.ingramOrderNumber)
+				log(req.body)
 			}
 		} 
 	} catch (error) {
