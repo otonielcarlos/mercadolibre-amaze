@@ -1,5 +1,5 @@
 const { default: axios } = require('axios');
-const { token } = require('./tokens/ml');
+const { token } = require('../tokens/ml');
 const log = console.log;
 const getDate = async resource => {
 	try {
