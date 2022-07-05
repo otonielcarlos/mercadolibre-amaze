@@ -26,8 +26,10 @@ const token = async () => {
 		})
 		// console.log(tokenData.data)
 		const token = tokenData.data.access_token
+
+		console.log(token);
 		return token
-	}
+}
 	
 module.exports = {
 	token,
