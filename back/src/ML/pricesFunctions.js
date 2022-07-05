@@ -1,11 +1,8 @@
-const { token } = require('./tokens/ml')
-const { ingramToken } = require('./tokens/ingramToken')
-const { getAllSkus, updateStock, updatePrevStock, getAllVariations, getAllNoVariations } = require('./db')
-const { skusChunks } = require('./helpers/chunks')
-const { requestAPI } = require('./helpers/requests')
-const { joinItems } = require('./helpers/requestForML')
-const { putStock } = require('./helpers/postRequest')
-const log = console.log
+const { getAllSkus, updateStock, updatePrevStock, getAllVariations, getAllNoVariations } = require('../ML/db')
+const { skusChunks } = require('../helpers/chunks')
+const { requestAPI } = require('../helpers/requests')
+const { joinItems } = require('../helpers/requestForML')
+const { putStock } = require('../helpers/postRequest')
 
 const getPrices = async () => {
   try{

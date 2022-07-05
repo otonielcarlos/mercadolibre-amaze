@@ -1,11 +1,7 @@
 
 const { default: axios } = require('axios')
-const arrayChunk = require('array-chunk')
-const { findOrder, db } = require('./db')
-const { token } = require('./tokens/ml')
-const { ingramToken } = require('./tokens/ingramToken')
-const { IngramHeaders } = require('./headers/ingramHeaders')
-const { sendMail } = require('./mailer')
+const { token } = require('../tokens/ml')
+const { IngramHeaders } = require('../headers/ingramHeaders')
 // const { getTicket } = require('./etiqueta/printTicket')
 
 const baseUrl = 'https://api.ingrammicro.com:443/resellers/v6/orders'

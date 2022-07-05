@@ -1,23 +1,12 @@
-// @ts-ignore
-const { default: axios } = require('axios')
 const express = require('express')
 const cors = require('cors')
 const app = express()
-const {
-	saveNewOrderID,
-	findOrder,
-	saveIngram,
-	getTickets,
-} = require('./src/db')
-const { addOrder } = require('./src/func')
-const { sendMessage } = require('./src/message')
-// @ts-ignore
-const { token } = require('./src/tokens/ml')
-const { getDate } = require('./src/date')
-const { sendMail } = require('./src/mailer')
-const { setDisplay, showAll } = require('./src/db')
- 
+const {	getTickets } = require('./src/ML/db')
+const { addOrder } = require('./src/ML/func')
+const { sendMessage } = require('./src/ML/message')
+const { setDisplay, showAll } = require('./src/ML/db')
 const {isOrderInIngram} = require('./src/IngramFunctions/checkIngramOrder')
+const { checkOrderStatusPaid } = require('./src/ML/checkOrderPaid')
 const log = console.log
 
 app.use(cors())
@@ -46,15 +35,15 @@ app.post('/callbacks', async (req, res) => {
 	res.status(200).send()
 	try {
 		const { resource, topic } = req.body
+
 		if (topic === 'orders_v2') {
-      // log(req.body)
 			let id = resource.slice(8, resource.length)
+			let isPaid = await checkOrderStatusPaid(id)
 			let isOrder = await isOrderInIngram(id)
-			if (!isOrder.isFound) {
+			if (!isOrder.isFound && isPaid) {
 				await sendMessage(id)
 				await addOrder(id)
 			} else {
-				// log('id ya existe ', `MLAPPLE_${id}`, isOrder.ingramOrderNumber)
 				log(req.body)
 			}
 		} 
