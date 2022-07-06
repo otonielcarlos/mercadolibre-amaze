@@ -7,6 +7,7 @@ const { sendMessage } = require('./src/ML/message')
 const { setDisplay, showAll } = require('./src/ML/db')
 const {isOrderInIngram} = require('./src/IngramFunctions/checkIngramOrder')
 const { checkOrderStatusPaid } = require('./src/ML/checkOrderPaid')
+const { findOrder, saveNewOrderID } = require('./src/ML/db')
 const log = console.log
 
 app.use(cors())
@@ -38,9 +39,9 @@ app.post('/callbacks', async (req, res) => {
 
 		if (topic === 'orders_v2') {
 			let id = resource.slice(8, resource.length)
-			let isPaid = await checkOrderStatusPaid(id)
-			let isOrder = await isOrderInIngram(id)
-			if (!isOrder.isFound && isPaid) {
+			let isOrder = await findOrder(id)
+			if (isOrder === 'undefined') {
+				await saveNewOrderID(id)
 				await sendMessage(id)
 				await addOrder(id)
 			} else {

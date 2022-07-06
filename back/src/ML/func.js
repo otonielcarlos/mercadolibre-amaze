@@ -2,6 +2,7 @@
 const { default: axios } = require('axios')
 const { token } = require('../tokens/ml')
 const { IngramHeaders } = require('../headers/ingramHeaders')
+const { saveIngram } = require('./db')
 // const { getTicket } = require('./etiqueta/printTicket')
 
 const baseUrl = 'https://api.ingrammicro.com:443/resellers/v6/orders'
@@ -165,6 +166,8 @@ const dataToReturn = {
  request: data,
  ingram: responseFromIngram.data
 }
+const { globalorderid, customerPO, trackingNumber, orderId} = dataToReturn
+await saveIngram(globalorderid, customerPO, trackingNumber, orderId)
 // console.log(dataToReturn)
 return dataToReturn
   } catch (error) {

@@ -31,7 +31,7 @@ const findOrder = id => {
           console.log(err);
           return reject(err);
         }
-        let result = results.length === 0 ? undefined : results[0].orderid;
+        let result = results.length === 0 ? 'undefined' : results[0].orderid;
         resolve(`${result}`);
       }
     );
