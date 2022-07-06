@@ -3,7 +3,7 @@ const { default: axios } = require('axios')
 const { token } = require('../tokens/ml')
 const log = console.log
 const fs = require('fs')
-const { savePdfToServer } = require('../saveFtp')
+const { savePdfToServer } = require('../ML/saveFtp')
 const ftp = require('basic-ftp')
 // const writer = fs.createWriteStream('./ticket.pdf')
 const { db, getNullTickets, updateTracking, setCancel } = require('../ML/db')
@@ -11,8 +11,8 @@ const { db, getNullTickets, updateTracking, setCancel } = require('../ML/db')
 const checkTickets = async () => {
 	const accessToken = await token()
 	let nullTickets = await getNullTickets()
+	axios.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken
 	if (nullTickets.length > 0) {
-		axios.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken
 		for (let i in nullTickets) {
 			try {
         let shipmentId = await axios.get(`https://api.mercadolibre.com/orders/${nullTickets[i].id}`)

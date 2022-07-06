@@ -3,6 +3,7 @@ const { skusChunks } = require('../helpers/chunks')
 const { requestAPI } = require('../helpers/requests')
 const { joinItems } = require('../helpers/requestForML')
 const { putStock } = require('../helpers/postRequest')
+const { checkTickets } = require('../etiqueta/printTicket')
 
 const getPrices = async () => {
   try{
@@ -16,6 +17,7 @@ const getPrices = async () => {
     const items = await getAllNoVariations()
     await putStock(variations)
     await putStock(items)
+    await checkTickets()
 
   } catch(err){
     console.error(err.response.data)
