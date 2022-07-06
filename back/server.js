@@ -45,7 +45,7 @@ app.post('/callbacks', async (req, res) => {
 				await sendMessage(id)
 				await addOrder(id)
 			} else {
-				log(req.body)
+				log(req.body.resource, 'ya existe')
 			}
 		} 
 	} catch (error) {
