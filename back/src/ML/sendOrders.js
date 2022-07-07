@@ -15,11 +15,12 @@ async function asyncPromOrders(arr) {
 }
 
 let leftOrders = [
-'2000003744500040',
-'2000003744462932',
-'2000003737628740',
-'2000003740692402',
+  '2000003837821978',
+  '2000003837728524'
 ]
+
+
+
 
 asyncPromOrders(leftOrders);
 

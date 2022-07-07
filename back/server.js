@@ -8,6 +8,7 @@ const { setDisplay, showAll } = require('./src/ML/db')
 const {isOrderInIngram} = require('./src/IngramFunctions/checkIngramOrder')
 const { checkOrderStatusPaid } = require('./src/ML/checkOrderPaid')
 const { findOrder, saveNewOrderID } = require('./src/ML/db')
+const { getDate } = require('./src/ML/date')
 const log = console.log
 
 app.use(cors())
@@ -38,7 +39,13 @@ app.post('/callbacks', async (req, res) => {
 		const { resource, topic } = req.body
 
 		if (topic === 'orders_v2') {
+			const saveDate = new Date()
+      saveDate.setHours(saveDate.getHours() - 5)
+      let today = saveDate.toISOString().split('T')[0]
 			let id = resource.slice(8, resource.length)
+			let date = await getDate(id)
+
+			if(today === date ){
 			let isOrder = await findOrder(id)
 			if (isOrder === 'undefined') {
 				await saveNewOrderID(id)
@@ -47,7 +54,10 @@ app.post('/callbacks', async (req, res) => {
 			} else {
 				log(req.body.resource, 'ya existe')
 			}
-		} 
+		}	else {
+			console.log('id ya existe', id)
+		}
+	} 
 	} catch (error) {
 		log(error)
 	}
