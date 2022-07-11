@@ -3,7 +3,7 @@ const { skusChunks } = require('../helpers/chunks')
 const { requestAPI } = require('../helpers/requests')
 const { joinItems } = require('../helpers/requestForML')
 const { putStock } = require('../helpers/postRequest')
-const { checkTickets } = require('../etiqueta/printTicket')
+// const { checkTickets } = require('../etiqueta/printTicket')
 
 const getPrices = async () => {
   try{
