@@ -17,7 +17,7 @@ const getPrices = async () => {
     const items = await getAllNoVariations()
     await putStock(variations)
     await putStock(items)
-    await checkTickets()
+    // await checkTickets()
 
   } catch(err){
     console.error(err.response.data)
