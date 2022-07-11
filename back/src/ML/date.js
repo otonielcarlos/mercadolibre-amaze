@@ -5,7 +5,7 @@ const getDate = async resource => {
 	try {
 		let accessToken = await token()
 		// @ts-ignore
-		let resDate = await axios.get(`https://api.mercadolibre.com/${resource}`, {
+		let resDate = await axios.get(`https://api.mercadolibre.com/orders/${resource}`, {
 			headers: { Authorization: `Bearer ${accessToken}` },
 		})
 
