@@ -31,6 +31,6 @@ function getEstado(citye){
   return state
 }
 
-module.exports = {
+export default {
   getEstado
 }

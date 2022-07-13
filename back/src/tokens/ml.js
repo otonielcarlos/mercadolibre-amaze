@@ -1,19 +1,21 @@
 const { default: axios } = require('axios')
+require('dotenv').config()
+const {MERCADOLIBRE_CLIENT_ID, MERCADOLIBRE_CLIENT_SECRET, MERCADOLIBRE_REFRESH_TOKEN, MERCADOLIBRE_REDIRECT_URI} = process.env
 const log = console.log
 
 const body = {
 	"grant_type": "refresh_token",
-	"client_id": "2796079999742920",
-	"client_secret": "iVV5i9dJyklUQoFwgxP83H8EqdmdZhFN",
-	"refresh_token": "TG-62a770a0847ce100148f5017-766642543"
+	"client_id": MERCADOLIBRE_CLIENT_ID,
+	"client_secret": MERCADOLIBRE_CLIENT_SECRET,
+	"refresh_token": MERCADOLIBRE_REFRESH_TOKEN
 }
 
 const body_1 = {
 	grant_type: 'authorization_code',
-	client_id: '2796079999742920',
-	client_secret: 'iVV5i9dJyklUQoFwgxP83H8EqdmdZhFN',
-	code: 'TG-61b770c171f899001bb1ee77-766642543',
-	redirect_uri: 'https://appleamaze.herokuapp.com/',
+	client_id: MERCADOLIBRE_CLIENT_ID,
+	client_secret: MERCADOLIBRE_CLIENT_SECRET,
+	code: '',
+	redirect_uri: MERCADOLIBRE_REDIRECT_URI,
 }
 
 const token = async () => {

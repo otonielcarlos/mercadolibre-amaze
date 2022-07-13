@@ -1,14 +1,16 @@
 // @ts-nocheck
 const ftp = require('basic-ftp');
+require('dotenv').config()
+const {SERVER_HOST, SERVER_PASSWORD, SERVER_USER} = process.env
 
 async function savePdfToServer(name) {
   const client = new ftp.Client();
   // client.ftp.verbose = true;
   try {
     await client.access({
-      host: '173.231.198.187',
-      user: 'amazecom',
-      password: '6vB2YVxW5=%r',
+      host: SERVER_HOST,
+      user: SERVER_USER,
+      password: SERVER_PASSWORD,
       secure: false,
       timeout: 50000,
     });

@@ -1,4 +1,6 @@
 const {ingramToken} = require('../tokens/ingramToken')
+require('dotenv').config()
+const {INGRAM_CLIENT_CUSTOMER, INGRAM_CORRELATION_ID} = process.env
 
 async function IngramHeaders() {
   try{  const token = await ingramToken()
@@ -7,8 +9,8 @@ async function IngramHeaders() {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          'IM-CustomerNumber': '325831',
-          'IM-CorrelationID': 'fbac82ba-cf0a-4bcf-fc03-0c508457f219-bw0a102j',
+          'IM-CustomerNumber': INGRAM_CLIENT_CUSTOMER,
+          'IM-CorrelationID': INGRAM_CORRELATION_ID,
           'IM-CountryCode': 'PE',
           Authorization: `Bearer ${token}`,
         }

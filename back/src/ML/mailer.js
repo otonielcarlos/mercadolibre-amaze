@@ -1,3 +1,7 @@
+require('dotenv').config()
+const {MAIL_USER, MAIL_PASSWORD, MAIL_RECEIVERS, MAIL_FROM} = process.env
+
+
 const nodemailer = require('nodemailer')
 const sendMail = async (id) => {
     try {
@@ -7,15 +11,15 @@ const sendMail = async (id) => {
     port: 465,
     secure: true, // true for 465, false for other ports
     auth: {
-      user: 'marketplaces@bluediamondinnovation.com', // generated ethereal user
-      pass: '6B+7~8?u_Oqa', // generated ethereal password
+      user: MAIL_USER, // generated ethereal user
+      pass: MAIL_PASSWORD, // generated ethereal password
     },
   });
 
   // send mail with defined transport object
   let info = await transporter.sendMail({
-    from: '"Apple Peru Mercadolibre" <marketplaces@bluediamondinnovation.com>', // sender address
-    to: "tom@bluediamondinnovation.com, eva@bluediamondinnovation.com, diego@bluediamondinnovation.com, montserrat@bluediamondinnovation.com", // list of receivers
+    from: MAIL_FROM, // sender address
+    to: MAIL_RECEIVERS, // list of receivers
     subject: "Orden No Enviada A Ingram", // Subject line
     text: "Se ha encontrado un error en la última orden", // plain text body
     html: ` <h3>Favor de Introducir Manualmente</h3>

@@ -1,4 +1,6 @@
 const axios = require('axios')
+require('dotenv').config()
+const {INGRAM_CLIENT_CUSTOMER, INGRAM_CORRELATION_ID} = process.env
 const { ingramToken } = require('../tokens/ingramToken')
 const url = 'https://api.ingrammicro.com:443/resellers/v6/catalog/priceandavailability?includeAvailability=true&includePricing=false&includeProductAttributes=true'
 
@@ -9,8 +11,8 @@ const requestAPI = async(skusForAPI) => {
   const token = await ingramToken()
   const config = {
     headers: {
-      "IM-CustomerNumber": "325831",
-      "IM-CorrelationID": "fbac82ba-cf0a-4bcf-fc03-0c508457f219-bw0a102j",
+      "IM-CustomerNumber": INGRAM_CLIENT_CUSTOMER,
+      "IM-CorrelationID": INGRAM_CORRELATION_ID,
       "IM-CountryCode": "PE",
       "Accept": "application/json",
       "Authorization": `Bearer ${token}`
@@ -34,7 +36,7 @@ const requestAPI = async(skusForAPI) => {
     //console.log(query)
   return query
   } catch (error) {
-   console.log(error.response.data.errors[0].fields) 
+   console.log(error.response.data) 
   }
 }
 
