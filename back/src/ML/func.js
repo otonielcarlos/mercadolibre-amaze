@@ -3,7 +3,7 @@ const { default: axios } = require('axios')
 const { token } = require('../tokens/ml')
 const { IngramHeaders } = require('../headers/ingramHeaders')
 const { saveIngram } = require('./db')
-const { getEstado } = require('./getEstado').default
+const { getEstado } = require('./getEstado')
 // const { getTicket } = require('./etiqueta/printTicket')
 
 const baseUrl = 'https://api.ingrammicro.com:443/resellers/v6/orders'
