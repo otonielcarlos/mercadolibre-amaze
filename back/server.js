@@ -25,9 +25,10 @@ app.get('/', (req, res) => {
 
 app.get('/orderid/:id', async (req, res) => {
 	try {
-		console.log(req.params)
+		// console.log(req.params)	
 		let order = req.params.id
-		let id = order.split('_')[1]
+		let id = order.slice(0, 7)
+		// console.log(id)
 		const orderRes = await addOrder(id)
 		res.status(200).json(orderRes)
 	} catch (error) {

@@ -15,7 +15,6 @@ const ingramToken = async () => {
   try {
     const request = await axios.post(tokenUrl, postFields, headers);
     const token = request.data.access_token;
-    console.log(token)
     return token;
     
   } catch (error) {
