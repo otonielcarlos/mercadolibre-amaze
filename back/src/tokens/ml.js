@@ -5,9 +5,9 @@ const log = console.log
 
 const body = {
 	"grant_type": "refresh_token",
-	"client_id": '2796079999742920',
-	"client_secret": 'iVV5i9dJyklUQoFwgxP83H8EqdmdZhFN',
-	"refresh_token": 'TG-62a770a0847ce100148f5017-766642543'
+	"client_id": MERCADOLIBRE_CLIENT_ID,
+	"client_secret": MERCADOLIBRE_CLIENT_SECRET,
+	"refresh_token": MERCADOLIBRE_REFRESH_TOKEN
 }
 
 const body_1 = {
@@ -31,7 +31,7 @@ const token = async () => {
 		const token = tokenData.data.access_token
 		return token
 	} catch (error) {
-		console.log(error.response.data)
+		console.log(error.response)
 	}
 	
 }
