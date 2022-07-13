@@ -27,7 +27,7 @@ app.get('/orderid/:id', async (req, res) => {
 	try {
 		console.log(req.params)
 		let order = req.params.id
-		let id = order.split('MLAPPLE_')[1]
+		let id = order.split('_')[1]
 		const orderRes = await addOrder(id)
 		res.status(200).json(orderRes)
 	} catch (error) {
