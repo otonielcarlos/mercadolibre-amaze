@@ -17,8 +17,7 @@ async function getDateOrder(resource){
 		let fullDate = dateCreated.slice(0, 10)
 		//log(fullDate)
 		return fullDate
-	} catch (error)
-	{
+	} catch (error)	{
 		log('error getting date in date.js file')
 	}
 }

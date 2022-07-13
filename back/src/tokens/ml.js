@@ -20,7 +20,8 @@ const body_1 = {
 
 const token = async () => {
 	// @ts-ignore
-	const tokenData = await axios.post('https://api.mercadolibre.com/oauth/token', body, {
+	try {
+		const tokenData = await axios.post('https://api.mercadolibre.com/oauth/token', body, {
 			headers: {
 				Accept: 'application/json',
 				'content-type': 'application/x-www-form-urlencoded',
@@ -29,6 +30,10 @@ const token = async () => {
 		// console.log(tokenData.data)
 		const token = tokenData.data.access_token
 		return token
+	} catch (error) {
+		console.log(error.response)
+	}
+	
 }
 	
 module.exports = {

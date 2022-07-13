@@ -1,4 +1,5 @@
 
+require('dotenv').config()
 const { default: axios } = require('axios')
 const { token } = require('../tokens/ml')
 const { IngramHeaders } = require('../headers/ingramHeaders')
