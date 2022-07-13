@@ -10,6 +10,7 @@ const baseUrl = 'https://api.ingrammicro.com:443/resellers/v6/orders'
 
 async function addOrder(resource) {
   try {
+    console.log(resource)
     let access_token = await token()
     const orderURL = `https://api.mercadolibre.com/orders/${resource}`
     let order = await axios.get(orderURL,{ headers: {'Authorization': `Bearer ${access_token}`}})
