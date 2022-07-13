@@ -32,7 +32,7 @@ app.get('/orderid/:id', async (req, res) => {
 		const orderRes = await addOrder(id)
 		res.status(200).json(orderRes)
 	} catch (error) {
-		log(error)
+		log('error',error)
 	}
 })
 
