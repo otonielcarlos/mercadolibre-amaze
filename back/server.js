@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 app.get('/orderid/:id', async (req, res) => {
 	try {	
 		let order = req.params.id
-		let id = order.slice(0, 7)
+		let id = order.slice(8)
 		const orderRes = await addOrder(id)
 		res.status(200).json(orderRes)
 	} catch (error) {
