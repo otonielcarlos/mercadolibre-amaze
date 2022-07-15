@@ -9,8 +9,11 @@ const {isOrderInIngram} = require('./src/IngramFunctions/checkIngramOrder')
 const { checkOrderStatusPaid } = require('./src/ML/checkOrderPaid')
 const { findOrder, saveNewOrderID } = require('./src/ML/db')
 const { getDateOrder, getToday } = require('./src/ML/date')
+const path = require("path");
 require('dotenv').config()
 const log = console.log
+
+app.use(express.static(path.join(__dirname, "build")));
 
 app.use(cors())
 app.use(express.json())

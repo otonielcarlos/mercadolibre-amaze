@@ -5,9 +5,11 @@ const { token } = require('../tokens/ml')
 const { IngramHeaders } = require('../headers/ingramHeaders')
 const { saveIngram } = require('./db')
 const { getEstado } = require('./getEstado')
+const { INGRAM_ORDER_URL, INGRAM_ORDER_URL_SANDBOX } = process.env
 // const { getTicket } = require('./etiqueta/printTicket')
 
-const baseUrl = 'https://api.ingrammicro.com:443/resellers/v6/orders'
+// let baseUrl = INGRAM_ORDER_URL_SANDBOX
+const baseUrl = INGRAM_ORDER_URL
 
 async function addOrder(resource) {
   try {
@@ -81,12 +83,17 @@ let data = {
       "state": `${finalState}`,
       "countryCode": "PE"
   },
-  "lines": lines,
+  "lines": [{
+    "customerLineNumber":  1,
+    "ingramPartNumber":  "4692463",
+    "quantity": 1,
+}],
+  // "lines": lines,
   "additionalAttributes": [
-      {
-          "attributeName": "allowDuplicateCustomerOrderNumber",
-          "attributeValue": "false"
-      },
+      // {
+      //     "attributeName": "allowDuplicateCustomerOrderNumber",
+      //     "attributeValue": "false"
+      // },
       {
           "attributeName": "allowOrderOnCustomerHold",
           "attributeValue": "true"
