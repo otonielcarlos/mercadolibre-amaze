@@ -90,10 +90,10 @@ let data = {
 }],
   // "lines": lines,
   "additionalAttributes": [
-      // {
-      //     "attributeName": "allowDuplicateCustomerOrderNumber",
-      //     "attributeValue": "false"
-      // },
+      {
+          "attributeName": "allowDuplicateCustomerOrderNumber",
+          "attributeValue": "false"
+      },
       {
           "attributeName": "allowOrderOnCustomerHold",
           "attributeValue": "true"
