@@ -83,12 +83,7 @@ let data = {
       "state": `${finalState}`,
       "countryCode": "PE"
   },
-  "lines": [{
-    "customerLineNumber":  1,
-    "ingramPartNumber":  "4692463",
-    "quantity": 1,
-}],
-  // "lines": lines,
+  "lines": lines,
   "additionalAttributes": [
       {
           "attributeName": "allowDuplicateCustomerOrderNumber",
