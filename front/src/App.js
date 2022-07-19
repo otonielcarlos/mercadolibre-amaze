@@ -13,16 +13,15 @@ const [customerpo, setCustomerpo ] = useState([])
 const [listOfResponses, setListOfResponses] = useState([])
 
 async function getCustomerpo(customerpo){ 
-  const list = []
-
+  
   for(let order of customerpo){
-    if(order.length > 16){
-      const orderResponse = await axios.get(`https://appleamaze.herokuapp.com/orderid/${order}`)
-      list.push(orderResponse.data)
+    if(order.length > 5){
+      const orderResponse = await axios.get(`http://localhost:4000/orderid/${order}`)
+
+      // @ts-ignore
+      setListOfResponses((prev) => [...prev, orderResponse.data])
   }
   }
-  // @ts-ignore
-  setListOfResponses(() => list)
 
 }
 
@@ -30,7 +29,7 @@ function onChangeText(event){
   const {value} = event.target
   const arrayOfcustomerpos = value.split('\n')
 
-  setCustomerpo(() => arrayOfcustomerpos)
+  setCustomerpo(() =>  arrayOfcustomerpos)
 }
 
 const responses = listOfResponses.map((order, key) => {
@@ -47,7 +46,7 @@ const responses = listOfResponses.map((order, key) => {
           <div>
               <textarea placeholder={textAreaPlaceholer} onChange={onChangeText}></textarea>
               <div>
-                <button onClick={() => getCustomerpo(customerpo)} className="button-6" role="button">Enviar</button>
+                <button onClick={() => getCustomerpo(customerpo)} className="button-6">Enviar</button>
               </div>
           </div>
        </div>

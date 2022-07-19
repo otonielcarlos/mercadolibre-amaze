@@ -3,22 +3,22 @@ const { token } = require('../tokens/ml')
 const log = console.log
 
 
-async function getDateOrder(resource){
+async function getDateOrder(resource, account){
 	try
 	{
-		let accessToken = await token()
+		let accessToken = await token(account)
 		// @ts-ignore
 		let resDate = await axios.get(`https://api.mercadolibre.com/orders/${ resource }`, {
 			headers: { Authorization: `Bearer ${ accessToken }` },
 		})
 
 		let dateCreated = resDate.data.date_created
-		//log(dateCreated)
+		log(dateCreated)
 		let fullDate = dateCreated.slice(0, 10)
 		//log(fullDate)
 		return fullDate
 	} catch (error)	{
-		log('error getting date in date.js file')
+		log('error getting date in date.js file', error.response.data)
 	}
 }
 
@@ -30,11 +30,6 @@ function getToday(){
 	return {today}
 }
 
-
-
-
-
-//getDate('orders/5081792652')
 module.exports = {
 	getDateOrder,
 	getToday

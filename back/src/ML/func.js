@@ -8,38 +8,46 @@ const { getEstado } = require('./getEstado')
 const { INGRAM_ORDER_URL, INGRAM_ORDER_URL_SANDBOX } = process.env
 // const { getTicket } = require('./etiqueta/printTicket')
 
-// let baseUrl = INGRAM_ORDER_URL_SANDBOX
-const baseUrl = INGRAM_ORDER_URL
 
-async function addOrder(resource) {
+async function addOrder(resource, account) {
+  // const baseUrl = INGRAM_ORDER_URL_SANDBOX
+  const baseUrl = INGRAM_ORDER_URL
   try {
-    console.log(resource)
-    let access_token = await token()
+    //DEFINIR CUENTA
+    const co = account === 'APPLE' ? 'MLAPPLE' : 'ML'
+
+    // OBTENER TOKEN
+    let access_token = await token(account)
+
+    //OBTENER INFORMACION DE LA COMPRA CON LA CUENTA 
     const orderURL = `https://api.mercadolibre.com/orders/${resource}`
     let order = await axios.get(orderURL,{ headers: {'Authorization': `Bearer ${access_token}`}})
     let shippingURL = `https://api.mercadolibre.com/shipments/${order.data.shipping.id}`
     let shipping = await axios.get(shippingURL, { headers: {'Authorization': `Bearer ${access_token}`}})
     let citye = shipping.data.receiver_address.city.name
     let cityFinal = shipping.data.receiver_address.city.name
-    let state = shipping.data.receiver_address.state.name
-    let stateFinal = shipping.data.receiver_address.state.name
 
-    let finalState = getEstado(citye)
+    //DEFINIR EL CODIGO DE ESTADO
+    const finalState = getEstado(citye)
      
     const id = order.data.id;
-    const customerPo = `MLAPPLE_${id}`;
+    const customerPo = `${co}_${id}`;
 
     const address = shipping.data.receiver_address.address_line;
-    const shipTo = address.normalize('NFD').replace(/[\u0300-\u036f]/g, "") ;
 
-    const fName = order.data.buyer.first_name;
-    const firstName = fName.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+    //RETIRAR ACENTOS Y CARACTERES LATINOS DEL NOMBRE
+    const shipTo = address.normalize('NFD').replace(/[\u0300-\u036f]/g, "") 
 
-    const sName = order.data.buyer.last_name;
-    const lastName = sName.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+    const fName = order.data.buyer.first_name
+    const firstName = fName.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+
+    const sName = order.data.buyer.last_name
+    const lastName = sName.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
 
     const name1 = `${firstName} ${lastName}`
 
+
+    //OBTENER INFORMACION DE LOS PRODUCTOS
     const lines = order.data.order_items.map((product, lineNumber) => {
       return  {
         "customerLineNumber": lineNumber + 1,
@@ -49,26 +57,26 @@ async function addOrder(resource) {
     })
     
     let addressline1 = '' 
-    let addressline2 = '';
-    let addressline3 = '';
+    let addressline2 = ''
+    let addressline3 = ''
 
     if(shipTo.length > 35){
-      addressline1 = shipTo.slice(0, 35);
-      addressline2 = shipTo.slice(36, shipTo.length);
+      addressline1 = shipTo.slice(0, 35)
+      addressline2 = shipTo.slice(36, shipTo.length)
     } else {
       addressline1 = shipTo
-      addressline2 = '';
+      addressline2 = ''
     }
     
     if(addressline2.length > 40) {
-      addressline2 = shipTo.slice(36, 70);
-      addressline3 = shipTo.slice(70, shipTo.length);
+      addressline2 = shipTo.slice(36, 70)
+      addressline3 = shipTo.slice(70, shipTo.length)
     } else{
-      addressline2 = shipTo.slice(36, 70);
+      addressline2 = shipTo.slice(36, 70)
       addressline3 = ''
     }
 
-let config = await IngramHeaders();
+let config = await IngramHeaders()
 let data = {
   "customerOrderNumber":`${customerPo}`,
   "notes": "",
@@ -98,11 +106,12 @@ let data = {
 
 
 console.log(JSON.stringify(data))
+// @ts-ignore
 let responseFromIngram = await axios.post(baseUrl, data, config)
 console.log(responseFromIngram.data.orders)
 
 const dataToReturn = {
-  globalorderid: responseFromIngram.data.orders[0].ingramOrderNumber,
+  globalorderid: responseFromIngram.data.orders[0].ingramOrderNumber || 'error enviando a ingram',
   customerPO: responseFromIngram.data.customerOrderNumber,
   trackingNumber: "null",
   orderId: id,
