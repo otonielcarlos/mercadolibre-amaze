@@ -12,7 +12,7 @@ const db = mysql.createPool({
   user: DB_USER,
   password: DB_PASSWORD,
   database: DB_DATABASE,
-  multipleStatements: true,
+  multipleStatements: true, 
 })
 
 const findOrder = id => {

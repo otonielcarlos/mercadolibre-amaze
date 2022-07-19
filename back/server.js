@@ -11,6 +11,10 @@ const { findOrder, saveNewOrderID } = require('./src/ML/db')
 const { getDateOrder, getToday } = require('./src/ML/date')
 const path = require("path");
 require('dotenv').config()
+const { MERCADOLIBRE_USER_ID, 
+				MULTIMARCAS_USER_ID, 
+				MERCADOLIBRE_APPLICATION_ID, 
+				MULTIMARCAS_APPLICATION_ID } = process.env
 const log = console.log
 
 app.use(express.static(path.join(__dirname, "build")));
@@ -27,38 +31,49 @@ app.get('/', (req, res) => {
 })
 
 app.get('/orderid/:id', async (req, res) => {
+	let order = req.params.id
 	try {	
-		let order = req.params.id
-		let id = order.slice(8)
-		const orderRes = await addOrder(id)
+		const isApple = req.params.id.includes('MLAPPLE')
+		
+		if(isApple){
+
+		const id = order.slice(8)
+		const orderRes = await addOrder(id, 'APPLE')
 		res.status(200).json(orderRes)
+		
+	} else {
+
+			const id = order.slice(3)
+			const orderRes = await addOrder(id, 'MULTIMARCAS')
+			res.status(200).json(orderRes)
+		}
 	} catch (error) {
-		log('error',error)
+		log('error', error)
 	}
 })
 
 app.post('/callbacks', async (req, res) => {
 	res.status(200).send()
 	try {
-		const { resource, topic } = req.body
+		const { resource, topic, user_id, application_id } = req.body
 
 		if (topic === 'orders_v2') {
-			
+			const account = (user_id === Number(MERCADOLIBRE_USER_ID) && application_id === Number(MERCADOLIBRE_APPLICATION_ID)) ? 'APPLE' : 'MULTIMARCAS'
 			let id = resource.slice(8, resource.length)
-			let date = await getDateOrder(id)
+			let date = await getDateOrder(id, account)
 			const {today} = getToday()
 			if(today === date ){
 			let isOrder = await findOrder(id)
 			if (isOrder === 'undefined') {
 				await saveNewOrderID(id)
-				await sendMessage(id)
-				await addOrder(id)
+				await sendMessage(id, account ,user_id)
+				await addOrder(id, account)
 				
 			} else {
 				log(req.body.resource, 'ya existe')
 			}
 		}	else {
-			console.log('id ya existe', id)
+			console.log('el pedido no es de hoy', id)
 		}
 	} 
 	} catch (error) {
