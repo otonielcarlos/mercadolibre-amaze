@@ -58,7 +58,8 @@ app.post('/callbacks', async (req, res) => {
 		const { resource, topic, user_id, application_id } = req.body
 
 		if (topic === 'orders_v2') {
-			const account = (user_id === Number(MERCADOLIBRE_USER_ID) && application_id === Number(MERCADOLIBRE_APPLICATION_ID)) ? 'APPLE' : 'MULTIMARCAS'
+			console.log(req.body)
+			const account = (user_id.toString() === MERCADOLIBRE_USER_ID && application_id.toString() === MERCADOLIBRE_APPLICATION_ID) ? 'APPLE' : 'MULTIMARCAS'
 			let id = resource.slice(8, resource.length)
 			let date = await getDateOrder(id, account)
 			const {today} = getToday()
