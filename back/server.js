@@ -5,8 +5,11 @@ const {	getTickets } = require('./src/ML/db')
 const { addOrder } = require('./src/ML/func')
 const { sendMessage } = require('./src/ML/message')
 const { setDisplay, showAll } = require('./src/ML/db')
-const { findOrder, saveNewOrderID } = require('./src/ML/db')
-const { getDateOrder, getToday } = require('./src/ML/date')
+
+const {isOrderInIngram} = require('./src/IngramFunctions/checkIngramOrder')
+const { checkOrderStatusPaid } = require('./src/ML/checkOrderPaid')
+const { findOrder, saveNewOrderID, getMercadolibreOrders } = require('./src/ML/db')
+const { getDateOrder, getToday, getTodayAndYesterday } = require('./src/ML/date')
 const path = require("path");
 require('dotenv').config()
 const { MERCADOLIBRE_USER_ID, 
@@ -23,6 +26,19 @@ app.set('json spaces', 2)
 const PORT = process.env.PORT || 4000
 
 // @ts-ignore
+
+app.get('/mercadolibre', async (req, res) => {
+	try {
+		const {today, yesterday} = getTodayAndYesterday()
+		const orders = await getMercadolibreOrders(today, yesterday)
+		console.log(orders)
+		res.status(200).json(orders)
+	} catch (error) {
+		console.log('error en /mercadolibre')
+	}
+})
+
+
 app.get('/', (req, res) => {
 	res.status(200).send({ status: 'OK' })
 	console.log({status: 'OK'})
@@ -139,3 +155,5 @@ app.listen(PORT, err => {
 })
 
 module.exports = app
+
+
