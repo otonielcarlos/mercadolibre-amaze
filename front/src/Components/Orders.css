@@ -1,0 +1,14 @@
+td, th {
+  border: 1px solid #dddddd;
+  text-align: center;
+  padding: 8px;
+}
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+}
+
+.orders {
+  margin: 2%;
+}

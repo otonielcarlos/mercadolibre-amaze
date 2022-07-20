@@ -49,14 +49,13 @@ const saveNewOrderID = id => {
   })
 }
 
-const saveIngram = (nv, customerpo, trackingNumber, id) => {
+const saveIngram = (globalorderid, customerPO, trackingNumber, id, name, sku, model, description, price, quantity, account) => {
   const saveDate = new Date()
   saveDate.setHours(saveDate.getHours() - 5)
   let day = saveDate.toISOString().split('T')[0]
   return new Promise((resolve, reject) => {
-    db.query(
-      `INSERT INTO ingramorders VALUES ('${nv}', '${id}','${customerpo}','${trackingNumber}', 'false','${day}')`,
-      (err, results) => {
+    const query = `INSERT INTO ingramorders(nv, id, customerpo, tracking, display, date, name, sku, model, description, price, quantity) VALUES ('${globalorderid}', '${id}','${customerPO}','${trackingNumber}', 'false', '${day}', '${name}', '${sku}', '${model}', '${description}', '${price}', '${quantity}', '${account}' )`
+    db.query(query, (err, results) => {
         if (err) {
           console.log('err saving ingramorders ', err)
           reject(false)
@@ -68,9 +67,9 @@ const saveIngram = (nv, customerpo, trackingNumber, id) => {
   })
 }
 
-const getNullTickets = () => {
+function getNullTickets(account){
   return new Promise((resolve, reject) => {
-    let query = "SELECT * from ingramorders WHERE tracking = 'null'"
+    let query = `SELECT * from ingramorders WHERE tracking = 'null' WHERE account = '${account}'`
     db.query(query, (err, results) => {
       if (err) reject(err)
       resolve(results)
@@ -89,9 +88,9 @@ const getTickets = () => {
   })
 }
 
-const updateTracking = (trackingNumber, id) => {
+const updateTracking = (trackingNumber, id, shippingAddress) => {
   return new Promise((resolve, reject) => {
-    let query = `UPDATE ingramorders SET tracking = '${trackingNumber}', display = 'true' WHERE id = ${id}`
+    let query = `UPDATE ingramorders SET tracking = '${trackingNumber}', display = 'true', address = '${shippingAddress}' WHERE id = ${id}`
     db.query(query, (err, results) => {
       if (err) reject(err)
       resolve(results)
@@ -186,12 +185,24 @@ const getAllNoVariations = () => {
     db.query(query, (err, results) => {
       if(err) console.log(err)
 
-results.forEach(result => {
-  resolvedArray.push({itemid: result.itemid, data: {'available_quantity': result.stock}})
+    results.forEach(result => {
+    resolvedArray.push({itemid: result.itemid, data: {'available_quantity': result.stock}})
 })
       resolve(resolvedArray)
     })
   })
+}
+
+function getMercadolibreOrders(today, yesterday){
+  const orders = new Promise((resolve, reject) => {
+    const query = `SELECT * FROM ingramorders WHERE date BETWEEN '${yesterday}' AND '${today}' AND account = 'APPLE'`
+    db.query(query, (err, results) => {
+      if(err) console.log(err)
+
+      resolve(results)
+    })
+  })
+  return orders
 }
 
 module.exports = {
@@ -210,4 +221,5 @@ module.exports = {
   updatePrevStock,
   getAllVariations,
   getAllNoVariations,
+  getMercadolibreOrders
 }

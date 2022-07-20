@@ -14,7 +14,7 @@ async function addOrder(resource, account) {
   const baseUrl = INGRAM_ORDER_URL
   try {
     //DEFINIR CUENTA
-    const co = account === 'APPLE' ? 'MLAPPLE' : 'ML'
+    const co = account === 'APPLE' ? 'MLAPPLE' : 'MULTIMARCAS'
 
     // OBTENER TOKEN
     let access_token = await token(account)
@@ -55,6 +55,7 @@ async function addOrder(resource, account) {
         "quantity": `${product.quantity}`,
     }
     })
+       
     
     let addressline1 = '' 
     let addressline2 = ''
@@ -113,13 +114,35 @@ console.log(responseFromIngram.data.orders)
 const dataToReturn = {
   globalorderid: responseFromIngram.data.orders[0].ingramOrderNumber || 'error enviando a ingram',
   customerPO: responseFromIngram.data.customerOrderNumber,
+  name: data.shipToInfo.name1,
+  shippingAddress: `${data.shipToInfo.name1}\n ${data.shipToInfo.addressLine1}\n ${data.shipToInfo.addressLine2}\n ${data.shipToInfo.addressLine3}\n ${data.shipToInfo.city}`,
   trackingNumber: "null",
   orderId: id,
   request: data,
   ingram: responseFromIngram.data
 }
-const { globalorderid, customerPO, trackingNumber, orderId} = dataToReturn
-await saveIngram(globalorderid, customerPO, trackingNumber, orderId)
+
+const models = responseFromIngram.data.orders[0].lines.map(line => line.vendorPartNumber).join()
+const productDescription = order.data.order_items.map((product) => {
+  return `${product.item.title}\n`
+}).join()
+
+const productPrices = order.data.order_items.map((product) => {
+  return `${product.unit_price}\n`
+}).join()
+
+const productQuantity = order.data.order_items.map((product) => {
+  return `${product.quantity}\n`
+}).join()
+
+const skus = order.data.order_items.map((product) => {
+  return `${product.item.seller_sku}\n`
+}).join()
+
+
+
+const { globalorderid, customerPO, trackingNumber, orderId, name} = dataToReturn
+await saveIngram(globalorderid, customerPO, trackingNumber, orderId, name, skus, models, productDescription, productPrices, productQuantity, account)
 // console.log(dataToReturn)
 return dataToReturn
   } catch (error) {
@@ -129,3 +152,5 @@ return dataToReturn
 }
 
 module.exports = { addOrder }
+
+

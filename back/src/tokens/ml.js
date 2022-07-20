@@ -42,7 +42,7 @@ async function token (cuenta) {
 				},
 			})
 			const token = tokenData.data.access_token
-			console.log('token apple')
+			// console.log('token apple')
 			return token
 		} catch (error) {
 			console.log(error.response)
@@ -56,7 +56,7 @@ async function token (cuenta) {
 				},
 			})
 			const token = tokenData.data.access_token
-			console.log('token multimarcas')
+			// console.log('token multimarcas')
 			return token
 		} catch (error) {
 			console.log(error.response)
