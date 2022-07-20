@@ -5,8 +5,6 @@ const {	getTickets } = require('./src/ML/db')
 const { addOrder } = require('./src/ML/func')
 const { sendMessage } = require('./src/ML/message')
 const { setDisplay, showAll } = require('./src/ML/db')
-const {isOrderInIngram} = require('./src/IngramFunctions/checkIngramOrder')
-const { checkOrderStatusPaid } = require('./src/ML/checkOrderPaid')
 const { findOrder, saveNewOrderID } = require('./src/ML/db')
 const { getDateOrder, getToday } = require('./src/ML/date')
 const path = require("path");
@@ -63,16 +61,18 @@ app.post('/callbacks', async (req, res) => {
 			let id = resource.slice(8, resource.length)
 			let date = await getDateOrder(id, account)
 			const {today} = getToday()
+			
 			if(today === date ){
-			let isOrder = await findOrder(id)
-			if (isOrder === 'undefined') {
-				await saveNewOrderID(id)
-				await sendMessage(id, account ,user_id)
-				await addOrder(id, account)
+				let isOrder = await findOrder(id)
 				
-			} else {
-				log(req.body.resource, 'ya existe')
-			}
+				if (isOrder === 'undefined') {
+					await saveNewOrderID(id)
+					await sendMessage(id, account ,user_id)
+					await addOrder(id, account)
+					
+				} else {
+					log(req.body.resource, 'ya existe')
+				}
 		}	else {
 			console.log('el pedido no es de hoy', id)
 		}
