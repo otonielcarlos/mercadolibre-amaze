@@ -25,7 +25,7 @@ function Orders(){
     }
 
     getOrders()
-  }, [])
+  })
 
 const displayOrders = orders.map((order, key) => {
   return (
@@ -44,7 +44,7 @@ const displayOrders = orders.map((order, key) => {
 })
   return(
   <div className='orders'>
-  <h3>Ordenes del {yesterday} al {today}</h3>
+  <h3>Ordenes del {yesterday} 1:00pm PE al {today} 12:59pm PE *** DEMO EN DESARROLLO***</h3>
   <table>
     <tbody>
       <tr>

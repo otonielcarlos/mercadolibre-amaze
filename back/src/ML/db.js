@@ -54,7 +54,7 @@ const saveIngram = (globalorderid, customerPO, trackingNumber, id, name, sku, mo
   saveDate.setHours(saveDate.getHours() - 5)
   let day = saveDate.toISOString().split('T')[0]
   return new Promise((resolve, reject) => {
-    const query = `INSERT INTO ingramorders(nv, id, customerpo, tracking, display, date, name, sku, model, description, price, quantity) VALUES ('${globalorderid}', '${id}','${customerPO}','${trackingNumber}', 'false', '${day}', '${name}', '${sku}', '${model}', '${description}', '${price}', '${quantity}', '${account}' )`
+    const query = `INSERT INTO ingramorders(nv, id, customerpo, tracking, display, date, name, sku, model, description, price, quantity) VALUES ('${globalorderid}', '${id}','${customerPO}','${trackingNumber}', 'false', '${saveDate}', '${name}', '${sku}', '${model}', '${description}', '${price}', '${quantity}', '${account}' )`
     db.query(query, (err, results) => {
         if (err) {
           console.log('err saving ingramorders ', err)
@@ -195,7 +195,7 @@ const getAllNoVariations = () => {
 
 function getMercadolibreOrders(today, yesterday){
   const orders = new Promise((resolve, reject) => {
-    const query = `SELECT * FROM ingramorders WHERE date BETWEEN '${yesterday}' AND '${today}' AND account = 'APPLE'`
+    const query = `SELECT * FROM ingramorders WHERE date BETWEEN '${yesterday}T13:00:00.000Z' AND '${today}T12:59:00.000Z' AND account = 'APPLE'`
     db.query(query, (err, results) => {
       if(err) console.log(err)
 
