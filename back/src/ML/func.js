@@ -14,7 +14,7 @@ async function addOrder(resource, account) {
   const baseUrl = INGRAM_ORDER_URL
   try {
     //DEFINIR CUENTA
-    const co = account === 'APPLE' ? 'MLAPPLE' : 'MULTIMARCAS'
+    const co = account === 'APPLE' ? 'MLAPPLE' : 'ML'
 
     // OBTENER TOKEN
     let access_token = await token(account)
