@@ -1,31 +1,11 @@
-import React, {useState, useEffect} from 'react'
-import axios from 'axios'
+import React, {useContext} from 'react'
 import './Orders.css'
-
+import {Context} from '../Context/Context'
+// import {getTodayAndYesterday} from '../utils/utils'
 
 function Orders(){
 
-  const [orders, setOrders] = useState([])
-
-
-  const saveDate = new Date()
-  saveDate.setHours(saveDate.getHours() - 5)
-  let today = saveDate.toISOString().split('T')[0]
-  const date = new Date()
-  date.setHours(date.getHours() - 5)
-  let previous = new Date(date.getTime())
-  previous.setDate(date.getDate() - 1)
-  const yesterday = previous.toISOString().split('T')[0]
-
-  useEffect(() => {
-    async function getOrders(){
-      const newOrders = await axios.get('https://appleamaze.herokuapp.com/mercadolibre')
-      // @ts-ignore
-      setOrders(() => newOrders.data)
-    }
-
-    getOrders()
-  })
+ const {orders} = useContext(Context)
 
 const displayOrders = orders.map((order, key) => {
   return (
@@ -42,9 +22,11 @@ const displayOrders = orders.map((order, key) => {
     </tr>
   )
 })
+
+
   return(
   <div className='orders'>
-  <h3>Ordenes del {yesterday} 1:00pm PE al {today} 12:59pm PE *** DEMO EN DESARROLLO***</h3>
+  {/* <h3>Ordenes del {yesterday} 1:00pm PE al {today} 12:59pm PE *** DEMO EN DESARROLLO***</h3> */}
   <table>
     <tbody>
       <tr>

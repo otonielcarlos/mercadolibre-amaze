@@ -31,7 +31,7 @@ app.get('/mercadolibre', async (req, res) => {
 	try {
 		const {today, yesterday} = getTodayAndYesterday()
 		const orders = await getMercadolibreOrders(today, yesterday)
-		console.log(orders)
+		console.log('orders logged')
 		res.status(200).json(orders)
 	} catch (error) {
 		console.log('error en /mercadolibre')

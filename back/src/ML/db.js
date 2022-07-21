@@ -49,23 +49,6 @@ const saveNewOrderID = id => {
   })
 }
 
-const saveIngram = (globalorderid, customerPO, trackingNumber, id, name, sku, model, description, price, quantity, account) => {
-  const saveDate = new Date()
-  saveDate.setHours(saveDate.getHours() - 5)
-  let day = saveDate.toISOString().split('T')[0]
-  return new Promise((resolve, reject) => {
-    const query = `INSERT INTO ingramorders(nv, id, customerpo, tracking, display, date, name, sku, model, description, price, quantity) VALUES ('${globalorderid}', '${id}','${customerPO}','${trackingNumber}', 'false', '${saveDate}', '${name}', '${sku}', '${model}', '${description}', '${price}', '${quantity}', '${account}' )`
-    db.query(query, (err, results) => {
-        if (err) {
-          console.log('err saving ingramorders ', err)
-          reject(false)
-        } else {
-          resolve(true)
-        }
-      }
-    )
-  })
-}
 
 function getNullTickets(account){
   return new Promise((resolve, reject) => {
@@ -203,6 +186,25 @@ function getMercadolibreOrders(today, yesterday){
     })
   })
   return orders
+}
+
+const saveIngram = (globalorderid, customerPO, trackingNumber, id, name, sku, model, description, price, quantity, account) => {
+  const saveDate = new Date()
+  saveDate.setHours(saveDate.getHours() - 5)
+  let day = saveDate.toISOString().split('T')[0]
+  return new Promise((resolve, reject) => {
+    const query = `INSERT INTO ingramorders(nv, id, customerpo, tracking, display, date, name, sku, model, description, price, quantity, account) 
+                    VALUES ('${globalorderid}', '${id}','${customerPO}','${trackingNumber}', 'false', '${saveDate}', '${name}', '${sku}', '${model}', '${description}', '${price}', '${quantity}', '${account}')`
+    db.query(query, (err, results) => {
+        if (err) {
+          console.log('err saving ingramorders ', err)
+          reject(false)
+        } else {
+          resolve(true)
+        }
+      }
+    )
+  })
 }
 
 module.exports = {

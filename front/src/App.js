@@ -12,7 +12,7 @@ function App() {
     <Navbar />
     <Switch>
       <Route exact path="/" element={<OrderEntry />}></Route>
-      <Route exact path="/orders-mercadolibre" element={<Orders />}></Route>
+      <Route  path="/orders-mercadolibre" element={<Orders />}></Route>
     </Switch>
     </div>
   )

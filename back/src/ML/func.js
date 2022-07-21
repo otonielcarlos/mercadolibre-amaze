@@ -77,77 +77,78 @@ async function addOrder(resource, account) {
       addressline3 = ''
     }
 
-let config = await IngramHeaders()
-let data = {
-  "customerOrderNumber":`${customerPo}`,
-  "notes": "",
-  "shipToInfo": {
-      "contact": `${name1.substring(0,35)}`,
-      "companyName": `${name1.substring(0,35)}`,
-      "name1": `${name1.substring(0,35)}`,
-      "addressLine1": `${addressline1}`,
-      "addressLine2": `${addressline2}`,
-      "addressLine3": `${addressline3}`,
-      "city":`${cityFinal}`,
-      "state": `${finalState}`,
-      "countryCode": "PE"
-  },
-  "lines": lines,
-  "additionalAttributes": [
-      {
-          "attributeName": "allowDuplicateCustomerOrderNumber",
-          "attributeValue": "false"
+    //OBTENER HEADERS PARA INGRAM API REQUEST
+    let config = await IngramHeaders()
+
+    //BODY REQUEST DE INGRAM API
+    let data = {
+      "customerOrderNumber":`${customerPo}`,
+      "notes": "",
+      "shipToInfo": {
+          "contact": `${name1.substring(0,34)}`,
+          "companyName": `${name1.substring(0,34)}`,
+          "name1": `${name1.substring(0,34)}`,
+          "addressLine1": `${addressline1}`,
+          "addressLine2": `${addressline2}`,
+          "addressLine3": `${addressline3}`,
+          "city":`${cityFinal}`,
+          "state": `${finalState}`,
+          "countryCode": "PE"
       },
-      {
-          "attributeName": "allowOrderOnCustomerHold",
-          "attributeValue": "true"
-      }
-  ]
-}
+      "lines": lines,
+      "additionalAttributes": [
+          {
+              "attributeName": "allowDuplicateCustomerOrderNumber",
+              "attributeValue": "false"
+          },
+          {
+              "attributeName": "allowOrderOnCustomerHold",
+              "attributeValue": "true"
+          }
+      ]
+    }
 
 
-console.log(JSON.stringify(data))
-// @ts-ignore
-let responseFromIngram = await axios.post(baseUrl, data, config)
-console.log(responseFromIngram.data.orders)
+    console.log(JSON.stringify(data))
+    // @ts-ignore
+    //INGRAM API REQUEST
+    let responseFromIngram = await axios.post(baseUrl, data, config)
 
-const dataToReturn = {
-  globalorderid: responseFromIngram.data.orders[0].ingramOrderNumber || 'error enviando a ingram',
-  customerPO: responseFromIngram.data.customerOrderNumber,
-  name: data.shipToInfo.name1,
-  shippingAddress: `${data.shipToInfo.name1}\n ${data.shipToInfo.addressLine1}\n ${data.shipToInfo.addressLine2}\n ${data.shipToInfo.addressLine3}\n ${data.shipToInfo.city}`,
-  trackingNumber: "null",
-  orderId: id,
-  request: data,
-  ingram: responseFromIngram.data
-}
+    const dataToReturn = {
+      globalorderid: responseFromIngram.data.orders[0].ingramOrderNumber || 'error enviando a ingram',
+      customerPO: responseFromIngram.data.customerOrderNumber,
+      name: data.shipToInfo.name1,
+      shippingAddress: `${data.shipToInfo.name1}\n ${data.shipToInfo.addressLine1}\n ${data.shipToInfo.addressLine2}\n ${data.shipToInfo.addressLine3}\n ${data.shipToInfo.city}`,
+      trackingNumber: "null",
+      orderId: id,
+    }
 
-const models = responseFromIngram.data.orders[0].lines.map(line => line.vendorPartNumber).join()
-const productDescription = order.data.order_items.map((product) => {
-  return `${product.item.title}\n`
-}).join()
+    const models = responseFromIngram.data.orders[0].lines.map(line => line.vendorPartNumber).join()
+    const productDescription = order.data.order_items.map((product) => {
+      return `${product.item.title}\n`
+    }).join()
 
-const productPrices = order.data.order_items.map((product) => {
-  return `${product.unit_price}\n`
-}).join()
+    const productPrices = order.data.order_items.map((product) => {
+      return `${product.unit_price}\n`
+    }).join()
 
-const productQuantity = order.data.order_items.map((product) => {
-  return `${product.quantity}\n`
-}).join()
+    const productQuantity = order.data.order_items.map((product) => {
+      return `${product.quantity}\n`
+    }).join()
 
-const skus = order.data.order_items.map((product) => {
-  return `${product.item.seller_sku}\n`
-}).join()
+    const skus = order.data.order_items.map((product) => {
+      return `${product.item.seller_sku}\n`
+    }).join()
 
 
 
-const { globalorderid, customerPO, trackingNumber, orderId, name} = dataToReturn
-await saveIngram(globalorderid, customerPO, trackingNumber, orderId, name, skus, models, productDescription, productPrices, productQuantity, account)
-// console.log(dataToReturn)
-return dataToReturn
-  } catch (error) {
-    console.log(error.data)
-    // sendMail(id)
+    const { globalorderid, customerPO, trackingNumber, orderId, name} = dataToReturn
+    await saveIngram(globalorderid, customerPO, trackingNumber, orderId, name, skus, models, productDescription, productPrices, productQuantity, account)
+    // console.log(dataToReturn)
+    return dataToReturn
+      } catch (error) {
+        console.log(error.data)
+        // sendMail(id)
   }
 }
 

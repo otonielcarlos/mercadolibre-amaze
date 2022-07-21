@@ -6,7 +6,7 @@ function Navbar(){
   return (
   <header className="topnav">
     <Link to="/">Order Entry</Link>
-    {/* <Link to="/orders-mercadolibre">Mercadolibre Orders</Link> */}
+    <Link to="/orders-mercadolibre">Mercadolibre Orders</Link>
   </header>
 
   )
