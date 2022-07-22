@@ -27,7 +27,11 @@ const PORT = process.env.PORT || 4000
 
 // @ts-ignore
 
-app.get('/mercadolibre', async (req, res) => {
+app.get('/*', (req, res) => {
+	res.sendFile(path.resolve(__dirname, "index.html"))
+})
+
+app.get('api/mercadolibre', async (req, res) => {
 	try {
 		const {today, yesterday} = getTodayAndYesterday()
 		const orders = await getMercadolibreOrders(today, yesterday)
@@ -40,11 +44,10 @@ app.get('/mercadolibre', async (req, res) => {
 
 
 app.get('/', (req, res) => {
-	res.status(200).send({ status: 'OK' })
-	console.log({status: 'OK'})
+	
 })
 
-app.get('/orderid/:id', async (req, res) => {
+app.get('api/orderid/:id', async (req, res) => {
 	let order = req.params.id
 	try {	
 		const isApple = req.params.id.includes('MLAPPLE')
@@ -66,7 +69,7 @@ app.get('/orderid/:id', async (req, res) => {
 	}
 })
 
-app.post('/callbacks', async (req, res) => {
+app.post('api/callbacks', async (req, res) => {
 	res.status(200).send()
 	try {
 		const { resource, topic, user_id, application_id } = req.body
@@ -99,7 +102,7 @@ app.post('/callbacks', async (req, res) => {
 })
 
 // @ts-ignore
-app.get('/guias', async (req, res) => {
+app.get('api/guias', async (req, res) => {
 	try {
 		const guias = await getTickets()
 		for (let i in guias) {
@@ -113,7 +116,7 @@ app.get('/guias', async (req, res) => {
 })
 
 // @ts-ignore
-app.get('/todos', async (req, res) => {
+app.get('api/todos', async (req, res) => {
   try {
     const results = await showAll()
     for(let i in results){

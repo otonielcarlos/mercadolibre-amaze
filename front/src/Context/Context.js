@@ -9,7 +9,7 @@ function ContextProvider({children}){
 
   useEffect(() => {
     async function getOrders(){
-      const newOrders = await axios.get('http://localhost:4000/mercadolibre')
+      const newOrders = await axios.get('https://appleamaze.herokuapp.com/api/mercadolibre')
       // @ts-ignore
       setOrders(() => newOrders.data)
     }
