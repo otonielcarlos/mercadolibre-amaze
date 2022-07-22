@@ -6,8 +6,9 @@ const { putStock } = require('../helpers/postRequest')
 const { checkTickets } = require('./printTicket')
 
 const getPrices = async () => {
-  try{
-    await updatePrevStock()
+
+    try {
+      await updatePrevStock()
     const skus = await getAllSkus()
     const skusForAPI = skusChunks(skus)
     const responseFromIngram = await requestAPI(skusForAPI)
@@ -17,12 +18,18 @@ const getPrices = async () => {
     const items = await getAllNoVariations()
     await putStock(variations)
     await putStock(items)
-    await checkTickets('APPLE')
-    await checkTickets('MULTIMARCAS')
+    } catch (error) {
+      console.log(error, 'error en items')
+    }
+    
+    try {
+      await checkTickets('APPLE')
+      await checkTickets('MULTIMARCAS')
+    } catch (error) {
+      console.log(error, 'error in checking tracking')
+    }
 
-  } catch(err){
-    console.error(err)
-  }
+  
     
 }
 

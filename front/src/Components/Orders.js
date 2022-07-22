@@ -14,6 +14,7 @@ const displayOrders = orders.map((order, key) => {
       <td>{order.customerpo}</td>
       <td>{order.name}</td>
       <td>{order.address}</td>
+      <td>{order.tracking}</td>
       <td>{order.sku}</td>
       <td>{order.model}</td>
       <td>{order.description}</td>
@@ -34,6 +35,7 @@ const displayOrders = orders.map((order, key) => {
         <th>OC</th>
         <th>Nombre</th>
         <th>Dirección</th>
+        <th>Tracking</th>
         <th>Sku</th>
         <th>Modelo</th>
         <th>Descripcion</th>

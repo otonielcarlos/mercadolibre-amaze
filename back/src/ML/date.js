@@ -4,8 +4,10 @@ const log = console.log
 
 
 async function getDateOrder(resource, account){
-	try
-	{
+try {
+	
+
+	try {
 		let accessToken = await token(account)
 		// @ts-ignore
 		let resDate = await axios.get(`https://api.mercadolibre.com/orders/${ resource }`, {
@@ -18,8 +20,24 @@ async function getDateOrder(resource, account){
 		//log(fullDate)
 		return fullDate
 	} catch (error)	{
-		log('error getting date in date.js file', error.response.data)
+		if(error){
+			let cuenta = account === 'APPLE' ? 'APPLE' : 'MULTIMARCAS'
+			let accessToken = await token(account)
+			// @ts-ignore
+		let resDate = await axios.get(`https://api.mercadolibre.com/orders/${ resource }`, {
+			headers: { Authorization: `Bearer ${ accessToken }` },
+		})
+
+		let dateCreated = resDate.data.date_created
+		log(dateCreated)
+		let fullDate = dateCreated.slice(0, 10)
+		//log(fullDate)
+		return fullDate
+		}
 	}
+} catch (error) {
+	console.log(error.response.data, 'error in date.js')
+}
 }
 
 function getToday(){
@@ -56,4 +74,6 @@ module.exports = {
 	getYesterday,
 	getTodayAndYesterday
 }
+
+
 

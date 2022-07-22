@@ -52,7 +52,7 @@ const saveNewOrderID = id => {
 
 function getNullTickets(account){
   return new Promise((resolve, reject) => {
-    let query = `SELECT * from ingramorders WHERE tracking = 'null' WHERE account = '${account}'`
+    let query = `SELECT * from ingramorders WHERE tracking = 'null' AND account = '${account}'`
     db.query(query, (err, results) => {
       if (err) reject(err)
       resolve(results)
@@ -191,10 +191,10 @@ function getMercadolibreOrders(today, yesterday){
 const saveIngram = (globalorderid, customerPO, trackingNumber, id, name, sku, model, description, price, quantity, account) => {
   const saveDate = new Date()
   saveDate.setHours(saveDate.getHours() - 5)
-  let day = saveDate.toISOString().split('T')[0]
+  let day = saveDate.toISOString().split('.')[0]
   return new Promise((resolve, reject) => {
     const query = `INSERT INTO ingramorders(nv, id, customerpo, tracking, display, date, name, sku, model, description, price, quantity, account) 
-                    VALUES ('${globalorderid}', '${id}','${customerPO}','${trackingNumber}', 'false', '${saveDate}', '${name}', '${sku}', '${model}', '${description}', '${price}', '${quantity}', '${account}')`
+                    VALUES ('${globalorderid}', '${id}','${customerPO}','${trackingNumber}', 'false', '${day}', '${name}', '${sku}', '${model}', '${description}', '${price}', '${quantity}', '${account}')`
     db.query(query, (err, results) => {
         if (err) {
           console.log('err saving ingramorders ', err)
