@@ -22,7 +22,7 @@ try {
 	} catch (error)	{
 		if(error){
 			let cuenta = account === 'APPLE' ? 'APPLE' : 'MULTIMARCAS'
-			let accessToken = await token(account)
+			let accessToken = await token(cuenta)
 			// @ts-ignore
 		let resDate = await axios.get(`https://api.mercadolibre.com/orders/${ resource }`, {
 			headers: { Authorization: `Bearer ${ accessToken }` },
