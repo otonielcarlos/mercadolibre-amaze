@@ -147,11 +147,16 @@ app.delete('/borrar/:guia', async (req, res) => {
   }
 })
 
+app.get('/*', (req, res) => {
+	res.sendFile(path.join(__dirname, 'build/index.html'))
+})
+
 app.listen(PORT, err => {
 	if (err) {
 		log('error listening',err)
 	}
 	log(`listening on port: ${PORT}`)
+
 })
 
 module.exports = app
