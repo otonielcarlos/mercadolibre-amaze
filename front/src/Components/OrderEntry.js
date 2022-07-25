@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import axios from 'axios'
 
 function OrderEntry(){
@@ -15,13 +15,14 @@ function OrderEntry(){
   async function getCustomerpo(customerpo){ 
     try {
       console.log(customerpo)
+
       for(let order of customerpo){
-        if(order.length > 5){
-          const orderResponse = await axios.get(`https://appleamaze.herokuapp/orderid/${order}`)
-    
+        console.log(order)
+        const url = `https://appleamaze.herokuapp.com/orderid/${order}`
+        console.log(url)
+          const orderResponse = await axios.get(url , {headers:{ 'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8;application/json' }})
           // @ts-ignore
           setListOfResponses((prev) => [...prev, orderResponse.data])
-      }
       }
     } catch (error) {
       
