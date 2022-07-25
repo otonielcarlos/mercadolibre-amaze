@@ -3,12 +3,10 @@ const { default: axios } = require('axios')
 const { token } = require('../tokens/ml')
 const log = console.log
 const fs = require('fs')
-const { savePdfToServer } = require('../ML/saveFtp')
-const ftp = require('basic-ftp')
 // const writer = fs.createWriteStream('./ticket.pdf')
-const { db, getNullTickets, updateTracking, setCancel } = require('../ML/db')
+const { db, getNullTickets, updateTracking, setCancel } = require('./db')
 
- async function checkTickets(account) {
+ async function checkTracking(account) {
 	const accessToken = await token(account)
 	let ordersWithNullTracking = await getNullTickets(account)
 	axios.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken
@@ -39,12 +37,11 @@ const { db, getNullTickets, updateTracking, setCancel } = require('../ML/db')
 			}
 		}
 	} else {
-		log('no hay nuevas etiquetas')
+		log('no hay nuevos tracking numbers')
 	}
 }
-checkTickets('APPLE')
 
 module.exports = {
-	checkTickets,
+	checkTracking,
 }
 

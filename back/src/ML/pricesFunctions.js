@@ -3,12 +3,11 @@ const { skusChunks } = require('../helpers/chunks')
 const { requestAPI } = require('../helpers/requests')
 const { joinItems } = require('../helpers/requestForML')
 const { putStock } = require('../helpers/postRequest')
-const { checkTickets } = require('./printTicket')
+const { checkTracking } = require('./checkTracking')
 
-const getPrices = async () => {
-
+async function getPrices() {
     try {
-      await updatePrevStock()
+    await updatePrevStock()
     const skus = await getAllSkus()
     const skusForAPI = skusChunks(skus)
     const responseFromIngram = await requestAPI(skusForAPI)
@@ -23,14 +22,11 @@ const getPrices = async () => {
     }
     
     try {
-      await checkTickets('APPLE')
-      await checkTickets('MULTIMARCAS')
+      await checkTracking('APPLE')
+      await checkTracking('MULTIMARCAS')
     } catch (error) {
       console.log(error, 'error in checking tracking')
     }
-
-  
-    
 }
-
+ 
 getPrices()

@@ -6,6 +6,7 @@ const skusChunks = (skus) => {
   if(!resultArray[chunkIndex]) {
     resultArray[chunkIndex] = [] // start a new chunk
   }
+  
   resultArray[chunkIndex].push({"ingramPartNumber" : item})
   return resultArray
 }, [])}

@@ -6,7 +6,7 @@ const log = console.log;
 const putStock = async (arrayOfProducts) => {
   try {
     let j = 0;
-    const accessToken = await token();
+    const accessToken = await token('APPLE');
     for(let i in arrayOfProducts){
       j++;
       let baseUrl =  `https://api.mercadolibre.com/items/${arrayOfProducts[i].itemid}`
