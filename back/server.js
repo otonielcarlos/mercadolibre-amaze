@@ -37,6 +37,7 @@ const PORT = process.env.PORT || 4000
 
 app.get('/orderid/:id', async (req, res) => {
 	let order = req.params.id
+	res.header("Access-Control-Allow-Origin", "*")
 	try {	
 		const isApple = req.params.id.includes('MLAPPLE')
 		

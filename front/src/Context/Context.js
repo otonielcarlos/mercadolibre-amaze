@@ -13,7 +13,7 @@ function ContextProvider({children}){
       // @ts-ignore
       setOrders(() => newOrders.data)
     }
-    getOrders()
+    // getOrders()
   },[])
 
   return(

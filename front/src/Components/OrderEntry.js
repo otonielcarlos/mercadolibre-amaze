@@ -14,6 +14,7 @@ function OrderEntry(){
   
   async function getCustomerpo(customerpo){ 
     try {
+      console.log(customerpo)
       for(let order of customerpo){
         if(order.length > 5){
           const orderResponse = await axios.get(`https://appleamaze.herokuapp/orderid/${order}`)
@@ -23,6 +24,7 @@ function OrderEntry(){
       }
       }
     } catch (error) {
+      
       console.log(error)
     }
   
