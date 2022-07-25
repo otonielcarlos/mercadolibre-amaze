@@ -118,7 +118,6 @@ async function addOrder(resource, account) {
       globalorderid: responseFromIngram.data.orders[0].ingramOrderNumber || 'error enviando a ingram',
       customerPO: responseFromIngram.data.customerOrderNumber,
       name: data.shipToInfo.name1,
-      shippingAddress: `${data.shipToInfo.name1}\n ${data.shipToInfo.addressLine1}\n ${data.shipToInfo.addressLine2}\n ${data.shipToInfo.addressLine3}\n ${data.shipToInfo.city}`,
       trackingNumber: "null",
       orderId: id,
     }
