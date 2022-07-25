@@ -31,16 +31,7 @@ const PORT = process.env.PORT || 4000
 // 	res.sendFile(path.resolve(__dirname, "index.html"))
 // })
 
-app.get('/mercadolibre', async (req, res) => {
-	try {
-		const {today, yesterday} = getTodayAndYesterday()
-		const orders = await getMercadolibreOrders(today, yesterday)
-		console.log('orders logged')
-		res.status(200).json(orders)
-	} catch (error) {
-		console.log('error en /mercadolibre')
-	}
-})
+
 
 
 
@@ -64,6 +55,17 @@ app.get('/orderid/:id', async (req, res) => {
 		}
 	} catch (error) {
 		log('error', error)
+	}
+})
+
+app.get('/mercadolibre', async (req, res) => {
+	try {
+		const {today, yesterday} = getTodayAndYesterday()
+		const orders = await getMercadolibreOrders(today, yesterday)
+		console.log('orders logged')
+		res.status(200).json(orders)
+	} catch (error) {
+		console.log('error en /mercadolibre')
 	}
 })
 

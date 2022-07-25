@@ -13,14 +13,17 @@ function OrderEntry(){
   const [listOfResponses, setListOfResponses] = useState([])
   
   async function getCustomerpo(customerpo){ 
+    try {
+      for(let order of customerpo){
+        if(order.length > 5){
+          const orderResponse = await axios.get(`https://appleamaze.herokuapp/orderid/${order}`)
     
-    for(let order of customerpo){
-      if(order.length > 5){
-        const orderResponse = await axios.get(`https://appleamaze.herokuapp/orderid/${order}`)
-  
-        // @ts-ignore
-        setListOfResponses((prev) => [...prev, orderResponse.data])
-    }
+          // @ts-ignore
+          setListOfResponses((prev) => [...prev, orderResponse.data])
+      }
+      }
+    } catch (error) {
+      console.log(error)
     }
   
   }
