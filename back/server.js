@@ -53,6 +53,7 @@ app.get('/orderid/:id', async (req, res) => {
 
 		const id = order.slice(8)
 		const orderRes = await addOrder(id, 'APPLE')
+		console.log(orderRes)
 		res.status(200).json(orderRes)
 		
 	} else {
@@ -147,9 +148,9 @@ app.delete('/borrar/:guia', async (req, res) => {
   }
 })
 
-app.get('/*', (req, res) => {
-	res.sendFile(path.join(__dirname, 'build/index.html'))
-})
+// app.get('/*', (req, res) => {
+// 	res.sendFile(path.join(__dirname, 'build/index.html'))
+// })
 
 app.listen(PORT, err => {
 	if (err) {
