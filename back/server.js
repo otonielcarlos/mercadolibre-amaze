@@ -5,20 +5,15 @@ const {	getTickets } = require('./src/ML/db')
 const { addOrder } = require('./src/ML/func')
 const { sendMessage } = require('./src/ML/message')
 const { setDisplay, showAll } = require('./src/ML/db')
-
-const {isOrderInIngram} = require('./src/IngramFunctions/checkIngramOrder')
-const { checkOrderStatusPaid } = require('./src/ML/checkOrderPaid')
 const { findOrder, saveNewOrderID, getMercadolibreOrders } = require('./src/ML/db')
 const { getDateOrder, getToday, getTodayAndYesterday } = require('./src/ML/date')
 const path = require("path");
 require('dotenv').config()
-const { MERCADOLIBRE_USER_ID, 
-				MULTIMARCAS_USER_ID, 
-				MERCADOLIBRE_APPLICATION_ID, 
-				MULTIMARCAS_APPLICATION_ID } = process.env
+const { MERCADOLIBRE_USER_ID } = process.env
 const log = console.log
 
 app.use(express.static(path.join(__dirname, "build")));
+
 
 app.use(cors())
 app.use(express.json())
@@ -37,7 +32,8 @@ const PORT = process.env.PORT || 4000
 
 app.get('/orderid/:id', async (req, res) => {
 	let order = req.params.id
-	res.header("Access-Control-Allow-Origin", "*")
+	res.setHeader('Content-Type', 'application/json');
+  res.header("Access-Control-Allow-Origin", req.headers.origin)
 	try {	
 		const isApple = req.params.id.includes('MLAPPLE')
 		
