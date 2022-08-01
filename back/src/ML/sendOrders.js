@@ -1,4 +1,5 @@
 const { default: axios } = require('axios');
+const { findOrder } = require('./db');
 
 let url = 'https://appleamaze.herokuapp.com/orderid/'
 
@@ -22,5 +23,8 @@ let leftOrders = [
 'MLAPPLE_2000003875237712',
 'MLAPPLE_2000003876814000',
 ]
-
-asyncPromOrders(leftOrders);
+async function testDB(){
+  const res = await findOrder('2000003959546756')
+  console.log(typeof res)
+}
+testDB();

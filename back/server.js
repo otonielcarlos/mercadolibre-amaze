@@ -8,6 +8,7 @@ const { setDisplay, showAll } = require('./src/ML/db')
 const { findOrder, saveNewOrderID, getMercadolibreOrders } = require('./src/ML/db')
 const { getDateOrder, getToday, getTodayAndYesterday } = require('./src/ML/date')
 const path = require("path");
+const { getProcessingOrders } = require('./src/gopro')
 require('dotenv').config()
 const { MERCADOLIBRE_USER_ID } = process.env
 const log = console.log
@@ -63,6 +64,14 @@ app.get('/mercadolibre', async (req, res) => {
 		res.status(200).json(orders)
 	} catch (error) {
 		console.log('error en /mercadolibre')
+	}
+})
+
+app.get('/gopro', async (req, res) => {
+	try {
+		await getProcessingOrders()
+	} catch (error) {
+		console.log(error)
 	}
 })
 
