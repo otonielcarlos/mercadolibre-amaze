@@ -5,7 +5,8 @@
   "main": "./back/server.js",
   "scripts": {
     "test": " mocha ./back/test/api.test.js",
-    "start": "./back/server.js"
+    "start": "./back/server.js",
+    "dev": "nodemon ./back/server"
   },
   "author": "",
   "license": "ISC",

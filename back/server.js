@@ -11,12 +11,14 @@ const path = require("path");
 require('dotenv').config()
 const { MERCADOLIBRE_USER_ID } = process.env
 const log = console.log
+const v1Router = require('./src/v1/routes')
 
 app.use(express.static(path.join(__dirname, "build")));
 
 
 app.use(cors())
 app.use(express.json())
+app.use("/api/v1", v1Router)
 app.set('json spaces', 2)
 const PORT = process.env.PORT || 4000
 
