@@ -17,7 +17,7 @@ async function getProcessingOrders() {
   try {
     const orders = await api.get('orders', {status: 'processing'})
     if(!orders.data.length){
-
+      return {"message": "no se encontraron ordenes en processing"}
     } else {
       for(let order of orders.data){
         const {id} = order
@@ -103,7 +103,9 @@ async function getProcessingOrders() {
       }
       await api.put(`orders/${id}`, updateOrder)
       }
+      return {"message": "ordenes enviadas"} 
   }
+
   } catch (error) {
     console.log(error.response.data)
   }

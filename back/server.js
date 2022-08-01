@@ -69,7 +69,8 @@ app.get('/mercadolibre', async (req, res) => {
 
 app.get('/gopro', async (req, res) => {
 	try {
-		await getProcessingOrders()
+		const responseMessage = await getProcessingOrders()
+		res.status(200).json(responseMessage)
 	} catch (error) {
 		console.log(error)
 	}
