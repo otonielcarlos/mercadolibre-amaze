@@ -21,90 +21,90 @@ async function getProcessingOrders() {
     } else {
       for(let order of orders.data){
         const {id} = order
-      const {first_name, last_name, address_1, address_2, departamento, provincia, distrito} = order.shipping
-      const name = `${first_name} ${last_name}`
-      const {phone} = order.billing
+        const {first_name, last_name, address_1, address_2, departamento, provincia, distrito} = order.shipping
+        const name = `${first_name} ${last_name}`
+        const {phone} = order.billing
 
-      const {line_items} = order
+        const {line_items} = order
 
-      const lines = line_items.map((item, lineNumber) => {
+        const lines = line_items.map((item, lineNumber) => {
         const line = {
           "customerLineNumber": lineNumber + 1,
           "ingramPartNumber":  `${item.sku}`,
           "quantity": `${item.quantity}`,
-      }
+        }
         return line
-      })
-      const pickAndPackSkus = ["4989758", "4622281", "4309436"]
-
-      const BreakException = 'added pickandpack'
-      try {
-        lines.forEach(line => {
-          if(pickAndPackSkus.includes(line.ingramPartNumber)){
-            lines.push({
-              "customerLineNumber": lines[lines.length - 1].customerLineNumber + 1,
-              "ingramPartNumber":  "5035113",
-              "quantity": "1",
-            })
-            throw BreakException;
-          }
         })
-      } catch (breakException) {
-        console.log(breakException)
-      }
-    
-      lines.push({
-        "customerLineNumber": lines[lines.length - 1].customerLineNumber + 1,
-        "ingramPartNumber":  "5035111",
-        "quantity": "1",
-      })
+        const pickAndPackSkus = ["4989758", "4622281", "4309436"]
 
-      let addressLine1 = ''
-      let addressLine2 = ''
-      if(address_1.length > 35) {
-        addressLine1 = address_1.slice(0,34)
-        addressLine2 = address_1.slice(35)
-      }
-
-      const estado = getEstado(departamento)
-
-      let data = {
-        "customerOrderNumber":`ULTIMAMILLA_${id}`,
-        "notes": "",
-        "shipToInfo": {
-            "contact": `${name.substring(0,34)}`,
-            "companyName": `${name.substring(0,34)}`,
-            "name1": `${name.substring(0,34)}`,
-            "addressLine1": `${addressLine1}`,
-            "addressLine2": `${addressLine2.substring(0,34)}`,
-            "addressLine3": `${address_2.substring(0,34)}`,
-            "addressLine4": `${phone}`,
-            "postalCode": `${provincia.substring(0,9)}`,
-            "city":`${distrito}`,
-            "state": `${estado}`,
-            "countryCode": "PE"
-        },
-        "lines": lines,
-        "additionalAttributes": [
-            {
-                "attributeName": "allowDuplicateCustomerOrderNumber",
-                "attributeValue": "false"
-            },
-            {
-                "attributeName": "allowOrderOnCustomerHold",
-                "attributeValue": "true"
+        const BreakException = 'added pickandpack'
+        try {
+          lines.forEach(line => {
+            if(pickAndPackSkus.includes(line.ingramPartNumber)){
+              lines.push({
+                "customerLineNumber": lines[lines.length - 1].customerLineNumber + 1,
+                "ingramPartNumber":  "5035113",
+                "quantity": "1",
+              })
+              throw BreakException;
             }
-        ]
-      }
-      const config = await IngramHeaders()
-      const sendOrder = await axios.post(INGRAM_ORDER_URL, data, config)
-      const updateOrder = {
-        status: 'completed'
-      }
-      await api.put(`orders/${id}`, updateOrder)
-      }
-      return {"message": "ordenes enviadas"} 
-  }
+          })
+        } catch (breakException) {
+          console.log(breakException)
+        }
+    
+        lines.push({
+          "customerLineNumber": lines[lines.length - 1].customerLineNumber + 1,
+          "ingramPartNumber":  "5035111",
+          "quantity": "1",
+        })
+
+        let addressLine1 = ''
+        let addressLine2 = ''
+        if(address_1.length > 35) {
+          addressLine1 = address_1.slice(0,34)
+          addressLine2 = address_1.slice(35)
+        }
+
+        const estado = getEstado(departamento)
+
+        let data = {
+          "customerOrderNumber":`ULTIMAMILLA_${id}`,
+          "notes": "",
+          "shipToInfo": {
+              "contact": `${name.substring(0,34)}`,
+              "companyName": `${name.substring(0,34)}`,
+              "name1": `${name.substring(0,34)}`,
+              "addressLine1": `${addressLine1}`,
+              "addressLine2": `${addressLine2.substring(0,34)}`,
+              "addressLine3": `${address_2.substring(0,34)}`,
+              "addressLine4": `${phone}`,
+              "postalCode": `${provincia.substring(0,9)}`,
+              "city":`${distrito}`,
+              "state": `${estado}`,
+              "countryCode": "PE"
+          },
+          "lines": lines,
+          "additionalAttributes": [
+              {
+                  "attributeName": "allowDuplicateCustomerOrderNumber",
+                  "attributeValue": "false"
+              },
+              {
+                  "attributeName": "allowOrderOnCustomerHold",
+                  "attributeValue": "true"
+              }
+          ]
+        }
+        const config = await IngramHeaders()
+        const sendOrder = await axios.post(INGRAM_ORDER_URL, data, config)
+        const updateOrder = {
+          status: 'completed'
+        }
+        await api.put(`orders/${id}`, updateOrder)
+        }
+        return {"message": "ordenes enviadas"} 
+    }
 
   } catch (error) {
     console.log(error.response.data)
