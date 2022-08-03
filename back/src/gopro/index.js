@@ -18,7 +18,6 @@ async function getProcessingOrders() {
     const orders = await api.get('orders', {status: 'processing'})
     if(orders.data.length > 0){
       for(let order of orders.data){
-
         console.log(JSON.stringify(order))
         const {id} = order
         const {first_name, last_name, address_1, address_2, departamento, provincia, distrito} = order.shipping
