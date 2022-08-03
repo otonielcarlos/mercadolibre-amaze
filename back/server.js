@@ -21,13 +21,6 @@ app.use(express.json())
 app.set('json spaces', 2)
 const PORT = process.env.PORT || 4000
 
-// @ts-ignore
-
-// app.get('*', (req, res) => {
-// 	res.sendFile(path.resolve(__dirname, "index.html"))
-// })
-
-
 
 
 

@@ -16,9 +16,9 @@ const api = new WooCommerceRestApi({
 async function getProcessingOrders() {
   try {
     const orders = await api.get('orders', {status: 'processing'})
+    // console.log(JSON.stringify(orders.data))
     if(orders.data.length > 0){
       for(let order of orders.data){
-        console.log(JSON.stringify(order))
         const {id} = order
         const {first_name, last_name, address_1, address_2, departamento, provincia, distrito} = order.shipping
         const name = `${first_name} ${last_name}`
@@ -106,7 +106,8 @@ async function getProcessingOrders() {
           }
           await api.put(`orders/${id}`, updateOrder)
 
-        }}
+        }
+      }
         return {"message": "ordenes enviadas"} 
     } else {
       return {"message": "no orders found"}
@@ -116,7 +117,6 @@ async function getProcessingOrders() {
     console.log(error.response.data)
   }
 }
-getProcessingOrders()
 
 module.exports = {
   getProcessingOrders
