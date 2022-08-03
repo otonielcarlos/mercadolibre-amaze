@@ -2,9 +2,9 @@ const express = require('express')
 const router = express.Router()
 const {ordersFromMercadolibreToIM, orderFromMercadolibreWithID} = require('../../controllers/ordersController')
 
-router.get('/:orderid', orderFromMercadolibreWithID)
+router.get('/mercadolibre/:orderid', orderFromMercadolibreWithID)
 
-router.post('/', ordersFromMercadolibreToIM)
+router.post('/mercadolibre', ordersFromMercadolibreToIM)
 
 
 
