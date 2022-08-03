@@ -16,10 +16,10 @@ const api = new WooCommerceRestApi({
 async function getProcessingOrders() {
   try {
     const orders = await api.get('orders', {status: 'processing'})
-    if(!orders.data.length){
-      return {"message": "no se encontraron ordenes en processing"}
-    } else {
+    if(orders.data.length > 0){
       for(let order of orders.data){
+
+        console.log(JSON.stringify(order))
         const {id} = order
         const {first_name, last_name, address_1, address_2, departamento, provincia, distrito} = order.shipping
         const name = `${first_name} ${last_name}`
@@ -64,6 +64,9 @@ async function getProcessingOrders() {
         if(address_1.length > 35) {
           addressLine1 = address_1.slice(0,34)
           addressLine2 = address_1.slice(35)
+        } else {
+          addressLine1 = address_1
+          addressLine2 = address_2
         }
 
         const estado = getEstado(departamento)
@@ -77,9 +80,8 @@ async function getProcessingOrders() {
               "name1": `${name.substring(0,34)}`,
               "addressLine1": `${addressLine1}`,
               "addressLine2": `${addressLine2.substring(0,34)}`,
-              "addressLine3": `${address_2.substring(0,34)}`,
-              "addressLine4": `${phone}`,
-              "postalCode": `${provincia.substring(0,9)}`,
+              "addressLine3": `${phone}`,
+              "addressLine4": `${provincia.substring(0,9)}`,
               "city":`${distrito}`,
               "state": `${estado}`,
               "countryCode": "PE"
@@ -96,20 +98,26 @@ async function getProcessingOrders() {
               }
           ]
         }
+
         const config = await IngramHeaders()
-        const sendOrder = await axios.post(INGRAM_ORDER_URL, data, config)
-        const updateOrder = {
-          status: 'completed'
-        }
-        await api.put(`orders/${id}`, updateOrder)
-        }
+        if(order.status === "processing"){
+          const sendOrder = await axios.post(INGRAM_ORDER_URL, data, config)
+          const updateOrder = {
+            status: 'completed'
+          }
+          await api.put(`orders/${id}`, updateOrder)
+
+        }}
         return {"message": "ordenes enviadas"} 
+    } else {
+      return {"message": "no orders found"}
     }
 
   } catch (error) {
     console.log(error.response.data)
   }
 }
+getProcessingOrders()
 
 module.exports = {
   getProcessingOrders
