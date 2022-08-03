@@ -11,14 +11,14 @@ const path = require("path");
 require('dotenv').config()
 const { MERCADOLIBRE_USER_ID } = process.env
 const log = console.log
-const v1Router = require('./src/v1/routes')
+const v1Orders = require('./src/v1/routes/orders')
 
 app.use(express.static(path.join(__dirname, "build")));
 
 
 app.use(cors())
 app.use(express.json())
-app.use("/api/v1", v1Router)
+app.use("/api/v1/orders", v1Orders)
 app.set('json spaces', 2)
 const PORT = process.env.PORT || 4000
 
@@ -33,28 +33,7 @@ const PORT = process.env.PORT || 4000
 
 
 app.get('/orderid/:id', async (req, res) => {
-	let order = req.params.id
-	res.setHeader('Content-Type', 'application/json');
-  res.header("Access-Control-Allow-Origin", req.headers.origin)
-	try {	
-		const isApple = req.params.id.includes('MLAPPLE')
-		
-		if(isApple){
-
-		const id = order.slice(8)
-		const orderRes = await addOrder(id, 'APPLE')
-		console.log(orderRes)
-		res.status(200).json(orderRes)
-		
-	} else {
-
-			const id = order.slice(3)
-			const orderRes = await addOrder(id, 'MULTIMARCAS')
-			res.status(200).json(orderRes)
-		}
-	} catch (error) {
-		log('error', error)
-	}
+	
 })
 
 app.get('/mercadolibre', async (req, res) => {
@@ -100,54 +79,6 @@ app.post('/callbacks', async (req, res) => {
 	}
 })
 
-// @ts-ignore
-app.get('/guias', async (req, res) => {
-	try {
-		const guias = await getTickets()
-		for (let i in guias) {
-			let guia = guias[i].fecha.toISOString()
-			guias[i].fecha = guia.split('T')[0]
-		}
-		res.status(200).json(guias)
-	} catch (error) {
-		log(error)
-	}
-})
-
-// @ts-ignore
-app.get('/todos', async (req, res) => {
-  try {
-    const results = await showAll()
-    for(let i in results){
-      let result = results[i].fecha.toISOString()
-      results[i].fecha = result.split('T')[0]
-    }
-    res.status(200).json(results)
-  } catch (error) {
-    log(error)
-    res.status(404).json(
-      {
-        "error": "something went wrong",
-        "data": error
-      }
-    )
-  }
-})
-
-app.delete('/borrar/:guia', async (req, res) => {
-  try {
-    const { guia } = req.params
-    const result = await setDisplay(guia)
-    if(result === 1) {
-      log(guia)
-      res.status(202).json({"message": `guia ${ guia } eliminada con éxito`})
-    } else {
-      res.status(404).json({"message": `guia ${guia} not found`})
-    } 
-  } catch (error) {
-    log(error)
-  }
-})
 
 app.get('/*', (req, res) => {
 	res.sendFile(path.join(__dirname, 'build/index.html'))
