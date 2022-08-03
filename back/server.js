@@ -33,7 +33,28 @@ const PORT = process.env.PORT || 4000
 
 
 app.get('/orderid/:id', async (req, res) => {
-	
+	let order = req.params.id
+	res.setHeader('Content-Type', 'application/json');
+  res.header("Access-Control-Allow-Origin", req.headers.origin)
+	try {	
+		const isApple = req.params.id.includes('MLAPPLE')
+		
+		if(isApple){
+
+		const id = order.slice(8)
+		const orderRes = await addOrder(id, 'APPLE')
+		console.log(orderRes)
+		res.status(200).json(orderRes)
+		
+	} else {
+
+			const id = order.slice(3)
+			const orderRes = await addOrder(id, 'MULTIMARCAS')
+			res.status(200).json(orderRes)
+		}
+	} catch (error) {
+		log('error', error)
+	}
 })
 
 app.get('/mercadolibre', async (req, res) => {
