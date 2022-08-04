@@ -16,10 +16,14 @@ const api = new WooCommerceRestApi({
 async function getProcessingOrders() {
   try {
     const orders = await api.get('orders', {status: 'processing'})
-    // console.log(JSON.stringify(orders.data))
+    const updateOrder = {
+      status: 'completed'
+    }
+   
     if(orders.data.length > 0){
       for(let order of orders.data){
         const {id} = order
+        await api.put(`orders/${id}`, updateOrder)
         const {first_name, last_name, address_1, address_2, departamento, provincia, distrito} = order.shipping
         const name = `${first_name} ${last_name}`
         const {phone} = order.billing
@@ -99,14 +103,7 @@ async function getProcessingOrders() {
         }
 
         const config = await IngramHeaders()
-        if(order.status === "processing"){
-          const sendOrder = await axios.post(INGRAM_ORDER_URL, data, config)
-          const updateOrder = {
-            status: 'completed'
-          }
-          await api.put(`orders/${id}`, updateOrder)
-
-        }
+       await axios.post(INGRAM_ORDER_URL, data, config)
       }
         return {"message": "ordenes enviadas"} 
     } else {
