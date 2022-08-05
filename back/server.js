@@ -60,7 +60,7 @@ app.get('/mercadolibre', async (req, res) => {
 	}
 })
 
-app.get('/gopro', async (req, res) => {
+app.post('/gopro', async (req, res) => {
 	try {
 		const responseMessage = await getProcessingOrders()
 		res.status(200).json(responseMessage)
