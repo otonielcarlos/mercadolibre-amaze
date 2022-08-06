@@ -31,7 +31,7 @@ const body_1 = {
 	redirect_uri: MERCADOLIBRE_REDIRECT_URI,
 }
 
-async function token (cuenta) {
+async function token (cuenta = 'APPLE') {
 	// const isApple = 
 	if(cuenta === 'APPLE'){
 		try {
