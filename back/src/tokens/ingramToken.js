@@ -3,7 +3,7 @@ require('dotenv').config()
 const { INGRAM_CLIENT_ID, INGRAM_CLIENT_SECRET, INGRAM_CLIENT_ID_SANDBOX, INGRAM_CLIENT_SECRET_SANDBOX} = process.env
 
 const tokenUrl = 'https://api.ingrammicro.com:443/oauth/oauth30/token';
-const postFields = `grant_type=client_credentials&client_id=${INGRAM_CLIENT_ID}&client_secret=${INGRAM_CLIENT_SECRET}`;
+const postFields = `grant_type=client_credentials&client_id=${INGRAM_CLIENT_ID_SANDBOX}&client_secret=${INGRAM_CLIENT_SECRET_SANDBOX}`;
 const headers = {
     headers: {
       Accept: 'application/json'

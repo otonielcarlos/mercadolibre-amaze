@@ -1,11 +1,14 @@
 const express = require('express')
 const router = express.Router()
-const {orderFromMercadolibreAppleWithID,
-  ordersFromMercadolibreAppleToIM} = require('../../controllers/ordersController')
+const {orderFromMercadolibreWithID,
+  ordersFromMercadolibreToIM,
+  getAllOrdersFromMercadolibreApple} = require('../../controllers/ordersController')
 
-router.get('/mercadolibre/apple/:orderid', orderFromMercadolibreAppleWithID)
+router.get('/mercadolibre/apple/orders', getAllOrdersFromMercadolibreApple)
 
-router.post('/mercadolibre/apple/', ordersFromMercadolibreAppleToIM)
+router.get('/mercadolibre/apple/:orderid', orderFromMercadolibreWithID)
+
+router.post('/mercadolibre/apple/', ordersFromMercadolibreToIM)
 
 
 

@@ -1,14 +1,59 @@
-async function orderFromMercadolibreAppleWithID (req, res) {
-  res.send({message: `orderid is ${req.params.orderid}`})
+require('dotenv').config()
+const {MERCADOLIBRE_USER_ID} = process.env
+const ordersService = require('../services/ordersService')
+const messageService = require('../services/messagesService')
+const utils = require('../database/utilsdate')
+
+async function orderFromMercadolibreWithID (req, res) {
+  const orderResponse = await ordersService.sendOrderToIngramWithId(req.params.id)
+  res.json(orderResponse)
 }
 
 
-async function ordersFromMercadolibreAppleToIM(req, res){
-  res.send({"message": "order sent to ingram"})
+async function ordersFromMercadolibreToIM(req, res){
+  // res.status(200).send()
+	try {
+		const { resource, topic, user_id } = req.body
+
+		if (topic === 'orders_v2') {
+			console.log(resource, user_id)
+			const account = (user_id.toString() === MERCADOLIBRE_USER_ID) ? 'APPLE' : 'MULTIMARCAS'
+			let id = resource.slice(8, resource.length)
+			let date = await ordersService.getOrderDate(id, account)
+			const {today} = utils.getToday()
+			
+			if(today === date ){
+				let isOrder = await ordersService.findOrderWithID(id)
+				
+				// if (isOrder === 'undefined') {
+					// await ordersService.saveOrderID(id)
+					// await messageService.sendNewOrderMessage(id, account ,user_id)
+					const respo = await ordersService.sendOrderToIngram(id, account)
+          console.log(respo)
+					res.status(200).send(respo)
+				//} else {
+        //   res.status(200).send({"order": `${req.body.resource}`, "message": "ya existe"})
+				// }
+		}	else {
+      res.status(200).send({"order": `${req.body.resource}`, "message": "el pedido no es de hoy"})
+
+			console.log('el pedido no es de hoy', id)
+		}
+	} 
+	} catch (error) {
+		console.log(error)
+	}
 }
+
+async function getAllOrdersFromMercadolibreApple(req, res){
+  const orders = await ordersService.getAllOrders()
+  res.json(orders)
+}
+
 
 
 module.exports = {
-  orderFromMercadolibreAppleWithID,
-  ordersFromMercadolibreAppleToIM
+  orderFromMercadolibreWithID,
+  ordersFromMercadolibreToIM,
+  getAllOrdersFromMercadolibreApple
 }

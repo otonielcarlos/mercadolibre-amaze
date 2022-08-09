@@ -3,6 +3,13 @@ require('dotenv').config()
 const db = require('./db')
 const {getToday, getTodayAndYesterday} = require('./utilsdate')
 
+async function getOrders(){
+  const query = 'SELECT * from orders'
+  const [rows] = await db.query(query)
+
+  return rows
+}
+
 async function findOrder(id) {
     const query = `SELECT orderid from orders WHERE orderid = '${id}'`
     const [rows] = await db.query(query)
@@ -35,4 +42,12 @@ async function saveIngram (globalorderid, customerPO, trackingNumber, id, name, 
   await db.query(query)
   
   return
+}
+
+module.exports = {
+  findOrder, 
+  saveNewOrderID,
+  getMercadolibreOrders,
+  saveIngram,
+  getOrders
 }
