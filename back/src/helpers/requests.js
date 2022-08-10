@@ -5,7 +5,7 @@ const { ingramToken } = require('../tokens/ingramToken')
 const {IngramHeaders} = require('../headers/ingramHeaders')
 const url = 'https://api.ingrammicro.com:443/resellers/v6/catalog/priceandavailability?includeAvailability=true&includePricing=false&includeProductAttributes=true'
 
-const requestAPI = async(skusForAPI) => {
+const getQueryToUpdateStockDB = async(skusForAPI) => {
   try {
     let responseArray = []
     let query = ''
@@ -32,5 +32,5 @@ const requestAPI = async(skusForAPI) => {
 }
 
 module.exports = {
-  requestAPI
+  getQueryToUpdateStockDB
 }

@@ -78,7 +78,6 @@ async function getOrderDate(resource, account = 'APPLE'){
 
     //OBTENER HEADERS PARA INGRAM API REQUEST
     let config = await IngramHeaders()
-    console.log(config)
 
     //INGRAM API REQUEST
     // @ts-ignore
@@ -105,9 +104,9 @@ async function getOrderDate(resource, account = 'APPLE'){
   }
 
 async function sendOrderToIngramWithId(req){
-  let order = req.params.id
+  let order = req.params.orderid
 	try {	
-		const isApple = req.params.id.includes('MLAPPLE')
+		const isApple = req.params.orderid.includes('MLAPPLE')
 		
 		if(isApple){
 

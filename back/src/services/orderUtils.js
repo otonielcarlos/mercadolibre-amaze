@@ -14,7 +14,7 @@ let cityFinal = shipping.data.receiver_address.city.name
 const finalState = getEstado(citye)
  
 const id = order.data.id;
-const customerPo = (account === 'APPLE' ? 'MLAPPLE_' : 'ML')
+const customerPo = (account === 'APPLE' ? `MLAPPLE_${id}` : `ML_${id}`)
 
 const address = shipping.data.receiver_address.address_line;
 

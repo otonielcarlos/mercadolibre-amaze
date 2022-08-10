@@ -1,24 +1,23 @@
-const { getAllSkus, updateStock, updatePrevStock, getAllVariations, getAllNoVariations } = require('../ML/db')
+
+const {getProducts,getAllSkus, updateStock, updatePrevStock, getAllVariations, getAllNoVariations} = require('../database/stockDB')
+const trackingService = require('../services/trackingService') 
 const { skusChunks } = require('../helpers/chunks')
-const { requestAPI } = require('../helpers/requests')
+const { getQueryToUpdateStockDB } = require('../helpers/requests')
 const { joinItems } = require('../helpers/requestForML')
 const { putStock } = require('../helpers/postRequest')
-const { checkTracking } = require('../ML/checkTracking')
+const usePromise = require('../helpers/errorHandling')
 
 async function updatePreviousStock(){
-  try {
-    return await updatePrevStock()
-  } catch (error) {
-      console.log(error)
-  }
+  const [data, error] = await usePromise(updatePrevStock)
+  return data
+
 }
 
 async function getIngramPartNumbers(){
-  try {
-    return await getAllSkus()
-  } catch (error) {
-    console.log('error en getIngramPartNumbers', error)
-  }
+  const [skus, error] = await usePromise(getAllSkus)
+  // console.log('error en getIngramPartNumbers', error)
+  
+  return skus
 }
 
 function getIngramChunksOf(skus) {
@@ -26,20 +25,13 @@ function getIngramChunksOf(skus) {
 }
 
 async function getupdateStockOfTheseSkus(ingramChunk){
-  try {
-    return await requestAPI(ingramChunk)
-    
-  } catch (error) {
-    console.log('updateDBskus', error)
-  }
+  const [query, error] = await usePromise(getQueryToUpdateStockDB, ingramChunk)
+  return query
 }
 
 async function saveUpdatedStockOfTheseSkus(query){
-  try {
-    return await updateStock(query)
-  } catch (error) {
-    
-  }
+  const [data, error] = await usePromise(updateStock, query)
+  return data
 }
 
 async function getVariationsProducts(){
@@ -75,6 +67,36 @@ async function updateMercadolibre(items, variations){
   }
 }
 
+
+async function getProductsUpdated(){
+  const [data, error] = await usePromise(getProducts)
+  console.log(error)
+  return data
+}
+
+async function getPrices() {
+  try {
+  await updatePrevStock()
+  const skus = await getAllSkus()
+  const skusForAPI = skusChunks(skus)
+  const responseFromIngram = await getQueryToUpdateStockDB(skusForAPI)
+  await updateStock(responseFromIngram)
+  const getVariations = await getAllVariations()
+  const variations = joinItems(getVariations)
+  const items = await getAllNoVariations()
+  await updateMercadolibre(items, variations)
+  } catch (error) {
+    console.log(error, 'error en items')
+  }
+  
+  try {
+    await trackingService.checkTracking('APPLE')
+    await trackingService.checkTracking('MULTIMARCAS')
+  } catch (error) {
+    console.log(error, 'error in checking tracking')
+  }
+}
+
 module.exports = {
   updatePreviousStock,
   getIngramPartNumbers,
@@ -84,5 +106,7 @@ module.exports = {
   getVariationsProducts,
   variations,
   getItemsProducts,
-  updateMercadolibre
+  updateMercadolibre,
+  getProductsUpdated,
+  getPrices
 }

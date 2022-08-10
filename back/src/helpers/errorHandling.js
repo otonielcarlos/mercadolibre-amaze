@@ -1,7 +1,14 @@
-async function usePromise(promise){
+async function usePromise(promiseFunction, params = null){
   try {
-    const data = await promise()
-    return [data, null]
+    if(params === null){
+      const data = await promiseFunction()
+      return [data, null]
+    } else {
+      // let functionParams = ''
+      // params.forEach(param => functionParams += `,${param}`)
+      const data = await promiseFunction(params)
+      return [data, null]
+    }
   } catch (error) {
     return [null, error]
   }

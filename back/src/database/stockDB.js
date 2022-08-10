@@ -2,6 +2,7 @@ const db = require('../database/db')
 
 
 
+
 async function updatePrevStock () {
   let query = 'UPDATE appleml set prevstock = stock'
   const [rows] = await db.query(query)
@@ -11,7 +12,8 @@ async function updatePrevStock () {
 
 async function updateStock (query) {
   const [rows] = await db.query(query)
-  return 'stock updated'
+  // @ts-ignore
+  return `actualizado ${rows.length} ingramPartNumbers`
 
 }
 
@@ -63,6 +65,13 @@ async function getAllNoVariations() {
 
 }
 
+async function getProducts() {
+  const query = 'SELECT * FROM appleml'
+  const [rows] = await db.query(query)
+
+  return rows
+}
+
 module.exports = {
   updatePrevStock,
   updateStock,
@@ -70,4 +79,5 @@ module.exports = {
   updateTracking,
   getAllVariations,
   getAllNoVariations,
+  getProducts
 }
