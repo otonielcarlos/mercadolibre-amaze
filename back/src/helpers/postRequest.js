@@ -6,7 +6,7 @@ const log = console.log;
 const putStock = async (arrayOfProducts) => {
   try {
     let j = 0;
-    const accessToken = await token('APPLE');
+    const accessToken = await token();
     for(let i in arrayOfProducts){
       j++;
       let baseUrl =  `https://api.mercadolibre.com/items/${arrayOfProducts[i].itemid}`
@@ -21,17 +21,17 @@ const putStock = async (arrayOfProducts) => {
       };
       let data = arrayOfProducts[i].data
       // @ts-ignore
-      const sendStock = await axios.put(baseUrl, data, config);
-     log(sendStock.data.id)
+      await axios.put(baseUrl, data, config);
+
     } catch (error) {
-        log('not updatated itemid', arrayOfProducts[i].itemid, error.response.data.message)
+        console.log('not updatated itemid', arrayOfProducts[i].itemid, error.response.data.message)
         }
       }, j * 1000)
       }
       
     
   } catch (error) {
-    log(error);
+    console.log(error);
   }
   return 'finished'
 }

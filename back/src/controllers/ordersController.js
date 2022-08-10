@@ -11,7 +11,7 @@ async function orderFromMercadolibreWithID (req, res) {
 
 
 async function ordersFromMercadolibreToIM(req, res){
-  // res.status(200).send()
+  res.status(200).send()
 	try {
 		const { resource, topic, user_id } = req.body
 
@@ -25,18 +25,16 @@ async function ordersFromMercadolibreToIM(req, res){
 			if(today === date ){
 				let isOrder = await ordersService.findOrderWithID(id)
 				
-				// if (isOrder === 'undefined') {
-					// await ordersService.saveOrderID(id)
-					// await messageService.sendNewOrderMessage(id, account ,user_id)
+				if (isOrder === 'undefined') {
+					await ordersService.saveOrderID(id)
+					await messageService.sendNewOrderMessage(id, account ,user_id)
 					const respo = await ordersService.sendOrderToIngram(id, account)
           console.log(respo)
-					res.status(200).send(respo)
-				//} else {
-        //   res.status(200).send({"order": `${req.body.resource}`, "message": "ya existe"})
-				// }
+					
+				} else {
+					console.log('el pedido ya existe', id)
+				}
 		}	else {
-      res.status(200).send({"order": `${req.body.resource}`, "message": "el pedido no es de hoy"})
-
 			console.log('el pedido no es de hoy', id)
 		}
 	} 
