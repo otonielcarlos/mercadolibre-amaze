@@ -1,11 +1,11 @@
 
-const {getProducts,getAllSkus, updateStock, updatePrevStock, getAllVariations, getAllNoVariations} = require('../database/stockDB')
-const trackingService = require('../services/trackingService') 
-const { skusChunks } = require('../helpers/chunks')
-const { getQueryToUpdateStockDB } = require('../helpers/requests')
-const { joinItems } = require('../helpers/requestForML')
-const { putStock } = require('../helpers/postRequest')
-const usePromise = require('../helpers/errorHandling')
+const {getProducts,getAllSkus, updateStock, updatePrevStock, getAllVariations, getAllNoVariations} = require('../../database/mercadolibre/stockDB')
+const trackingService = require('./trackingService') 
+const { skusChunks } = require('../../helpers/chunks')
+const { getQueryToUpdateStockDB } = require('../../helpers/requests')
+const { joinItems } = require('../../helpers/requestForML')
+const { putStock } = require('../../helpers/postRequest')
+const usePromise = require('../../helpers/errorHandling')
 
 async function updatePreviousStock(){
   const [data, error] = await usePromise(updatePrevStock)

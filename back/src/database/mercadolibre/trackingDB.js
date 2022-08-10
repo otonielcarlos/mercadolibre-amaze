@@ -1,7 +1,7 @@
 
 require('dotenv').config()
-const db = require('./db')
-const {getToday, getTodayAndYesterday} = require('./utilsdate')
+const db = require('../db')
+const {getToday, getTodayAndYesterday} = require('../utilsdate')
 
 
 async function getNullTickets(account){

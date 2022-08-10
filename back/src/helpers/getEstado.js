@@ -1,32 +1,32 @@
 function getEstado(citye){
-  let state = ''
-  switch (citye) {
-    case 'Amazonas': state = "01"; break;
-    case 'Ancash': state = "02"; break;
-    case 'Apurimac': state = "03"; break;
-    case 'Arequipa': state = "04"; break;
-    case 'Ayacucho': state = "05"; break;
-    case 'Cajamarca': state = "06"; break;
-    case 'Callao': state = "07"; break;
-    case 'Cusco': state = "08"; break;
-    case 'Huancavelica': state = "09"; break;
-    case 'Huanuco': state = "10"; break;
-    case 'Ica': state = "11"; break;
-    case 'Junin': state = "12"; break;
-    case 'La Libertad': state = "13"; break;
-    case 'Lambayeque': state = "14"; break;
-    case 'Lima': state = "15"; break;
-    case 'Loreto': state = "16"; break;
-    case 'Madre de Dios': state = "17"; break;
-    case 'Moquegua': state = "18"; break;
-    case 'Pasco': state = "19"; break;
-    case 'Piura': state = "20"; break;
-    case 'Puno': state = "21"; break;
-    case 'San Martin': state = "22"; break;
-    case 'Tacna': state = "23"; break;
-    case 'Tumbes': state = "24"; break;
-    case 'Ucayali': state = "25"; break;
-    default: state = "15";
+  let state = citye.toUpperCase()
+  switch (state) {
+    case 'AMAZONAS': state = "01"; break;
+    case 'ANCASH': state = "02"; break;
+    case 'APURIMAC': state = "03"; break;
+    case 'AREQUIPA': state = "04"; break;
+    case 'AYACUCHO': state = "05"; break;
+    case 'CAJAMARCA': state = "06"; break;
+    case 'CALLAO': state = "07"; break;
+    case 'CUSCO': state = "08"; break;
+    case 'HUANCAVELICA': state = "09"; break;
+    case 'HUANUCO': state = "10"; break;
+    case 'ICA': state = "11"; break;
+    case 'JUNIN': state = "12"; break;
+    case 'LA LIBERTAD': state = "13"; break;
+    case 'LAMBAYEQUE': state = "14"; break;
+    case 'LIMA': state = "15"; break;
+    case 'LORETO': state = "16"; break;
+    case 'MADRE DE DIOS': state = "17"; break;
+    case 'MOQUEGUA': state = "18"; break;
+    case 'PASCO': state = "19"; break;
+    case 'PIURA': state = "20"; break;
+    case 'PUNO': state = "21"; break;
+    case 'SAN MARTIN': state = "22"; break;
+    case 'TACNA': state = "23"; break;
+    case 'TUMBES': state = "24"; break;
+    case 'UCAYALI': state = "25"; break;
+    default: state = "15"
   }
   return state
 }

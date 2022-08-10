@@ -1,8 +1,8 @@
 require('dotenv').config()
 const {MERCADOLIBRE_USER_ID} = process.env
-const ordersService = require('../services/ordersService')
-const messageService = require('../services/messagesService')
-const utils = require('../database/utilsdate')
+const ordersService = require('../../services/mercadolibre/ordersService')
+const messageService = require('../../services/mercadolibre/messagesService')
+const utils = require('../../database/utilsdate')
 
 async function orderFromMercadolibreWithID (req, res) {
   const orderResponse = await ordersService.sendOrderToIngramWithId(req)

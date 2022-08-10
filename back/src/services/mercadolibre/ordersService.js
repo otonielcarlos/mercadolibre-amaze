@@ -1,10 +1,10 @@
 require('dotenv').config()
 const {INGRAM_ORDER_URL, INGRAM_ORDER_URL_SANDBOX} = process.env
 const {default: axios} = require('axios')
-const {getOrders, findOrder, saveNewOrderID, saveIngram} = require('../database/ordersDB')
-const {token} = require('../tokens/ml')
+const {getOrders, findOrder, saveNewOrderID, saveIngram} = require('../../database/mercadolibre/ordersDB')
+const {token} = require('../../tokens/ml')
 const {prepareDataForIngramRequest, getOrderProps} = require('./orderUtils')
-const {IngramHeaders} = require('../headers/ingramHeaders')
+const {IngramHeaders} = require('../../headers/ingramHeaders')
 
 async function getAllOrders(){
   const orders = await getOrders()
