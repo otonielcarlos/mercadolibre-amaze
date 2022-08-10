@@ -1,0 +1,10 @@
+const usePromise = require('../../helpers/errorHandling')
+const ordersService = require('../../services/gopro/ordersService')
+
+async function sendProcessingOrdersToIM(req, res) {
+  const [data, error] = await usePromise(ordersService.sendProcessingOrders)
+}
+
+module.exports = {
+  sendProcessingOrdersToIM
+}

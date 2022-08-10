@@ -1,7 +1,7 @@
 // @ts-nocheck
 const { default: axios } = require('axios')
 require('dotenv').config()
-const { token } = require('../tokens/ml')
+const { token } = require('../../tokens/ml')
 
 const sendNewOrderMessage = async (resource, account='APPLE', user_id) => {
   try {
