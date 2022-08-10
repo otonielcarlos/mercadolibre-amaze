@@ -4,7 +4,7 @@ const db = require('./db')
 const {getToday, getTodayAndYesterday} = require('./utilsdate')
 
 async function getOrders(){
-  const query = 'SELECT * from orders'
+  const query = 'SELECT * from ingramorders'
   const [rows] = await db.query(query)
 
   return rows
