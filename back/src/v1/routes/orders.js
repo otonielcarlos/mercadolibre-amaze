@@ -14,7 +14,7 @@ router.get('/mercadolibre/apple/all', getAllOrdersFromMercadolibreApple)
 router.get('/mercadolibre/apple/:orderid', orderFromMercadolibreWithID)
 
 // CALLBACK DE MERCADOLIBRE ORDENES
-router.post('/mercadolibre/apple/', ordersFromMercadolibreToIM)
+router.post('/mercadolibre/apple', ordersFromMercadolibreToIM)
 
 // WEBHOOK DE GOPRO
 router.post('/gopro/new', sendProcessingOrdersToIM)

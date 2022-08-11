@@ -18,7 +18,7 @@ function OrderEntry(){
 
       for(let order of customerpo){
         console.log(order)
-        const url = `https://appleamaze.herokuapp.com/orderid/${order}`
+        const url = `https://appleamaze.herokuapp.com/pe/v1/orders/mercadolibre/apple/${order}`
         console.log(url)
           const orderResponse = await axios.get(url , {headers:{ 'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8;application/json' }})
           // @ts-ignore
