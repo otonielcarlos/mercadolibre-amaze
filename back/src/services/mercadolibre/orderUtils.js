@@ -1,6 +1,6 @@
 const{default:axios} = require('axios')
-const {getEstado} = require('../helpers/getEstado')
-const {IngramHeaders} = require('../headers/ingramHeaders')
+const {getEstado} = require('../../helpers/getEstado')
+const {IngramHeaders} = require('../../headers/ingramHeaders')
 
 
 
@@ -94,32 +94,44 @@ return data
 }
 
 
-function getOrderProps(order, response) {
+function getOrderProps(order, data) {
   
-  const models = response.orders[0].lines.map(line => line.vendorPartNumber).join()
-  const productDescription = order.order_items.map((product) => {
-    return `${product.item.title}\n`
-  }).join()
+  try {
+      const models = data.orders[0].lines.map(line => line.vendorPartNumber).join() 
+    const productDescription = order.order_items.map((product) => {
+      return `${product.item.title}\n`
+    }).join() 
 
-  const productPrices = order.order_items.map((product) => {
-    return `${product.unit_price}\n`
-  }).join()
+    const productPrices = order.order_items.map((product) => {
+      return `${product.unit_price}\n`
+    }).join() 
 
-  const productQuantity = order.order_items.map((product) => {
-    return `${product.quantity}\n`
-  }).join()
+    const productQuantity = order.order_items.map((product) => {
+      return `${product.quantity}\n`
+    }).join() 
 
-  const skus = order.order_items.map((product) => {
-    return `${product.item.seller_sku}\n`
-  }).join()
+    const skus = order.order_items.map((product) => {
+      return `${product.item.seller_sku}\n`
+    }).join()
 
-  return {
-    models,
-    productDescription,
-    productPrices,
-    productQuantity,
-    skus
-  
+    return {
+      models,
+      productDescription,
+      productPrices,
+      productQuantity,
+      skus
+    
+    }
+
+  } catch (error) {
+    return {
+      models: 'Error en Orden',
+      productDescription: 'Error en Orden',
+      productPrices: 'Error en Orden',
+      productQuantity: 'Error en Orden',
+      skus: 'Error en Orden'
+    
+    }
   }
 }
 

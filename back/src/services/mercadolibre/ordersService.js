@@ -60,8 +60,8 @@ async function getOrderDate(resource, account = 'APPLE'){
   }
 
   async function sendOrderToIngram(order_id, account){
-    const baseUrl = INGRAM_ORDER_URL_SANDBOX
-  // const baseUrl = INGRAM_ORDER_URL
+    // const baseUrl = INGRAM_ORDER_URL_SANDBOX
+  const baseUrl = INGRAM_ORDER_URL
   try {
     //DEFINIR CUENTA
     const co = account === 'APPLE' ? 'MLAPPLE' : 'ML'
@@ -99,7 +99,7 @@ async function getOrderDate(resource, account = 'APPLE'){
 
     return dataProps
       } catch (error) {
-        console.log(error.response.data)
+        console.log(error)
   }
   }
 

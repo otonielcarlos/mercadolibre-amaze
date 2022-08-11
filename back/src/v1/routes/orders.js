@@ -4,14 +4,19 @@ const {orderFromMercadolibreWithID,
   ordersFromMercadolibreToIM,
   getAllOrdersFromMercadolibreApple} = require('../../controllers/mercadolibre/ordersController')
 
-const ordersController = require('../../controllers/gopro/ordersController')
+const {sendProcessingOrdersToIM} = require('../../controllers/gopro/ordersController')
 
-router.get('/mercadolibre/apple/orders', getAllOrdersFromMercadolibreApple)
 
+//GET TODOS LAS ORDENES
+router.get('/mercadolibre/apple/all', getAllOrdersFromMercadolibreApple)
+
+//ENVIAR ORDEN CON ID
 router.get('/mercadolibre/apple/:orderid', orderFromMercadolibreWithID)
 
+// CALLBACK DE MERCADOLIBRE ORDENES
 router.post('/mercadolibre/apple/', ordersFromMercadolibreToIM)
 
-router.post('/gopro/orders', ordersController.sendProcessingOrdersToIM)
+// WEBHOOK DE GOPRO
+router.post('/gopro/new', sendProcessingOrdersToIM)
 
 module.exports = router

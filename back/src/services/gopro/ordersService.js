@@ -9,7 +9,9 @@ const {getEstado} = require('../../helpers/getEstado')
 
 const api = new WooCommerceRestApi({
   url: "https://gopro.pe",
+  // @ts-ignore
   consumerKey: CK,
+    // @ts-ignore
   consumerSecret: CS,
   version: "wc/v3"
 })
@@ -103,11 +105,12 @@ async function sendProcessingOrders() {
         }
 
         const config = await IngramHeaders()
+       // @ts-ignore
        await axios.post(INGRAM_ORDER_URL, data, config)
       }
         return {"message": "ordenes enviadas"} 
     } else {
-      return {"message": "no orders found"}
+      return {"message": "no hay ordenes"}
     }
 
   } catch (error) {

@@ -1,10 +1,10 @@
 // @ts-nocheck
 const { default: axios } = require('axios')
-const { token } = require('../tokens/ml')
+const { token } = require('../../tokens/ml')
 const log = console.log
 const fs = require('fs')
 // const writer = fs.createWriteStream('./ticket.pdf')
-const {  getNullTickets, updateTracking } = require('../database/trackingDB')
+const {  getNullTickets, updateTracking } = require('../../database/mercadolibre/trackingDB')
 
  async function checkTracking(account) {
 	const accessToken = await token(account)

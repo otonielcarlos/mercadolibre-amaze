@@ -1,5 +1,5 @@
-const stockService = require('../services/stockService')
-const usePromise = require('../helpers/errorHandling')
+const stockService = require('../../services/mercadolibre/stockService')
+const usePromise = require('../../helpers/errorHandling')
 /*
  await updatePrevStock()
     const skus = await getAllSkus()
