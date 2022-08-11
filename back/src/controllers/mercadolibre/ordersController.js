@@ -27,8 +27,8 @@ async function ordersFromMercadolibreToIM(req, res){
 				let isOrder = await ordersService.findOrderWithID(id)
 				
 				if (isOrder === 'undefined') {
-					// await ordersService.saveOrderID(id)
-					// await messageService.sendNewOrderMessage(id, account ,user_id)
+					await ordersService.saveOrderID(id)
+					await messageService.sendNewOrderMessage(id, account ,user_id)
 					const respo = await ordersService.sendOrderToIngram(id, account)
           console.log(respo)
 					
