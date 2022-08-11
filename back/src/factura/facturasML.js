@@ -4,8 +4,6 @@ const {unlink, readdir, createReadStream} = require('fs');
 const FormData = require('form-data');
 
 class Factura {
-    
-
    async getHeaders() {
         try{
             const accessToken = await token()

@@ -1,54 +1,23 @@
 // @ts-nocheck
-const mysql = require('mysql2')
-const { resolveHostname } = require('nodemailer/lib/shared')
-require('dotenv').config()
-const {DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE} = process.env
-// const { resource } = require('../server')
-const log = console.log
 
-const db = mysql.createPool({
-  connectionLimit: 10,
-  host: DB_HOST,
-  user: DB_USER,
-  password: DB_PASSWORD,
-  database: DB_DATABASE,
-  multipleStatements: true, 
-})
+const db = require('../database/db')
 
-const findOrder = id => {
-  return new Promise((resolve, reject) => {
-    db.query(
-      `SELECT orderid from orders WHERE orderid = '${id}'`,
-      (err, results) => {
-        if (err) {
-          console.log(err)
-          return reject(err)
-        }
-        let result = results.length === 0 ? 'undefined' : results[0].orderid
-        resolve(`${result}`)
-      }
-    )
-  })
+async function findOrder(id) {
+  const query = `SELECT orderid from orders WHERE orderid = '${id}'`
+  const [rows] = await db.query(query)
+  // @ts-ignore
+  const result = rows.length === 0 ? 'undefined' : rows[0].orderid
+
+  return result
 }
 
-const saveNewOrderID = id => {
-  const saveDate = new Date()
-  saveDate.setHours(saveDate.getHours() - 5)
-  let day = saveDate.toISOString().split('T')[0]
-  return new Promise((resolve, reject) => {
-    db.query(
-      `INSERT INTO orders VALUES ('${id}', '${day}')`,
-      (err, results) => {
-        if (err) {
-          reject(false)
-        } else {
-          resolve(true)
-        }
-      }
-    )
-  })
-}
+async function saveNewOrderID(id) {
+  const {today} = getToday()
+  const query = `INSERT INTO orders VALUES ('${id}', '${today}')`
+  await db.query(query)
 
+  return 
+}
 
 function getNullTickets(account){
   return new Promise((resolve, reject) => {
@@ -176,6 +145,16 @@ const getAllNoVariations = () => {
   })
 }
 
+async function saveIngram (globalorderid, customerPO, trackingNumber, id, name, sku, model, description, price, quantity, account) {
+  const {today} = getToday()
+  const query = `INSERT INTO ingramorders(nv, id, customerpo, tracking, display, date, name, sku, model, description, price, quantity, account) 
+                VALUES ('${globalorderid}', '${id}','${customerPO}','${trackingNumber}', 'false', '${today}', '${name}', '${sku}', '${model}', '${description}', '${price}', '${quantity}', '${account}')`
+    
+    await db.query(query)
+  
+    return
+}
+
 function getMercadolibreOrders(today, yesterday){
   const orders = new Promise((resolve, reject) => {
     const query = `SELECT * FROM ingramorders WHERE date BETWEEN '${yesterday}T13:00:00.000Z' AND '${today}T12:59:00.000Z' AND account = 'APPLE'`
@@ -188,24 +167,7 @@ function getMercadolibreOrders(today, yesterday){
   return orders
 }
 
-const saveIngram = (globalorderid, customerPO, trackingNumber, id, name, sku, model, description, price, quantity, account) => {
-  const saveDate = new Date()
-  saveDate.setHours(saveDate.getHours() - 5)
-  let day = saveDate.toISOString().split('.')[0]
-  return new Promise((resolve, reject) => {
-    const query = `INSERT INTO ingramorders(nv, id, customerpo, tracking, display, date, name, sku, model, description, price, quantity, account) 
-                    VALUES ('${globalorderid}', '${id}','${customerPO}','${trackingNumber}', 'false', '${day}', '${name}', '${sku}', '${model}', '${description}', '${price}', '${quantity}', '${account}')`
-    db.query(query, (err, results) => {
-        if (err) {
-          console.log('err saving ingramorders ', err)
-          reject(false)
-        } else {
-          resolve(true)
-        }
-      }
-    )
-  })
-}
+
 
 module.exports = {
   db,

@@ -5,8 +5,6 @@ const log = console.log
 
 async function getDateOrder(resource, account){
 try {
-	
-
 	try {
 		let accessToken = await token(account)
 		// @ts-ignore
@@ -15,7 +13,6 @@ try {
 		})
 
 		let dateCreated = resDate.data.date_created
-		log(dateCreated)
 		let fullDate = dateCreated.slice(0, 10)
 		//log(fullDate)
 		return fullDate
@@ -29,7 +26,6 @@ try {
 		})
 
 		let dateCreated = resDate.data.date_created
-		log(dateCreated)
 		let fullDate = dateCreated.slice(0, 10)
 		//log(fullDate)
 		return fullDate
