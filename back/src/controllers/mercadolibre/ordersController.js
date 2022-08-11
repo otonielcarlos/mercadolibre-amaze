@@ -12,7 +12,7 @@ async function orderFromMercadolibreWithID (req, res) {
 
 
 async function ordersFromMercadolibreToIM(req, res){
-  
+  res.status(200).json({"message": "recibido"})
 	try {
 		const { resource, topic, user_id } = req.body
 
@@ -31,7 +31,7 @@ async function ordersFromMercadolibreToIM(req, res){
 					// await messageService.sendNewOrderMessage(id, account ,user_id)
 					const respo = await ordersService.sendOrderToIngram(id, account)
           console.log(respo)
-					res.status(200).json(respo)
+					
 					
 				} else {
 					console.log('el pedido ya existe', id)
