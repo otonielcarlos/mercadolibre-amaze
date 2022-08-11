@@ -12,33 +12,42 @@ class Factura {
             return {
                 "Authorization": `Bearer ${ accessToken }`,
             }
-
         } catch(err){
             console.log(err)
         }
     }
 
     get path() {
-        return `/Users/user/Downloads/amaze04Jul_part2/`
+        return `/Users/user/Downloads/amaze09Ago/`
     }
 
     DeleteFactura(factura, path) {
         unlink(`${path}${factura}`, err => `successfully deleted ${factura}`)
     }
 
+    getFileNames(){
+        return new Promise((resolve, reject) => {
+            const document = this.path
+            readdir(document, (err, files) => {
+                if(err) console.log(err)
+
+                resolve(files)
+            })
+        })
+    }
+
     async SubirFactura(factura, path, headers) {
         try {
-            let data = new FormData();
+            let data = new FormData()
             data.append('fiscal_document', createReadStream(`${path}${factura}`), factura)
             const orderid  = factura.split('.')[0]
             const url = `https://api.mercadolibre.com/packs/${orderid}/fiscal_documents`
             const secondHeaders = data.getHeaders()
-            const resp = await axios.post(url, data, { headers: {...headers, ...secondHeaders} });
+            const resp = await axios.post(url, data, { headers: {...headers, ...secondHeaders} })
             this.DeleteFactura(factura , path)
-            console.log(resp.data);
+            console.log(resp.data)
             }
         catch (error) {
-            unlink(`/Users/user/Downloads/amaze04Jul_part2/${factura}`, err => (err) ? console.log(err): `successfully deleted ${factura}`)
             console.log(error.response.data)
         }
 
