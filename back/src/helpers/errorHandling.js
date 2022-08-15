@@ -4,8 +4,6 @@ async function usePromise(promiseFunction, params = null){
       const data = await promiseFunction()
       return [data, null]
     } else {
-      // let functionParams = ''
-      // params.forEach(param => functionParams += `,${param}`)
       const data = await promiseFunction(params)
       return [data, null]
     }

@@ -19,7 +19,7 @@ const ingramToken = async () => {
     return token;
     
   } catch (error) {
-    console.log(error.response.data)
+    console.log(error.response.data, 'error en token ingram')
   }
 }
 
