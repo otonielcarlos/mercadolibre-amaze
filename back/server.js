@@ -1,11 +1,12 @@
-const express = require('express')
-const cors = require('cors')
-const app = express()
 
-const path = require("path");
-require('dotenv').config()
-const v1Orders = require('./src/v1/routes/orders')
-const v1Stock = require('./src/v1/routes/stock')
+import {config} from 'dotenv'
+config()
+import express from 'express'
+import cors from 'cors'
+const app = express()
+import path from "path"
+import v1Orders from './src/v1/routes/orders'
+import v1Stock from './src/v1/routes/stock'
 const PORT = process.env.PORT || 4000
 
 
@@ -15,8 +16,7 @@ app.use(cors())
 app.use(express.json())
 
 app.use("/pe/v1/orders", v1Orders)
-app.use("/pe/v1/stock", v1Stock)
-app.use
+app.use("/pe/v1/stock", v1Stock)	
 app.set('json spaces', 2)
 
 app.get('/*', (req, res) => {

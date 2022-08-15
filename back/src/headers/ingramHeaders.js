@@ -18,7 +18,7 @@ async function IngramHeaders() {
 
     return data
     } catch(err){
-      console.log(err)
+      console.log('IngramHeader helper error ',err.response.data)
     }
 }
 
