@@ -10,7 +10,7 @@ import v1Stock from './src/v1/routes/stock'
 const PORT = process.env.PORT || 4000
 
 
-app.use(express.static(path.join(__dirname, "build")));
+app.use(express.static(path.join(__dirname, "build")))
 
 app.use(cors())
 app.use(express.json())

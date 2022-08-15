@@ -1,3 +1,3 @@
-const {getPrices} = require('../src/services/mercadolibre/stockService')
+const {getStockCron} = require('../src/services/mercadolibre/stockService')
 
-getPrices().then(() => console.log('updated'))
+getStockCron()
