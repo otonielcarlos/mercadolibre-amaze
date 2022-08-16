@@ -19,7 +19,6 @@ async function sendOrderToIngramLinio(orderId) {
     const items = await axios.get(itemsUrl, {headers: {'Accept': 'application/json'}} )
     
     const data = prepareDataForIngram(order.data, items.data)
-    console.log(data)
     const config = await IngramHeaders()
 
     const ingramResponse = await axios.post(ingramUrl, data, config)

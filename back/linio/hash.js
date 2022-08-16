@@ -2,7 +2,7 @@ import {createHmac} from 'crypto'
 import {config} from 'dotenv'
 config()
 // @ts-ignore
-import {SECRET_LINIO } from process.env
+import { SECRET_LINIO, LINIO_USER } from process.env
 function getSignature(orderId, event){
 
   
@@ -12,7 +12,7 @@ function getSignature(orderId, event){
   const encodedDate = encodeURIComponent(utc)
   
   if(event === 'GetOrder'){
-    const concatenated = `Action=GetOrder&Format=JSON&OrderId=${orderId}&Timestamp=${encodedDate}&UserID=carlos%40bluediamondinnovation.com&Version=1.0`
+    const concatenated = `Action=GetOrder&Format=JSON&OrderId=${orderId}&Timestamp=${encodedDate}&UserID=${LINIO_USER}&Version=1.0`
     const hashOrder = createHmac('sha256', SECRET_LINIO)
                       .update(concatenated)
                       .digest('hex')
@@ -20,16 +20,16 @@ function getSignature(orderId, event){
 
   } else if(event === 'GetOrderItems'){
 
-    const action = `Action=GetOrderItems&Format=JSON&OrderId=${orderId}&Timestamp=${encodedDate}&UserID=carlos%40bluediamondinnovation.com&Version=1.0`
-    const hashItems = createHmac('sha256', SECRET)
+    const action = `Action=GetOrderItems&Format=JSON&OrderId=${orderId}&Timestamp=${encodedDate}&UserID=${LINIO_USER}&Version=1.0`
+    const hashItems = createHmac('sha256', SECRET_LINIO)
                       .update(action)
                       .digest('hex')
     return {urlItems: action, hashItems: hashItems}
     
   } else if(event === 'GetProducts'){
   
-      const productAction = `Action=GetProducts&Filter=all&Format=JSON&Timestamp=${encodedDate}&UserID=carlos%40bluediamondinnovation.com&Version=1.0`
-      const hashProducts = createHmac('sha256', SECRET)
+      const productAction = `Action=GetProducts&Filter=all&Format=JSON&Timestamp=${encodedDate}&UserID=${LINIO_USER}&Version=1.0`
+      const hashProducts = createHmac('sha256', SECRET_LINIO)
                           .update(productAction)
                           .digest('hex')
       return {url: productAction, hash: hashProducts}
