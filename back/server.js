@@ -1,12 +1,12 @@
 
-const {config} = require( 'dotenv')
+const {config} = require('dotenv')
 config()
-const express = require( 'express')
-const cors = require( 'cors')
+const express = require('express')
+const cors = require('cors')
 const app = express()
-const path = require( "path")
-const v1Orders = require( './src/v1/routes/orders')
-const v1Stock = require( './src/v1/routes/stock')
+const path = require("path")
+const v1Orders = require('./src/v1/routes/orders')
+const v1Stock = require('./src/v1/routes/stock')
 const PORT = process.env.PORT || 4000
 
 
