@@ -53,10 +53,10 @@ async function sendProcessingOrdersToIM(req, res) {
   res.status(200).json(data)
 }
 ```
-The ```usePromise```is a helper function to pass any pending promise, so it takes cares to fulfilling the promise and returnin the promised value. If any ```
-error```throw with be handled as well on this helper function. 
+The ```usePromise```is a helper function to pass any pending promise, so it takes cares to fulfilling the promise and returning the promised value. If any ```
+error```thrown will be handled as well on this helper function. 
 
-All controllers use the ```usePromise``` helper in order to avoid trying blocks of code and catching any error.
+All controllers use the ```usePromise``` helper in order to avoid trying blocks of code and catching errors.
 
 An example of ```usePromise``` can be seen below:
 ```javascript
