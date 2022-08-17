@@ -1,8 +1,8 @@
-import {createHmac} from 'crypto'
-import {config} from 'dotenv'
+const {createHmac} = require ('crypto')
+const {config} = require ('dotenv')
 config()
 // @ts-ignore
-import { SECRET_LINIO, LINIO_USER } from process.env
+const { SECRET_LINIO, LINIO_USER } = process.env
 function getSignature(orderId, event){
 
   
@@ -13,7 +13,7 @@ function getSignature(orderId, event){
   
   if(event === 'GetOrder'){
     const concatenated = `Action=GetOrder&Format=JSON&OrderId=${orderId}&Timestamp=${encodedDate}&UserID=${LINIO_USER}&Version=1.0`
-    const hashOrder = createHmac('sha256', SECRET_LINIO)
+    const hashOrder = createHmac('sha256', `${SECRET_LINIO}`)
                       .update(concatenated)
                       .digest('hex')
     return {url: concatenated, hash: hashOrder}
@@ -21,7 +21,7 @@ function getSignature(orderId, event){
   } else if(event === 'GetOrderItems'){
 
     const action = `Action=GetOrderItems&Format=JSON&OrderId=${orderId}&Timestamp=${encodedDate}&UserID=${LINIO_USER}&Version=1.0`
-    const hashItems = createHmac('sha256', SECRET_LINIO)
+    const hashItems = createHmac('sha256', `${SECRET_LINIO}`)
                       .update(action)
                       .digest('hex')
     return {urlItems: action, hashItems: hashItems}
@@ -29,7 +29,7 @@ function getSignature(orderId, event){
   } else if(event === 'GetProducts'){
   
       const productAction = `Action=GetProducts&Filter=all&Format=JSON&Timestamp=${encodedDate}&UserID=${LINIO_USER}&Version=1.0`
-      const hashProducts = createHmac('sha256', SECRET_LINIO)
+      const hashProducts = createHmac('sha256', `${SECRET_LINIO}`)
                           .update(productAction)
                           .digest('hex')
       return {url: productAction, hash: hashProducts}
