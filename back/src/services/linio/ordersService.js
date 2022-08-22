@@ -5,7 +5,6 @@ const { getSignature } = require('./orderUtils')
 const {INGRAM_ORDER_URL} = process.env
 
 function prepareDataForIngram(order, items){
-  console.log(order.SuccessResponse.Body.Orders)
   const {OrderNumber, Price} = order.SuccessResponse.Body.Orders.Order
   const {FirstName, LastName, Phone, Phone2, Address1, Address2, Address3, Address4, City} = order.SuccessResponse.Body.Orders.Order.AddressShipping
     let lines = []
@@ -101,7 +100,7 @@ async function sendOrderToIngramLinio(orderId) {
     const config = await IngramHeaders()
 
     const ingramResponse = await axios.post(`${INGRAM_ORDER_URL}`, data, config)
-    console.log(ingramResponse.data)
+    console.log(ingramResponse.data.orders[0].ingramOrderNumber)
     return {request : data, ingram: ingramResponse.data}
 
   }
