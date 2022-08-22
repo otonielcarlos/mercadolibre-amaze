@@ -79,6 +79,45 @@ async function usePromise(promiseFunction, params = null){  //function expects 1
  const [data, error] = await usePromise(promiseToBeResolved)
 ```
 
+## Linio
+For getting the data from a new Linio Order, a hashed signature needs to be passed within the request. I used the ```createHmac``` from the ```crypto```  module. 
+```` javascript
+
+const concatenated = `Action=GetOrder&Format=JSON&OrderId=${orderId}&Timestamp=${encodedDate}&UserID=${LINIO_USER}&Version=1.0`
+
+const hashOrder = createHmac('sha256', `${SECRET_LINIO}`)
+                  .update(concatenated)
+                  .digest('hex')
+
+return {url: concatenated, hash: hashOrder}
+````
+Now that I get my signature, I'll proceed to do 2 request to Linio: The first one is to pulled the delivery address from client in the order. The second request, is to get the product information from the order (quantity and sku)
+
+````javascript
+
+//Get signature hashed for an Order Delivery Request
+const {url, hash} = getSignature(orderId, 'GetOrder')
+
+//Get signature hashed for a Products Order Request
+const {urlItems, hashItems} = getSignature(orderId, 'GetOrderItems') 
+
+//Create the 2 url with the signature added
+const getUrl = 'https://sellercenter-api.linio.com.pe?' + url + '&Signature=' + hash 
+const itemsUrl = 'https://sellercenter-api.linio.com.pe?' + urlItems + '&Signature=' + hashItems
+const headers =  { 
+      headers: {
+        'Accept': 'application/json'
+      }
+    }
+
+//Request for the order delivery info
+const order = await axios.get(getUrl, headers)
+
+//Request for the order products info
+const items = await axios.get(itemsUrl, headers)
+
+````
+
 
 
 *More info in progress...
