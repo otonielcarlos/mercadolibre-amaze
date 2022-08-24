@@ -9,7 +9,7 @@ const {default: axios} = require( 'axios')
 const {getDataReadyToUpdate} = require('../../helpers/getDataReadyToUpdate')
 
 
-async function getStockCron() {
+async function getStockMercadolibreApple() {
   try {
 
     // GET ALL ACTIVE ITEMS WITH AND WITHOUT VARIATIONS
@@ -167,5 +167,5 @@ async function getStockCron() {
   }
 }
 
-module.exports = {getStockCron}
+module.exports = {getStockMercadolibreApple}
 

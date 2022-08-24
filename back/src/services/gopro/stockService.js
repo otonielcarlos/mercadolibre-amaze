@@ -43,7 +43,7 @@ async function updateStockGoPro(){
 
       return {id, sku, stock_quantity, stock_status, date_modified} 
     })
-    
+    isUpdated.data.update.map( product => console.log(product.sku, product.stock_quantity))
     console.log('gopro stock updated')
     return stockUpdated
 
