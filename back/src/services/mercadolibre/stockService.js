@@ -129,7 +129,7 @@ async function getStockCron() {
       })
       return {
         itemid: result,
-        variations: [... all.flat()]
+        variations: [...all.flat()]
       }
     })
 

@@ -7,26 +7,27 @@ const url = 'https://api.ingrammicro.com:443/resellers/v6/catalog/priceandavaila
 
 const getDataReadyToUpdate = async(skusForAPI) => {
   try {
-    // console.log(skusForAPI)
+
     const config = await IngramHeaders()
     let arrayToReturn = []
-  for(let chunk of skusForAPI){
-    const data = {
-      "showReserveInventoryDetails": true,
-      "showAvailableDiscounts": false,
-      "products": chunk
-    }
-    // console.log(data)
-    let responseFromAPI = await axios.post(url, data, config)
-     responseFromAPI.data.forEach(response => {
-      arrayToReturn =  [... arrayToReturn, {sku: response.ingramPartNumber, stock: response.availability.totalAvailability}]
-      })
+    for(let chunk of skusForAPI){
+      const data = {
+        "showReserveInventoryDetails": true,
+        "showAvailableDiscounts": false,
+        "products": chunk
+      }
 
-    }
+      let responseFromAPI = await axios.post(url, data, config)
+      const arrayUpdated = responseFromAPI.data.map(response => {
+        return {sku: response.ingramPartNumber, stock: response.availability.totalAvailability}
+      })
+      arrayToReturn = [...arrayToReturn, ...arrayUpdated]
+
+      }
 
     return arrayToReturn
   } catch (error) {
-   console.log(error.response.data.errors[0].fields, 'error en prices v6 ingram') 
+   console.log(error.response.data, 'error en prices v6 ingram') 
   }
 }
 

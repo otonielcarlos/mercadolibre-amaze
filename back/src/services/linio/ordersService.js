@@ -91,10 +91,14 @@ async function sendOrderToIngramLinio(orderId) {
     const {urlItems, hashItems} = getSignature(orderId, 'GetOrderItems')
     const getUrl = 'https://sellercenter-api.linio.com.pe?' + url + '&Signature=' + hash
     const itemsUrl = 'https://sellercenter-api.linio.com.pe?' + urlItems + '&Signature=' + hashItems
-    const headers=  {headers: {'Accept': 'application/json'}}
+    const headers=  { 
+      headers: {
+        'Accept': 'application/json'
+      }
+    }
     
-    const order = await axios.get(getUrl, headers )
-    const items = await axios.get(itemsUrl, headers )
+    const order = await axios.get(getUrl, headers)
+    const items = await axios.get(itemsUrl, headers)
     
     const data = prepareDataForIngram(order.data, items.data)
     const config = await IngramHeaders()
