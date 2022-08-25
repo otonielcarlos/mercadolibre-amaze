@@ -14,10 +14,10 @@ app.use(express.static(path.join(__dirname, "build")))
 
 app.use(cors())
 app.use(express.json())
+app.set('json spaces', 2)	
 
 app.use("/pe/v1/orders", v1Orders)
 app.use("/pe/v1/stock", v1Stock)	
-app.set('json spaces', 2)
 
 app.get('/*', (req, res) => {
 	res.sendFile(path.join(__dirname, 'build/index.html'))

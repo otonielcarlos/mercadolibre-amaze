@@ -18,16 +18,23 @@ const getDataReadyToUpdate = async(skusForAPI) => {
       }
 
       let responseFromAPI = await axios.post(url, data, config)
+
       const arrayUpdated = responseFromAPI.data.map(response => {
-        return {sku: response.ingramPartNumber, stock: response.availability.totalAvailability}
+        let stock = 0
+
+        if(response.availability.hasOwnProperty('availabilityByWarehouse')) {
+          stock =  response.availability.availabilityByWarehouse.find(warehouse => warehouse.warehouseId === "PE10").quantityAvailable
+        }
+        
+        return {sku: response.ingramPartNumber, stock: stock}
       })
       arrayToReturn = [...arrayToReturn, ...arrayUpdated]
 
       }
-
+      // console.log(arrayToReturn)
     return arrayToReturn
   } catch (error) {
-   console.log(error.response.data, 'error en prices v6 ingram') 
+   console.log(error, 'error en prices v6 ingram') 
   }
 }
 

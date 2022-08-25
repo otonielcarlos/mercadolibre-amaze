@@ -139,9 +139,10 @@ async function getStockMercadolibreApple() {
       setTimeout(async () => {
         const { variations, itemid } = itemGroup
         const data = { variations }
+        console.log(data)
         try {
           const isUpdated = await axios.put(`${MERCADOLIBRE_ITEMS_URL}/${itemid}`, data,  {headers: {'Authorization': `Bearer ${accessToken}`}} )
-          // console.log('variation', isUpdated.data.id)
+          console.log('variation', isUpdated.data.id)
         } catch (error) {
           console.log('no se puede actualizar variations', itemid, error.response.data)
         }
@@ -153,8 +154,8 @@ async function getStockMercadolibreApple() {
       setTimeout(async () => {
         const { itemid, data } = itemGroup
         try {
-        const isUpdated = await axios.put(`${MERCADOLIBRE_ITEMS_URL}/${itemid}`, data,  {headers: {'Authorization': `Bearer ${accessToken}`}} )
-        // console.log('item', isUpdated.data.id)
+          const isUpdated = await axios.put(`${MERCADOLIBRE_ITEMS_URL}/${itemid}`, data,  {headers: {'Authorization': `Bearer ${accessToken}`}} )
+          console.log('item', isUpdated.data.id)
         } catch (error) {
           console.log('no se puede actualizar item ', itemid)
         }

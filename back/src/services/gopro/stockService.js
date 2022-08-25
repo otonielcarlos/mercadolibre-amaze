@@ -37,6 +37,7 @@ async function updateStockGoPro(){
       }
   })
     const data = { update }
+
     const isUpdated = await api.post('products/batch', data)
     const stockUpdated = isUpdated.data.update.map(product => {
       const {id, sku, stock_quantity, stock_status, date_modified} = product
