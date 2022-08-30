@@ -7,8 +7,7 @@ config()
 const {MERCADOLIBRE_URL_ACTIVE_ITEMS, MERCADOLIBRE_ITEMS_URL} = process.env
 const {default: axios} = require( 'axios')
 const {getDataReadyToUpdate} = require('../../helpers/getDataReadyToUpdate')
-
-
+ 
 async function getStockMercadolibreApple() {
   try {
 
