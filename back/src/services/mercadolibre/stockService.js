@@ -75,15 +75,13 @@ async function getStockMercadolibreApple() {
 
     const itemFullData = await Promise.all(totalItems)
 
-    const itemLines = skusChunks(itemFullData.map(item => {
+    const itemLines = itemFullData.map(item => {
       const { sku } = item 
         return sku
-    }))
-
-    const [itemDataStock, itemStockError] = await usePromise(getDataReadyToUpdate, itemLines)
-    if(itemStockError) throw itemStockError
-
-    const itemDataToUpdate = itemDataStock.map(item => {
+    })
+    console.log(itemLines)
+    const itemDataStock = await getDataReadyToUpdate(itemLines)
+    const itemDataToUpdate = itemDataStock?.map(item => {
       const {itemid} = itemFullData.filter(product => item.sku === product.sku)[0]
       const { stock } = item
       const data = {
@@ -105,13 +103,12 @@ async function getStockMercadolibreApple() {
     totalDataOfProducts.forEach(promise => {
       fullData = [...fullData, ...promise.variations]
     })
-    const lines = skusChunks(linesFull)
 
-    const [dataStock, error] = await usePromise(getDataReadyToUpdate, lines)
-    if(error) throw error
+    const dataStock = await getDataReadyToUpdate(linesFull)
+
 
     const dataSettle = fullData.map(item => {
-      const { stock } = dataStock.find(product => product.sku.includes(item.sku))
+      const { stock } = dataStock?.find(product => product.sku.includes(item.sku))
       delete item.sku
       return {
         ...item,
@@ -139,10 +136,8 @@ async function getStockMercadolibreApple() {
       setTimeout(async () => {
         const { variations, itemid } = itemGroup
         const data = { variations }
-        console.log(data)
         try {
           const isUpdated = await axios.put(`${MERCADOLIBRE_ITEMS_URL}/${itemid}`, data,  {headers: {'Authorization': `Bearer ${accessToken}`}} )
-          // console.log('variation', isUpdated.data.id)
         } catch (error) {
           console.log('no se puede actualizar variations', itemid, error.response.data)
         }
@@ -155,7 +150,6 @@ async function getStockMercadolibreApple() {
         const { itemid, data } = itemGroup
         try {
           const isUpdated = await axios.put(`${MERCADOLIBRE_ITEMS_URL}/${itemid}`, data,  {headers: {'Authorization': `Bearer ${accessToken}`}} )
-          // console.log('item', isUpdated.data.id)
         } catch (error) {
           console.log('no se puede actualizar item ', itemid)
         }

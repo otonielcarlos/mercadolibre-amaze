@@ -86,9 +86,9 @@ async function sendOrderToIngramLinio(orderId) {
   try {
     // crear hash signature para request 
     // @ts-ignore
-    const {url, hash} = getSignature(orderId, 'GetOrder')
+    const [url, hash] = getSignature(orderId, 'GetOrder')
     // @ts-ignore
-    const {urlItems, hashItems} = getSignature(orderId, 'GetOrderItems')
+    const [urlItems, hashItems] = getSignature(orderId, 'GetOrderItems')
     const getUrl = 'https://sellercenter-api.linio.com.pe?' + url + '&Signature=' + hash
     const itemsUrl = 'https://sellercenter-api.linio.com.pe?' + urlItems + '&Signature=' + hashItems
     const headers=  { 

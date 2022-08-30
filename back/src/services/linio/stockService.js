@@ -3,6 +3,7 @@ const {getSignature} = require('./orderUtils')
 const {getDataReadyToUpdate} = require('../../helpers/getDataReadyToUpdate')
 
 async function updateStockLinio() {
+  // @ts-ignore
   const [url, hash] = getSignature(false, 'GetProducts')
   const productsUrl = 'https://sellercenter-api.linio.com.pe?' + url + '&Signature=' + hash
   const productsLinio = await axios.get(productsUrl)
@@ -14,10 +15,10 @@ async function updateStockLinio() {
   const [updateUrl, hashUpdate] = getSignature(false, 'ProductUpdate')
   const productUpdateUrl = 'https://sellercenter-api.linio.com.pe?' + updateUrl + '&Signature=' + hashUpdate
   const updatedProducts = await getDataReadyToUpdate(products)
-  const productsdata = updatedProducts.filter(item => item.sku !== '')
+  const productsdata = updatedProducts?.filter(item => item.sku !== '')
   let requestString = ''
 
-  productsdata.forEach(item => {
+  productsdata?.forEach(item => {
     const {sku, stock} = item
     requestString += `<Product>
               <SellerSku>${sku}</SellerSku>

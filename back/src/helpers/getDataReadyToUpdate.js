@@ -8,7 +8,6 @@ const {skusChunks} = require('../helpers/chunks')
 const getDataReadyToUpdate = async(skusForAPI) => {
   try {
     const chunksOfsku = skusChunks(skusForAPI)
-    // console.log(chunksOfsku)
     const config = await IngramHeaders()
     let arrayToReturn = []
     for(let chunk of chunksOfsku){
@@ -37,7 +36,7 @@ const getDataReadyToUpdate = async(skusForAPI) => {
       console.table(arrayToReturn.filter(item => item.sku !== '').flat())
     return arrayToReturn
   } catch (error) {
-   console.log(error.response.data, 'error en prices v6 ingram') 
+   console.log(error.response.config.data, 'error en prices v6 ingram') 
   }
 }
 

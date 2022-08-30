@@ -21,9 +21,9 @@ async function updateStockGoPro(){
       return sku
     }).filter(item => item !== '')
 
-
-    let skusFormatted = skusChunks(arraySkus)
-    const updatedSkuStock = await getDataReadyToUpdate(skusFormatted)
+    // let skusFormatted = skusChunks(arraySkus)
+    const updatedSkuStock = await getDataReadyToUpdate(arraySkus)
+    // console.log(skusFormatted)
     
     const update = updatedSkuStock?.map(product => {
       const id = products.data.find(item => item.sku === product.sku).id
@@ -44,7 +44,7 @@ async function updateStockGoPro(){
 
       return {id, sku, stock_quantity, stock_status, date_modified} 
     })
-    isUpdated.data.update.forEach(product => console.log(product.sku, product.stock_quantity))
+
     console.log('gopro stock updated')
     return stockUpdated
 

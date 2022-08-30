@@ -14,7 +14,7 @@ function getSignature(orderId=false, event){
       const hashOrder = createHmac('sha256', `${SECRET_LINIO}`)
                         .update(concatenated)
                         .digest('hex')
-      return {url: concatenated, hash: hashOrder}
+      return [concatenated, hashOrder]
   
     } else if(event === 'GetOrderItems'){
   
@@ -22,7 +22,7 @@ function getSignature(orderId=false, event){
       const hashItems = createHmac('sha256', `${SECRET_LINIO}`)
                         .update(action)
                         .digest('hex')
-      return {urlItems: action, hashItems: hashItems}
+      return [action, hashItems]
     }
 
   } else if(event === 'GetProducts') {
