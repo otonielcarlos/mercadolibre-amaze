@@ -1,7 +1,38 @@
-// const url = `https://sellercenter-api.linio.com.pe?Action=GetProducts&Filter=all&Format=JSON&Timestamp=2022-08-18T17%3A19%3A34-05%3A00&UserID=carlos%40bluediamondinnovation.com&Version=1.0&Signature=5c65bf4731fab3b87dac1a23eb4f9d9061127a04a1462fc0221891dfb19b2d2a`
+const {default:axios} = require('axios')
 const {getSignature} = require('./orderUtils')
-const signature = getSignature(false, 'GetProducts')
-console.log(signature)
+const {getDataReadyToUpdate} = require('../../helpers/getDataReadyToUpdate')
+
+async function updateStockLinio() {
+  const [url, hash] = getSignature(false, 'GetProducts')
+  const productsUrl = 'https://sellercenter-api.linio.com.pe?' + url + '&Signature=' + hash
+  const productsLinio = await axios.get(productsUrl)
+  const products = productsLinio.data.SuccessResponse.Body.Products.Product.map(product => {
+    const {SellerSku} = product
+    return `${SellerSku}`
+  }).filter(sku => sku.length === 7)
+    .filter(sku => sku !== '')
+  const [updateUrl, hashUpdate] = getSignature(false, 'ProductUpdate')
+  const productUpdateUrl = 'https://sellercenter-api.linio.com.pe?' + updateUrl + '&Signature=' + hashUpdate
+  const updatedProducts = await getDataReadyToUpdate(products)
+  const productsdata = updatedProducts.filter(item => item.sku !== '')
+  let requestString = ''
+
+  productsdata.forEach(item => {
+    const {sku, stock} = item
+    requestString += `<Product>
+              <SellerSku>${sku}</SellerSku>
+              <Quantity>${stock > 20 ? 20 : stock}</Quantity>
+            </Product>`
+  })
+
+  const requestXML = `<Request>${requestString}</Request>`
+  const responseXML = await axios.post(productUpdateUrl, requestXML, {headers: {'Content-Type': 'text/xml'}})
+  console.log('linio stock updated at: ', responseXML.data.SuccessResponse.Head.Timestamp)
+}
+
+module.exports = {
+  updateStockLinio
+}
 
 
 

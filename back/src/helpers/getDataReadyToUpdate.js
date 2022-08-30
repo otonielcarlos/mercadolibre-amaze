@@ -4,13 +4,14 @@ const {INGRAM_CLIENT_CUSTOMER, INGRAM_CORRELATION_ID} = process.env
 const { ingramToken } = require('../tokens/ingramToken')
 const {IngramHeaders} = require('../headers/ingramHeaders')
 const url = 'https://api.ingrammicro.com:443/resellers/v6/catalog/priceandavailability?includeAvailability=true&includePricing=false&includeProductAttributes=true'
-
+const {skusChunks} = require('../helpers/chunks')
 const getDataReadyToUpdate = async(skusForAPI) => {
   try {
-
+    const chunksOfsku = skusChunks(skusForAPI)
+    // console.log(chunksOfsku)
     const config = await IngramHeaders()
     let arrayToReturn = []
-    for(let chunk of skusForAPI){
+    for(let chunk of chunksOfsku){
       const data = {
         "showReserveInventoryDetails": true,
         "showAvailableDiscounts": false,
@@ -23,7 +24,9 @@ const getDataReadyToUpdate = async(skusForAPI) => {
         let stock = 0
 
         if(response.availability.hasOwnProperty('availabilityByWarehouse')) {
-          stock =  response.availability.availabilityByWarehouse.find(warehouse => warehouse.warehouseId === "PE10").quantityAvailable
+          stock =  response.availability.availabilityByWarehouse
+          .find(warehouse => warehouse.warehouseId === "PE10")
+          .quantityAvailable
         }
         
         return {sku: response.ingramPartNumber, stock: stock}
@@ -31,10 +34,10 @@ const getDataReadyToUpdate = async(skusForAPI) => {
       arrayToReturn = [...arrayToReturn, ...arrayUpdated]
 
       }
-      // console.log(arrayToReturn)
+      console.table(arrayToReturn.filter(item => item.sku !== '').flat())
     return arrayToReturn
   } catch (error) {
-   console.log(error, 'error en prices v6 ingram') 
+   console.log(error.response.data, 'error en prices v6 ingram') 
   }
 }
 

@@ -24,12 +24,20 @@ function getSignature(orderId=false, event){
                         .digest('hex')
       return {urlItems: action, hashItems: hashItems}
     }
-  } else {
+
+  } else if(event === 'GetProducts') {
     const productAction = `Action=GetProducts&Filter=all&Format=JSON&Timestamp=${encodedDate}&UserID=${LINIO_USER}&Version=1.0`
     const hashProducts = createHmac('sha256', `${SECRET_LINIO}`)
                         .update(productAction)
                         .digest('hex')
-    return {url: productAction, hash: hashProducts}
+    return [productAction, hashProducts]
+
+  } else if(event === 'ProductUpdate') {
+    const productAction = `Action=ProductUpdate&Filter=all&Format=JSON&Timestamp=${encodedDate}&UserID=${LINIO_USER}&Version=1.0`
+    const hashProducts = createHmac('sha256', `${SECRET_LINIO}`)
+                        .update(productAction)
+                        .digest('hex')
+    return [productAction, hashProducts]
   }
 }
 
