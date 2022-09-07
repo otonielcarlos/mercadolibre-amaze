@@ -31,9 +31,9 @@ const body_1 = {
 	redirect_uri: MERCADOLIBRE_REDIRECT_URI,
 }
 
-async function token (cuenta = 'APPLE') {
+async function token (isApple = true) {
 	// const isApple = 
-	if(cuenta === 'APPLE'){
+	if(isApple){
 		try {
 			const tokenData = await axios.post('https://api.mercadolibre.com/oauth/token', bodyApple, {
 				headers: {
@@ -42,7 +42,7 @@ async function token (cuenta = 'APPLE') {
 				},
 			})
 			const token = tokenData.data.access_token
-			// console.log('token apple')
+			console.log('token apple')
 			return token
 		} catch (error) {
 			console.log(error.response)
@@ -56,7 +56,7 @@ async function token (cuenta = 'APPLE') {
 				},
 			})
 			const token = tokenData.data.access_token
-			// console.log('token multimarcas')
+			console.log('token multimarcas')
 			return token
 		} catch (error) {
 			console.log(error.response)

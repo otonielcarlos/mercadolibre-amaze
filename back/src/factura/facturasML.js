@@ -6,7 +6,7 @@ const FormData = require('form-data');
 class Factura {
    async getHeaders() {
         try{
-            const accessToken = await token()
+            const accessToken = await token(false)
             return {
                 "Authorization": `Bearer ${ accessToken }`,
             }
@@ -16,7 +16,7 @@ class Factura {
     }
 
     get path() {
-        return `/Users/user/Downloads/amaze28Ago/`
+        return `/Users/user/Downloads/amaze31Ago/`
     }
 
     DeleteFactura(factura, path) {
