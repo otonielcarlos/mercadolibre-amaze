@@ -117,6 +117,53 @@ async function sendProcessingOrders() {
     console.log(error.response.data)
   }
 }
+
+async function getGoProOrders() {
+  try {
+    const orders = await api.get('orders', {'status':'completed', 'after': '2022-09-04T13:00:00', 'before': '2022-09-07T12:59:00' })
+    const ingramConfig = await IngramHeaders()
+    const results = orders.data.map(order => {
+      const {id, shipping, line_items, meta_data, total} = order
+      const transactionId = meta_data.find(meta=> meta.key === "_Mercado_Pago_Payment_IDs").value
+      const productLists = line_items.map(line =>  {
+        return {
+          sku: line.sku,
+          name: line.name,
+          qty: line.quantity,
+        }
+      })
+      return {
+        'oc': `ULTIMAMILLA_${id}`, 
+        nombre: `${shipping.first_name} ${shipping.last_name}`, 
+        total,
+        products: productLists,
+        transactionId
+
+      }
+    })
+
+
+    const withIngramOrderNumber = results.map(async (order) => {
+      const url = `https://api.ingrammicro.com:443/resellers/v6/orders/search?customerOrderNumber=${order.oc}`
+      const ingramData = await axios.get(url, ingramConfig)
+      const {orders} = ingramData.data   //(order => order.subOrders.filter(sub => sub.subOrderStatus !== "REJECTED"))
+      const {subOrderNumber, subOrderTotal} = orders.map(subOrder => subOrder.subOrders)
+                        .filter(suborder => suborder.subOrderStatus !== "REJECTED")[0][0]
+      const data = {
+        ...order,
+        ingramOrder: subOrderNumber,
+        ingramTotal: subOrderTotal
+      }
+      
+      return data
+    })
+    const allOrdersWithIngram = await Promise.all(withIngramOrderNumber)
+    return allOrdersWithIngram
+  } catch (error) {
+    console.log(error)
+  }
+}
 module.exports = {
-  sendProcessingOrders
+  sendProcessingOrders,
+  getGoProOrders
 }
