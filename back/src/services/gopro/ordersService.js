@@ -5,6 +5,8 @@ config()
 const {CK , CS, INGRAM_ORDER_URL, INGRAM_ORDER_URL_SANDBOX} = process.env
 const {IngramHeaders} = require('../../headers/ingramHeaders')
 const {getEstado} = require('../../helpers/getEstado')
+const { mercadopagoToken } = require('../../tokens/mercadopago')
+const {getTodayAndYesterday} = require('../../helpers/getTodayAndYesterday')
 
 
 const api = new WooCommerceRestApi({
@@ -120,11 +122,14 @@ async function sendProcessingOrders() {
 
 async function getGoProOrders() {
   try {
-    const orders = await api.get('orders', {'status':'completed', 'after': '2022-09-04T13:00:00', 'before': '2022-09-07T12:59:00' })
+    const [today, yesterday] = getTodayAndYesterday()
+    const orders = await api.get('orders', {'status':'completed', 'after': `${yesterday}T13:00:00`, 'before': `${today}T12:59:00`})
     const ingramConfig = await IngramHeaders()
     const results = orders.data.map(order => {
-      const {id, shipping, line_items, meta_data, total} = order
+      const {id, shipping, billing, line_items, meta_data, total} = order
       const transactionId = meta_data.find(meta=> meta.key === "_Mercado_Pago_Payment_IDs").value
+      const  [documento, valor] = meta_data
+
       const productLists = line_items.map(line =>  {
         return {
           sku: line.sku,
@@ -134,10 +139,13 @@ async function getGoProOrders() {
       })
       return {
         'oc': `ULTIMAMILLA_${id}`, 
+        mpTransaction: transactionId,
+        storeTotal: Number(total),
         nombre: `${shipping.first_name} ${shipping.last_name}`, 
-        total,
+        correo: billing.email,
+        documento: documento.value,
+        numero: valor.value,
         products: productLists,
-        transactionId
 
       }
     })
@@ -158,7 +166,23 @@ async function getGoProOrders() {
       return data
     })
     const allOrdersWithIngram = await Promise.all(withIngramOrderNumber)
-    return allOrdersWithIngram
+    const allOrdersWithMercadopago = []
+    for(let order of allOrdersWithIngram){
+      try {
+        const url = `https://api.mercadopago.com/v1/payments/${order.mpTransaction}`
+        const token = await mercadopagoToken(true)
+        const config = {headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}`}}
+        const mercadopagoOrder = await axios.get(url, config)
+        const details = mercadopagoOrder.data.transaction_details
+        allOrdersWithMercadopago.push({
+          ...order,
+          mercadopago_neto: details.net_received_amount
+        })
+      } catch (error) {
+        console.log(error.response.data)
+      }
+    }
+    return allOrdersWithMercadopago
   } catch (error) {
     console.log(error)
   }
