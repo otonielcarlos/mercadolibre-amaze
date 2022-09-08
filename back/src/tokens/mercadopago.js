@@ -1,10 +1,12 @@
 
 const {default: axios} = require('axios')
+require('dotenv').config()
+const {CLIENT_SECRET_MERCADOPAGO_GOPRO, CLIENT_ID_MERCADOPAGO_GOPRO, REFRESH_TOKEN_GOPRO} = process.env
 const bodyGoPro = {
-  "client_secret": "nkG1rtOX2dSirNNLGElnLkqqGg5UOOYM",
-  "client_id": "8641619197625627",
+  "client_secret": CLIENT_SECRET_MERCADOPAGO_GOPRO,
+  "client_id":CLIENT_ID_MERCADOPAGO_GOPRO,
   "grant_type": "refresh_token",
-  "refresh_token": "TG-6318d554028cf20001e99d66-1087789496"
+  "refresh_token": REFRESH_TOKEN_GOPRO
 }
 
 async function mercadopagoToken (isGoPro = true) {

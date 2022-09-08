@@ -1,18 +1,19 @@
 const {default :axios} = require('axios')
 const {getTodayAndYesterday} = require('../../helpers/getTodayAndYesterday')
 const {getAsusOrders, completeAsusOrdersInfo, getAsusOrdersCompleted} = require('../../database/asus/ordersDB')
-
+const {magentoHeaders} = require('../../headers/magentoHeaders')
 async function updateAllAsusOrdersInfo() {
   try {
     let arr = []
     const [today, yesterday] = getTodayAndYesterday()
+    const config = await magentoHeaders()
     const all = await getAsusOrders(today, yesterday)
     if(!all.length){
       console.log('nada por actualizar en Asus orders')
     } else {
       for(let order of all){
         const url =`https://pe.store.asus.com/index.php/rest/V1/orders/${order.order_id}`
-        const orderInfo = await axios.get(url,{headers: {'Authorization': 'Bearer 1fsvbmby1oehqcqx507jc64owhrwjrs2'}})
+        const orderInfo = await axios.get(url, config)
         const {base_grand_total, items, billing_address, extension_attributes, document_type, document_number, total_item_count} = orderInfo.data
         const skus = items.map(item => `${item.sku},`).toString()
         const productos = items.map(item => `${item.name},`).toString()
