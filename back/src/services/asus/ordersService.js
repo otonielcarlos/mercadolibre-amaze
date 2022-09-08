@@ -15,6 +15,7 @@ async function updateAllAsusOrdersInfo() {
         const orderInfo = await axios.get(url,{headers: {'Authorization': 'Bearer 1fsvbmby1oehqcqx507jc64owhrwjrs2'}})
         const {base_grand_total, items, billing_address, extension_attributes, document_type, document_number, total_item_count} = orderInfo.data
         const skus = items.map(item => `${item.sku},`).toString()
+        const productos = items.map(item => `${item.name},`).toString()
         const mercadopagoInfo = JSON.parse(extension_attributes.payment_additional_info.find(info => info.key === "paymentResponse").value)
           const allInfo = {
           ...order,
@@ -23,6 +24,7 @@ async function updateAllAsusOrdersInfo() {
           mercadopago_id: `${mercadopagoInfo.id}`,
           skus,
           total_item_count,
+          productos,
           nombre: `${billing_address.firstname} ${billing_address.lastname}`,
           email: `${billing_address.email}`,
           document_type: extension_attributes.document_type,
@@ -33,7 +35,7 @@ async function updateAllAsusOrdersInfo() {
 
       let query = ''
       arr.forEach(order => {
-        query+= `UPDATE ingramorders_asus SET mercadopago_id = '${order.mercadopago_id}', total_tienda = '${order.total_tienda}', total_mercadopago = '${order.total_mercadopago}', skus = '${order.skus}', cantidad =  ${order.total_item_count}, nombre = '${order.nombre}', email = '${order.email}', document_type = '${order.document_type}', document_number = ${order.document_number} WHERE order_id = '${order.order_id}';\n`
+        query+= `UPDATE ingramorders_asus SET mercadopago_id = '${order.mercadopago_id}', total_tienda = '${order.total_tienda}', total_mercadopago = '${order.total_mercadopago}', skus = '${order.skus}', cantidad =  ${order.total_item_count}, productos = '${order.productos}',nombre = '${order.nombre}', email = '${order.email}', document_type = '${order.document_type}', document_number = ${order.document_number} WHERE order_id = '${order.order_id}';\n`
       })
       await completeAsusOrdersInfo(query)
       console.log('done')
@@ -47,6 +49,7 @@ async function getAsusInformationOrders() {
   const [today, yesterday] = getTodayAndYesterday()
  return await getAsusOrdersCompleted(today, yesterday)
 }
+updateAllAsusOrdersInfo()
 module.exports = {
   updateAllAsusOrdersInfo,
   getAsusInformationOrders
