@@ -16,7 +16,7 @@ const displayOrders = asusOrders.map((order, key) => {
       <td>{order.mercadopago_id}</td>
       <td>{order.date.split('T')[0]}</td>
       <td>$ {order.total_tienda}</td>
-      <td>$ {order.total_tienda}</td>
+      <td>$ {order.total_mercadopago}</td>
       <td>$ {order.total_mercadopago}</td>
       <td>$ {perdida > 0 ? 0 : perdida}</td>
       <td>{order.cantidad}</td>
