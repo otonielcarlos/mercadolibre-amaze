@@ -10,16 +10,16 @@ const { MERCADOLIBRE_CLIENT_ID,
 const log = console.log
 
 const bodyApple = {
-	"grant_type": "refresh_token",
-	"client_id": MERCADOLIBRE_CLIENT_ID,
 	"client_secret": MERCADOLIBRE_CLIENT_SECRET,
+	"client_id": MERCADOLIBRE_CLIENT_ID,
+	"grant_type": "refresh_token",
 	"refresh_token": MERCADOLIBRE_REFRESH_TOKEN
 }
 
 const bodyMultimarcas = {
-	"grant_type": "refresh_token",
-	"client_id": MULTIMARCAS_CLIENT_ID,
 	"client_secret": MULTIMARCAS_CLIENT_SECRET,
+	"client_id": MULTIMARCAS_CLIENT_ID,
+	"grant_type": "refresh_token",
 	"refresh_token": MULTIMARCAS_REFRESH_TOKEN
 }
 

@@ -49,10 +49,10 @@ async function updateStockGoPro(){
     return stockUpdated
 
     } catch (error) {
-      console.log(error, 'error en stock gopro services')
+      console.log('error en stock gopro services', error.response.data)
     }
 }
-
+updateStockGoPro()
 module.exports = {
   updateStockGoPro
 }
