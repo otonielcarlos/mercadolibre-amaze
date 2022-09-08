@@ -7,7 +7,8 @@ const ordersService = require('../../services/asus/ordersService')
 // }
 
 async function getAllAsusOrders(req, res) {
-  const [data, error] = await usePromise(ordersService.getAsusOrders)
+  const [data, error] = await usePromise(ordersService.getAsusInformationOrders)
+  if(error) res.status(400).json(error)
   res.status(200).json(data)
 }
 
