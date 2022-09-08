@@ -21,7 +21,7 @@ async function mercadopagoToken (isGoPro = true) {
 			const token = tokenData.data.access_token
 			return token
 		} catch (error) {
-			console.log(error.response)
+			console.log(error.response.data)
 		}
 	} else {
 	// 	try {
