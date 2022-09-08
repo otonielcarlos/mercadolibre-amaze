@@ -5,10 +5,12 @@ const { ingramToken } = require('../tokens/ingramToken')
 const {IngramHeaders} = require('../headers/ingramHeaders')
 const url = 'https://api.ingrammicro.com:443/resellers/v6/catalog/priceandavailability?includeAvailability=true&includePricing=false&includeProductAttributes=true'
 const {skusChunks} = require('../helpers/chunks')
+
 const getDataReadyToUpdate = async(skusForAPI) => {
   try {
     const chunksOfsku = skusChunks(skusForAPI)
     const config = await IngramHeaders()
+    // console.log(config)
     let arrayToReturn = []
     for(let chunk of chunksOfsku){
       const data = {
@@ -33,10 +35,11 @@ const getDataReadyToUpdate = async(skusForAPI) => {
       arrayToReturn = [...arrayToReturn, ...arrayUpdated]
 
       }
+      // console.log(arrayToReturn)
       console.table(arrayToReturn.filter(item => item.sku !== '').flat())
     return arrayToReturn
   } catch (error) {
-   console.log(error.response.config.data, 'error en prices v6 ingram') 
+   console.log('error en prices v6 ingram') 
   }
 }
 

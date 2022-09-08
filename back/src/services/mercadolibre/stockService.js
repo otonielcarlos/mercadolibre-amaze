@@ -7,20 +7,21 @@ config()
 const {MERCADOLIBRE_URL_ACTIVE_ITEMS, MERCADOLIBRE_ITEMS_URL} = process.env
 const {default: axios} = require( 'axios')
 const {getDataReadyToUpdate} = require('../../helpers/getDataReadyToUpdate')
+const {getTokens} = require('../../database/mercadolibre/tokens')
  
 async function getStockMercadolibreApple() {
   try {
 
     // GET ALL ACTIVE ITEMS WITH AND WITHOUT VARIATIONS
-    const accessToken = await token()
-    const itemsData = await axios.get(`${MERCADOLIBRE_URL_ACTIVE_ITEMS}`, {headers: {'Authorization': `Bearer ${accessToken}`}})
+    const accessToken = await getTokens()
+    const itemsData = await axios.get(`${MERCADOLIBRE_URL_ACTIVE_ITEMS}`, {headers: {'Authorization': `Bearer ${accessToken.mercadolibreapple}`}})
     const ATTRIBUTE_SELLER_SKU = "SELLER_SKU"
     const {results, scroll_id, paging} = itemsData.data
     const {total} = paging
     let totalResults = []
 
     if(total > 100){
-      const remainingItems = await axios.get(`${MERCADOLIBRE_URL_ACTIVE_ITEMS}&scroll_id=${scroll_id}`, {headers: {'Authorization': `Bearer ${accessToken}`}})
+      const remainingItems = await axios.get(`${MERCADOLIBRE_URL_ACTIVE_ITEMS}&scroll_id=${scroll_id}`, {headers: {'Authorization': `Bearer ${accessToken.mercadolibreapple}`}})
        totalResults = [...results, ...remainingItems.data.results]
        console.log(totalResults.length)
       } else {
@@ -31,7 +32,7 @@ async function getStockMercadolibreApple() {
       const items = totalResults.map(async item => {
       
       const urlVar = `https://api.mercadolibre.com/items/${item}/variations?include_attributes=all`
-      const variations = await axios.get(urlVar, {headers: {'Authorization': `Bearer ${accessToken}`}})
+      const variations = await axios.get(urlVar, {headers: {'Authorization': `Bearer ${accessToken.mercadolibreapple}`}})
       if(variations.data.length === 0){
         return {
           itemid: item,
@@ -58,11 +59,12 @@ async function getStockMercadolibreApple() {
    
     const totalDataOfProducts = await Promise.all(items)
     const itemProducts = totalDataOfProducts.filter(product => product.variations.length === 0)
+    // console.log(itemProducts)
 
     const totalItems = itemProducts.map(async (item) => {
       const {itemid } = item
       const url = 'https://api.mercadolibre.com/items/' + itemid
-      const itemData = await axios.get(url, {headers: {'Authorization': `Bearer ${accessToken}`}})
+      const itemData = await axios.get(url, {headers: {'Authorization': `Bearer ${accessToken.mercadolibreapple}`}})
       const {attributes} = itemData.data
       const sku = attributes.filter(attribute => attribute.id === ATTRIBUTE_SELLER_SKU)[0].value_name
 
@@ -78,7 +80,6 @@ async function getStockMercadolibreApple() {
       const { sku } = item 
         return sku
     })
-    console.log(itemLines)
     const itemDataStock = await getDataReadyToUpdate(itemLines)
     const itemDataToUpdate = itemDataStock?.map(item => {
       const {itemid} = itemFullData.filter(product => item.sku === product.sku)[0]
@@ -89,7 +90,7 @@ async function getStockMercadolibreApple() {
 
       return { itemid, data }
     })
-    
+
 
     totalDataOfProducts.forEach(promise => {
       const variations = [... promise.variations]
@@ -98,11 +99,11 @@ async function getStockMercadolibreApple() {
       })
     })
 
+
     let fullData = []
     totalDataOfProducts.forEach(promise => {
       fullData = [...fullData, ...promise.variations]
     })
-
     const dataStock = await getDataReadyToUpdate(linesFull)
 
 
@@ -136,7 +137,7 @@ async function getStockMercadolibreApple() {
         const { variations, itemid } = itemGroup
         const data = { variations }
         try {
-          const isUpdated = await axios.put(`${MERCADOLIBRE_ITEMS_URL}/${itemid}`, data,  {headers: {'Authorization': `Bearer ${accessToken}`}} )
+          const isUpdated = await axios.put(`${MERCADOLIBRE_ITEMS_URL}/${itemid}`, data,  {headers: {'Authorization': `Bearer ${accessToken.mercadolibreapple}`}} )
         } catch (error) {
           console.log('no se puede actualizar variations', itemid, error.response.data)
         }
@@ -148,7 +149,7 @@ async function getStockMercadolibreApple() {
       setTimeout(async () => {
         const { itemid, data } = itemGroup
         try {
-          const isUpdated = await axios.put(`${MERCADOLIBRE_ITEMS_URL}/${itemid}`, data,  {headers: {'Authorization': `Bearer ${accessToken}`}} )
+          const isUpdated = await axios.put(`${MERCADOLIBRE_ITEMS_URL}/${itemid}`, data,  {headers: {'Authorization': `Bearer ${accessToken.mercadolibreapple}`}} )
         } catch (error) {
           console.log('no se puede actualizar item ', itemid)
         }

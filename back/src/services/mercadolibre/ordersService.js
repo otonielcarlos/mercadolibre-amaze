@@ -5,6 +5,7 @@ const {getOrders, findOrder, saveNewOrderID, saveIngram} = require('../../databa
 const {token} = require('../../tokens/ml')
 const {prepareDataForIngramRequest, getOrderProps} = require('./orderUtils')
 const {IngramHeaders} = require('../../headers/ingramHeaders')
+const {getTokens} = require('../../database/mercadolibre/tokens')
 
 async function getAllOrders(){
   const orders = await getOrders()
@@ -41,10 +42,11 @@ async function saveIngramOrder(orderProps, dataProps, account = 'APPLE'){
 async function getOrderDate(resource, account = 'APPLE'){
   try {
     try {
-      let accessToken = await token(account)
+      let {mercadolibreapple, mercadolibremultimarcas} = await getTokens()
+      let token = account === 'APPLE' ? mercadolibreapple : mercadolibremultimarcas
       // @ts-ignore
       let resDate = await axios.get(`https://api.mercadolibre.com/orders/${ resource }`, {
-        headers: { Authorization: `Bearer ${ accessToken }` },
+        headers: { Authorization: `Bearer ${ token }` },
       })
   
       let dateCreated = resDate.data.date_created
@@ -64,16 +66,15 @@ async function getOrderDate(resource, account = 'APPLE'){
   const baseUrl = INGRAM_ORDER_URL
   try {
     //DEFINIR CUENTA
+    let {mercadolibreapple, mercadolibremultimarcas} = await getTokens()
+    let token = account === 'APPLE' ? mercadolibreapple : mercadolibremultimarcas
     const co = account === 'APPLE' ? 'MLAPPLE' : 'ML'
-
-    // OBTENER TOKEN
-    let access_token = await token(account)
 
     //OBTENER INFORMACION DE LA COMPRA CON LA CUENTA 
     const orderURL = `https://api.mercadolibre.com/orders/${order_id}`
-    let order = await axios.get(orderURL,{ headers: {'Authorization': `Bearer ${access_token}`}})
+    let order = await axios.get(orderURL,{ headers: {'Authorization': `Bearer ${token}`}})
     
-    const data = await prepareDataForIngramRequest(order, account, access_token )
+    const data = await prepareDataForIngramRequest(order, account, token )
     
 
     //OBTENER HEADERS PARA INGRAM API REQUEST

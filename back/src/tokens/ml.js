@@ -31,6 +31,8 @@ const body_1 = {
 	redirect_uri: MERCADOLIBRE_REDIRECT_URI,
 }
 
+
+
 async function token (isApple = true) {
 	// const isApple = 
 	if(isApple){
@@ -45,7 +47,8 @@ async function token (isApple = true) {
 			console.log('token apple')
 			return token
 		} catch (error) {
-			console.log(error.response)
+			return token(true)
+			//console.log(error.response.data, 'error en token apple')
 		}
 	} else {
 		try {
@@ -59,11 +62,23 @@ async function token (isApple = true) {
 			console.log('token multimarcas')
 			return token
 		} catch (error) {
-			console.log(error.response)
+			return token(false)
+			console.log(error.response.data, 'error multimarcas token')
 		}
 	}	
+}
+
+async function getTokens(){
+	try {	
+			const tokenApple = await token(true)	
+			const tokenMultimarcas = await token(false)	
+			return [tokenApple, tokenMultimarcas]
+	} catch (error) {
+			console.log('error en getTokens')
+	}
 }
 	
 module.exports = {
 	token,
+	getTokens
 }

@@ -50,7 +50,7 @@ async function getAsusInformationOrders() {
   const [today, yesterday] = getTodayAndYesterday()
  return await getAsusOrdersCompleted(today, yesterday)
 }
-updateAllAsusOrdersInfo()
+
 module.exports = {
   updateAllAsusOrdersInfo,
   getAsusInformationOrders

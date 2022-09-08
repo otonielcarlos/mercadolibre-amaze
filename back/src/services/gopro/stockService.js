@@ -52,7 +52,6 @@ async function updateStockGoPro(){
       console.log('error en stock gopro services', error.response.data)
     }
 }
-updateStockGoPro()
 module.exports = {
   updateStockGoPro
 }
