@@ -24,6 +24,8 @@ const displayOrders = asusOrders.map((order, key) => {
       <td>{order.productos}</td>
       <td>{order.nombre}</td>
       <td>{order.email}</td>
+      <td>{order.document_type}</td>
+      <td>{order.document_number}</td>
     </tr>
   )
 })
@@ -48,6 +50,8 @@ const displayOrders = asusOrders.map((order, key) => {
         <th>Productos</th>
         <th>Nombre</th>
         <th>Email</th>
+        <th>Documento</th>
+        <th>Número</th>
       </tr>
       {displayOrders}
     </tbody>
