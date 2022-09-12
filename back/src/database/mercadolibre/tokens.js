@@ -12,7 +12,7 @@ async function getTokens() {
   if(rows){
     return rows[0]
   }
-    console.log('error in stock update')
+    console.log('error getTokens from Database')
   }
 
 async function updateTokens(tokenApple, tokenMultimarcas) {

@@ -6,7 +6,8 @@
   "scripts": {
     "test": " mocha ./back/test/api.test.js",
     "start": "./back/server.js",
-    "dev": "nodemon ./back/server"
+    "dev": "nodemon ./back/server",
+    "factura": "node ./back/src/factura/facturador.js"
   },
   "author": "",
   "license": "ISC",

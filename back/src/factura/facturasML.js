@@ -1,14 +1,15 @@
 const {default: axios} = require('axios');
-const { token } = require('../tokens/ml');
+// const { token } = require('../tokens/ml');
+const {getTokens} = require('../database/mercadolibre/tokens')
 const {unlink, readdir, createReadStream} = require('fs');
 const FormData = require('form-data');
 
 class Factura {
    async getHeaders() {
         try{
-            const accessToken = await token(false)
+            const accessToken = await getTokens()
             return {
-                "Authorization": `Bearer ${ accessToken }`,
+                "Authorization": `Bearer ${ accessToken.mercadolibreapple }`,
             }
         } catch(err){
             console.log(err)
@@ -16,7 +17,7 @@ class Factura {
     }
 
     get path() {
-        return `/Users/user/Downloads/amaze31Ago/`
+        return `/Users/user/Downloads/amaze06Set/`
     }
 
     DeleteFactura(factura, path) {
