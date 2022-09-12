@@ -15,10 +15,10 @@ const displayOrders = asusOrders.map((order, key) => {
       <td>{order.nv}</td>
       <td>{order.mercadopago_id}</td>
       <td>{order.date.split('T')[0]}</td>
-      <td>{order.total_tienda}</td>
-      <td>{order.total_mercadopago}</td>
-      <td>{order.total_mercadopago}</td>
-      <td>{perdida > 0 ? 0 : perdida}</td>
+      <td>{order.total_tienda.toLocaleString()}</td>
+      <td>{order.total_mercadopago.toLocaleString()}</td>
+      <td>{order.total_mercadopago.toLocaleString()}</td>
+      <td>{perdida > 0 ? 0 : perdida.toLocaleString()}</td>
       <td>{order.cantidad}</td>
       <td>{order.skus}</td>
       <td>{order.productos}</td>
