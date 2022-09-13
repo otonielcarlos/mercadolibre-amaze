@@ -28,7 +28,7 @@ function ContextProvider({children}){
     setAsusOrders(() => [])
     // @ts-ignore
     const {from, to} = rangeDate
-    const asusOrders = await axios.get(`http://localhost:4000/pe/v1/orders/asus/all/${from}/${to}`)
+    const asusOrders = await axios.get(`https://appleamaze.herokuapp.com/pe/v1/orders/asus/all/${from}/${to}`)
     setAsusOrders(() => asusOrders.data)
   }
 
