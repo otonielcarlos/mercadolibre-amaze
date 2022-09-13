@@ -1,6 +1,7 @@
 import React, {useContext} from 'react'
 import './Orders.css'
 import {Context} from '../Context/Context'
+import {InputDates} from "../Components/InputDates"
 // import {getTodayAndYesterday} from '../utils/utils'
 
 function AsusOrders(){
@@ -33,6 +34,7 @@ const displayOrders = asusOrders.map((order, key) => {
 
   return(
   <div className='orders'>
+    <InputDates />
   {/* <h3>Ordenes del {yesterday} 1:00pm PE al {today} 12:59pm PE *** DEMO EN DESARROLLO***</h3> */}
   <table>
     <tbody>

@@ -5,13 +5,12 @@ import OrderEntry from "./Components/OrderEntry"
 import Orders from "./Components/Orders"
 import AsusOrders from "./Components/AsusOrders"
 import Navbar from "./Components/Navbar"
-import {InputDates} from "./Components/InputDates"
+
 import './App.css';
 function App() {
   return (
     <div>
     <Navbar />
-    <InputDates />
     
     <Switch>
       <Route 

@@ -15,7 +15,7 @@ function ContextProvider({children}){
     async function getAsusOrdersWithDates(today, yesterday){
       
       const newOrders = await axios.get('https://appleamaze.herokuapp.com/pe/v1/orders/mercadolibre/apple/all')
-      const asusOrders = await axios.get(`http://localhost:4000/pe/v1/orders/asus/all/${yesterday}/${today}`)
+      const asusOrders = await axios.get(`https://appleamaze.herokuapp.com/pe/v1/orders/asus/all/${yesterday}/${today}`)
       // const asusOrders = await axios.get(`https://appleamaze.herokuapp.com/pe/v1/orders/asus/all?from=${yesterday}`)
       // @ts-ignore
       setOrders(() => newOrders.data)
@@ -42,7 +42,7 @@ function ContextProvider({children}){
   }
 
   return(
-    <Context.Provider value={{orders, asusOrders, onChangeDate, setDateForSearch}}>
+    <Context.Provider value={{orders, asusOrders, onChangeDate, setDateForSearch, rangeDate}}>
       {children}
     </Context.Provider>
   ) 
