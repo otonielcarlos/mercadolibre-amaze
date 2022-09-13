@@ -5,14 +5,18 @@ import OrderEntry from "./Components/OrderEntry"
 import Orders from "./Components/Orders"
 import AsusOrders from "./Components/AsusOrders"
 import Navbar from "./Components/Navbar"
+import {InputDates} from "./Components/InputDates"
 import './App.css';
 function App() {
-
   return (
     <div>
     <Navbar />
+    <InputDates />
+    
     <Switch>
-      <Route exact path="/" element={<OrderEntry />}></Route>
+      <Route 
+// @ts-ignore
+      exact path="/" element={<OrderEntry />}></Route>
       <Route  path="/orders-mercadolibre" element={<Orders />}></Route>
       <Route  path="/orders-asus" element={<AsusOrders />}></Route>
     </Switch>
