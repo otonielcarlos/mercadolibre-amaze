@@ -11,8 +11,16 @@ async function getAllAsusOrders(req, res) {
   if(error) res.status(400).json(error)
   res.status(200).json(data)
 }
+async function getAllAsusOrdersFromDates(req, res) {
+  const {from, to} = req.params
+  // const [data, error] = await usePromise(ordersService.getAsusInformationOrders)
+  const data = await ordersService.getAsusInformationOrdersFromDates(from, to)
+  // console.log(data)
+  res.status(200).json(data)
+}
 
 module.exports = {
-  // sendProcessingOrdersToIM,  
-  getAllAsusOrders
+  // sendProcessingOrdersToIM,
+  getAllAsusOrders,
+  getAllAsusOrdersFromDates
 }

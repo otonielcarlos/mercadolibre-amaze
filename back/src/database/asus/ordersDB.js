@@ -23,9 +23,19 @@ async function getAsusOrdersCompleted(today, yesterday){
   return rows
 }
 
+async function getAsusOrdersCompletedFromDates(today, yesterday){
+  const query = `SELECT * FROM ingramorders_asus WHERE date BETWEEN '${yesterday}T13:00:00' AND '${today}T12:59:00' AND mercadopago_id != ''`
+  // const query = `SELECT * FROM ingramorders_asus WHERE date BETWEEN '${yesterday}T13:00:00' AND '${today}T12:59:00' AND mercadopago_id != ''`
+  // console.log(query)
+  const [rows] = await db.query(query)
+
+  return rows
+}
+
 
 module.exports = {
   getAsusOrders,
   completeAsusOrdersInfo,
-  getAsusOrdersCompleted
+  getAsusOrdersCompleted,
+  getAsusOrdersCompletedFromDates
 }

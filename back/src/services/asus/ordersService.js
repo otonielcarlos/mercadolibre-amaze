@@ -1,6 +1,6 @@
 const {default :axios} = require('axios')
 const {getTodayAndYesterday} = require('../../helpers/getTodayAndYesterday')
-const {getAsusOrders, completeAsusOrdersInfo, getAsusOrdersCompleted} = require('../../database/asus/ordersDB')
+const {getAsusOrders, completeAsusOrdersInfo, getAsusOrdersCompleted, getAsusOrdersCompletedFromDates} = require('../../database/asus/ordersDB')
 const {magentoHeaders} = require('../../headers/magentoHeaders')
 async function updateAllAsusOrdersInfo() {
   try {
@@ -51,7 +51,13 @@ async function getAsusInformationOrders() {
  return await getAsusOrdersCompleted(today, yesterday)
 }
 
+async function getAsusInformationOrdersFromDates(yesterday, today) {
+ return await getAsusOrdersCompletedFromDates(today, yesterday)
+
+}
+
 module.exports = {
   updateAllAsusOrdersInfo,
-  getAsusInformationOrders
+  getAsusInformationOrders,
+  getAsusInformationOrdersFromDates
 }   
