@@ -14,7 +14,7 @@ async function updateAllAsusOrdersInfo() {
       for(let order of all){
         const url =`https://pe.store.asus.com/index.php/rest/V1/orders/${order.order_id}`
         const orderInfo = await axios.get(url, config)
-        const {base_grand_total, items, billing_address, extension_attributes, document_type, document_number, total_item_count} = orderInfo.data
+        const {base_grand_total, items, billing_address, extension_attributes, total_item_count} = orderInfo.data
         const skus = items.map(item => `${item.sku},`).toString()
         const productos = items.map(item => `${item.name},`).toString()
         const mercadopagoInfo = JSON.parse(extension_attributes.payment_additional_info.find(info => info.key === "paymentResponse").value)
