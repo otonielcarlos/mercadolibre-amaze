@@ -7,6 +7,7 @@ const app = express()
 const path = require("path")
 const v1Orders = require('./src/v1/routes/orders')
 const v1Stock = require('./src/v1/routes/stock')
+const v1Delivery = require('./src/v1/routes/delivery')
 const PORT = process.env.PORT || 4000
 
 
@@ -18,7 +19,7 @@ app.set('json spaces', 2)
 
 app.use("/pe/v1/orders", v1Orders)
 app.use("/pe/v1/stock", v1Stock)	
-app.use("/pe/v1/delivery", v1Stock)	
+app.use("/pe/v1/delivery", v1Delivery)	
 
 app.get('/*', (req, res) => {
 	res.sendFile(path.join(__dirname, 'build/index.html'))
