@@ -1,7 +1,10 @@
 
 const { config } = require('dotenv')
 config()
-const {CK , CS, GOPRO_URL} = process.env
+
+async function updateDeliveryInMagento() {
+  
+}
 
 module.exports = {
 

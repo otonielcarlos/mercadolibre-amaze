@@ -19,7 +19,7 @@ app.set('json spaces', 2)
 
 app.use("/pe/v1/orders", v1Orders)
 app.use("/pe/v1/stock", v1Stock)	
-// app.use("/pe/v1/delivery", v1Delivery)	
+app.use("/pe/v1/delivery", v1Delivery)	
 
 app.get('/*', (req, res) => {
 	res.sendFile(path.join(__dirname, 'build/index.html'))

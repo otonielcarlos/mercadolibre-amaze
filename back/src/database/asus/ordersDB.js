@@ -31,11 +31,19 @@ async function getAsusOrdersCompletedFromDates(today, yesterday){
 
   return rows
 }
+async function getAsusEntity(ingramOrder){
+  const query = `SELECT * FROM ingramorders_asus WHERE nv = '${ingramOrder}'`
+
+  const [rows] = await db.query(query)
+
+  return rows
+}
 
 
 module.exports = {
   getAsusOrders,
   completeAsusOrdersInfo,
   getAsusOrdersCompleted,
-  getAsusOrdersCompletedFromDates
+  getAsusOrdersCompletedFromDates,
+  getAsusEntity
 }
