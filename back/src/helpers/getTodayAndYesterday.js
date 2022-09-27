@@ -12,6 +12,17 @@ const today = new Date()
 
 }
 
+function getTodayAndTime() {
+  const saveDate = new Date()
+  saveDate.setHours(saveDate.getHours() - 6)
+  let day = saveDate.toISOString().split('T')[0]
+  let time = saveDate.toISOString().split('T')[1].split('.')[0]
+  // let created_at =  `${day} ${time}`
+
+  return [day, time]
+}
+
 module.exports = {
-  getTodayAndYesterday
+  getTodayAndYesterday,
+  getTodayAndTime
 }
