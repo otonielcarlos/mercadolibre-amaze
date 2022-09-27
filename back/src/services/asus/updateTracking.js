@@ -46,7 +46,7 @@ async function updateTrackingNumberAndStatus({delivery, ingramOrder}){
 							parent_id: order[0].order_id,
 							is_customer_notified: 0,
 							is_visible_on_front: 0,
-							status: 'InTransit',
+							status: 'inTransit',
 						},
 					}
           try {
