@@ -17,7 +17,7 @@ async function statusUpdateAsus({order, status}) {
       status: `${status}`,
     },
   }
-  const orderStatus = await axios.post(postUrl, dataForUpdate, {headers: { 'Authorization': `Bearer ${token}`}})
+  const orderStatus = await axios.post(postUrl, dataForUpdate, { headers: { 'Authorization': `Bearer ${token}` }})
 
   return orderStatus.data
 }

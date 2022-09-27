@@ -1,6 +1,9 @@
+const { getAsusEntity } = require('../../database/asus/ordersDB')
 const usePromise = require('../../helpers/errorHandling')
 const ordersService = require('../../services/asus/ordersService')
+const { statusUpdateAsus } = require('../../services/asus/statusUpdateAsus')
 const {updateTrackingNumberAndStatus} = require('../../services/asus/updateTracking')
+const { getTokenAsus } = require('../../tokens/magento')
 require('dotenv').config()
 const {BEETRACK_AMAZE_CONTACT_ID} = process.env
 
@@ -31,65 +34,113 @@ async function getDelivery(req, res) {
   }
 }
 
+async function completeDelivery(req, res) {
+  try {
+    const {contact_identifier, status, tags} = req.body
 
-module.exports = {
-  getDelivery
+    if(contact_identifier === BEETRACK_AMAZE_CONTACT_ID && status === 2){
+      const isAsus = tags.find(tag => tag.name === "OC").value
+      const OC = isAsus.split('_')[0]
+      if(OC === "ESHOPASUS"){
+        const delivery = tags.find(tag => tag.name === "Delivery").value
+        const ingramOrder = tags.find(tag => tag.name === "Nota de venta").value
+        const order = await getAsusEntity(ingramOrder)
+        await statusUpdateAsus({order: order[0].order_id, status: 'Done'})
+        res.status(200).send()
+      } else{
+        res.status(200).send()
+      }
+    }
+  } catch (error) {
+    console.log(error, 'error in completeDelivery Asus')
+  }
 }
 
 
-// let ex = {
-//   "resource": "dispatch_guide",
-//   "event": "create",
-//   "account_name": "Ingram Micro Peru",
-//   "dispatch_guide": {
-//     "guide": "019-0004745",
-//     "beecode": "c0c5038afef4f0c6a2d10abb",
-//     "identifier": "019-0004745",
-//     "account_id": 2572,
-//     "promised_date": null,
-//     "contact_name": "AMAZE PERU E.I.R.L.",
-//     "contact_phone": "968145213",
-//     "contact_identifier": "20606185775",
-//     "contact_email": null,
-//     "contact_address": "AV 28 DE JULIO 1583 CERCADO DE LIMA, , CERCADO DE LIMA, LIMA"
-//   },
-//   "tags": [
-//     {
-//       "name": "Contacto",
-//       "value": "Cliente"
-//     },
-//     {
-//       "name": "Delivery",
-//       "value": "8091253587"
-//     },
-//     {
-//       "name": "Factura Sap",
-//       "value": "9921542308"
-//     },
-//     {
-//       "name": "Factura Sunat",
-//       "value": "01_F007_0391546"
-//     },
-//     {
-//       "name": "Nota de venta",
-//       "value": "7092260067"
-//     },
-//     {
-//       "name": "OC",
-//       "value": "ESHOPASUS_7000004392"
-//     }
-//   ],
-//   "items": [
-//     {
-//       "id": 680870352,
-//       "name": "E510MA-BR883WS CEL N4020 128GB 4GB WIN11",
-//       "description": "E510MA-BR883WS CEL N4020 128GB 4GB WIN11",
-//       "quantity": 6,
-//       "original_quantity": 6,
-//       "delivered_quantity": 0,
-//       "code": "5447139",
-//       "extras": []
-//     }
-//   ],
-//   "groups": []
-// }
+module.exports = {
+  getDelivery,
+  completeDelivery
+}
+
+
+let reqBody = {
+  "resource": "dispatch",
+  "event": "update",
+  "account_name": "Ingram Micro Peru",
+  "account_id": 2572,
+  "guide": "018-0050742",
+  "identifier": "018-0050742",
+  "route_id": 28971684,
+  "dispatch_id": 460732004,
+  "truck_identifier": "ARZ743",
+  "status": 2,
+  "substatus": "Entrega Conforme",
+  "substatus_code": "",
+  "estimated_at": "2022-09-27T16:17:51.000-05:00",
+  "max_delivery_time": null,
+  "min_delivery_time": null,
+  "is_pickup": false,
+  "is_trunk": false,
+  "locked": false,
+  "contact_name": "CONTRERAS TORRES MARLENE ELODIA",
+  "contact_phone": "954662800",
+  "contact_identifier": "10222833634",
+  "contact_email": "vipalxyz@gmail.com",
+  "contact_address": "AV. BOLIVIA 148 INT. 285F CERDADO DE LIMA, LIMA, LIMA, LIMA",
+  "tags": [
+    {
+      "name": "Contacto",
+      "value": "Cliente"
+    },
+    {
+      "name": "Delivery",
+      "value": "8091577162"
+    },
+    {
+      "name": "Factura Sap",
+      "value": "9921579022"
+    },
+    {
+      "name": "Factura Sunat",
+      "value": "01_F007_0392571"
+    },
+    {
+      "name": "Nota de venta",
+      "value": "7092608933"
+    },
+    {
+      "name": "OC",
+      "value": "12345"
+    }
+  ],
+  "items": [
+    {
+      "id": 682834967,
+      "name": "SSD A400 STANDALONE 480GB 2.5 SATA 3",
+      "description": "SSD A400 STANDALONE 480GB 2.5 SATA 3",
+      "quantity": 3,
+      "original_quantity": 3,
+      "delivered_quantity": 3,
+      "code": "3985831",
+      "extras": []
+    }
+  ],
+  "groups": [],
+  "arrived_at": "2022-09-27 16:17:05-0500",
+  "waypoint": {
+    "latitude": "-12.055802",
+    "longitude": "-77.039358"
+  },
+  "evaluation_answers": [
+    {
+      "_id": {
+        "$oid": "633368541bd6590001ff0b5f"
+      },
+      "cast": "photo",
+      "code": "2bc7a180-e570-0138-5b39-0229ce6ea5a0",
+      "name": "Foto de la guía firmada",
+      "value": "https://cdn.beetrack.com/mobile_evaluations/images/COMP_IMG_20220927_161700_4308005022088392412.jpg",
+      "web": false
+    }
+  ]
+}
