@@ -42,7 +42,6 @@ async function completeDelivery(req, res) {
       const isAsus = tags.find(tag => tag.name === "OC").value
       const OC = isAsus.split('_')[0]
       if(OC === "ESHOPASUS"){
-        const delivery = tags.find(tag => tag.name === "Delivery").value
         const ingramOrder = tags.find(tag => tag.name === "Nota de venta").value
         const order = await getAsusEntity(ingramOrder)
         await statusUpdateAsus({order: order[0].order_id, status: 'Done'})
