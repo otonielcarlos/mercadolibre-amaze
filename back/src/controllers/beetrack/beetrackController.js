@@ -11,7 +11,7 @@ async function getDelivery(req, res) {
     const {dispatch_guide, tags} = req.body
 
     if(dispatch_guide.contact_identifier === BEETRACK_AMAZE_CONTACT_ID){
-
+      console.log(req.body)
       const isAsus = tags.find(tag => tag.name === "OC").value
       const OC = isAsus.split('_')[0]
       if(OC === "ESHOPASUS"){

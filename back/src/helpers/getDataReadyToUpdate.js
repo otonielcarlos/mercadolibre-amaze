@@ -36,7 +36,7 @@ const getDataReadyToUpdate = async(skusForAPI) => {
 
       }
       // console.log(arrayToReturn)
-      console.table(arrayToReturn.filter(item => item.sku !== '').flat())
+      // console.table(arrayToReturn.filter(item => item.sku !== '').flat())
     return arrayToReturn
   } catch (error) {
    console.log('error en prices v6 ingram') 
