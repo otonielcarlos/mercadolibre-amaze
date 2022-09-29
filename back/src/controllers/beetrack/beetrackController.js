@@ -22,7 +22,6 @@ async function getDelivery(req, res) {
         const delivery = tags.find(tag => tag.name === "Delivery").value
         const ingramOrder = tags.find(tag => tag.name === "Nota de venta").value
         await updateTrackingNumberAndStatus({delivery, ingramOrder})
-        res.status(200).send()
       }
     }
     
