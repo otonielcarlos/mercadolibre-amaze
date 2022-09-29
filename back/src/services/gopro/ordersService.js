@@ -7,6 +7,7 @@ const {IngramHeaders} = require('../../headers/ingramHeaders')
 const {getEstado} = require('../../helpers/getEstado')
 const { mercadopagoToken } = require('../../tokens/mercadopago')
 const {getTodayAndYesterday} = require('../../helpers/getTodayAndYesterday')
+const { newGoProOrder } = require('../../database/gopro/ordersDB')
 
 
 const api = new WooCommerceRestApi({
@@ -106,9 +107,17 @@ async function sendProcessingOrders() {
           ]
         }
 
+        let dataForDatabase = {
+          order_id: id,
+          customerpo: data['customerOrderNumber'],
+          nv: ''
+        }
         const config = await IngramHeaders()
        // @ts-ignore
-       await axios.post(INGRAM_ORDER_URL, data, config)
+       const orderIngramRespose = await axios.post(INGRAM_ORDER_URL, data, config)
+       const nv = orderIngramRespose.data.orders[0].ingramOrderNumber
+        dataForDatabase['nv'] = nv
+       await newGoProOrder(dataForDatabase)
       }
         return {"message": "ordenes enviadas"} 
     } else {
