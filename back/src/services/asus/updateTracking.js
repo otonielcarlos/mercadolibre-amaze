@@ -33,7 +33,7 @@ async function updateTrackingNumberAndStatus({delivery, ingramOrder}){
      
           try {
             const sendShip = await axios.post(baseUrl, dataShip,{headers: { 'Authorization': `Bearer ${token}`}})
-            const sendTransit = await statusUpdateAsus({order : order[0].order_id, status: 'inTransit'})
+            const sendTransit = await statusUpdateAsus({order : order[0].order_id, status: 'inTransit', comment: ''})
             console.log(order[0].order_id ,sendShip.data, sendTransit)
             
           } catch (error) {

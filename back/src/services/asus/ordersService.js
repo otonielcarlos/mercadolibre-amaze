@@ -2,6 +2,13 @@ const {default :axios} = require('axios')
 const {getTodayAndYesterday} = require('../../helpers/getTodayAndYesterday')
 const {getAsusOrders, completeAsusOrdersInfo, getAsusOrdersCompleted, getAsusOrdersCompletedFromDates} = require('../../database/asus/ordersDB')
 const {magentoHeaders} = require('../../headers/magentoHeaders')
+
+
+
+
+
+
+
 async function updateAllAsusOrdersInfo() {
   try {
     let arr = []

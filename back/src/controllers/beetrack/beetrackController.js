@@ -12,7 +12,6 @@ async function getDelivery(req, res) {
   res.status(200).send()
   
   try {
-  
     const {dispatch_guide, tags} = req.body
     console.log(req.body)
     if(dispatch_guide.contact_identifier === BEETRACK_AMAZE_CONTACT_ID){
