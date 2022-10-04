@@ -3,12 +3,6 @@ const {getTodayAndYesterday} = require('../../helpers/getTodayAndYesterday')
 const {getAsusOrders, completeAsusOrdersInfo, getAsusOrdersCompleted, getAsusOrdersCompletedFromDates} = require('../../database/asus/ordersDB')
 const {magentoHeaders} = require('../../headers/magentoHeaders')
 
-
-
-
-
-
-
 async function updateAllAsusOrdersInfo() {
   try {
     let arr = []
@@ -35,15 +29,16 @@ async function updateAllAsusOrdersInfo() {
           productos,
           nombre: `${billing_address.firstname} ${billing_address.lastname}`,
           email: `${billing_address.email}`,
+          address: `${billing_address.street[0]}, ${billing_address.city}, ${billing_address.region}, Peru `,
           document_type: extension_attributes.document_type,
-          document_number: extension_attributes.document_number
+          document_number: extension_attributes.document_number,
         }
         arr = [... arr, allInfo]
       }
 
       let query = ''
       arr.forEach(order => {
-        query+= `UPDATE ingramorders_asus SET mercadopago_id = '${order.mercadopago_id}', total_tienda = '${order.total_tienda}', total_mercadopago = '${order.total_mercadopago}', skus = '${order.skus}', cantidad =  ${order.total_item_count}, productos = '${order.productos}',nombre = '${order.nombre}', email = '${order.email}', document_type = '${order.document_type}', document_number = ${order.document_number} WHERE order_id = '${order.order_id}';\n`
+        query+= `UPDATE ingramorders_asus SET mercadopago_id = '${order.mercadopago_id}', total_tienda = '${order.total_tienda}', total_mercadopago = '${order.total_mercadopago}', skus = '${order.skus}', cantidad =  ${order.total_item_count}, productos = '${order.productos}',nombre = '${order.nombre}', email = '${order.email}', direccion = '${order.address}',document_type = '${order.document_type}', document_number = ${order.document_number} WHERE order_id = '${order.order_id}';\n`
       })
       await completeAsusOrdersInfo(query)
       console.log('done')

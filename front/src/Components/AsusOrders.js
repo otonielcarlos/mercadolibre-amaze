@@ -25,6 +25,7 @@ const displayOrders = asusOrders.map((order, key) => {
       <td>{order.productos}</td>
       <td>{order.nombre}</td>
       <td>{order.email}</td>
+      <td>{order.direccion}</td>
       <td>{order.document_type}</td>
       <td>{order.document_number}</td>
     </tr>
@@ -35,7 +36,6 @@ const displayOrders = asusOrders.map((order, key) => {
   return(
   <div className='orders'>
     <InputDates />
-  {/* <h3>Ordenes del {yesterday} 1:00pm PE al {today} 12:59pm PE *** DEMO EN DESARROLLO***</h3> */}
   <table>
     <tbody>
       <tr>
@@ -52,6 +52,7 @@ const displayOrders = asusOrders.map((order, key) => {
         <th>Productos</th>
         <th>Nombre</th>
         <th>Email</th>
+        <th>Dirección</th>
         <th>Documento</th>
         <th>Número</th>
       </tr>
