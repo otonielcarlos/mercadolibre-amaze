@@ -23,13 +23,23 @@ async function getAllAsusOrdersFromDates(req, res) {
 async function updateAsusOrderStatus(req, res) {
   try {
     const {order, status} = req.body
-    await statusUpdateAsus({order, status, comment: 'La factura ha sido enviada a su correo'})
+    await statusUpdateAsus({order, status, comment: ''})
+  } catch (error) {
+    console.log(error, 'error updating factura status')
+  }
+}
+async function updateAsusOrderStatusFactura(req, res) {
+  try {
+    const {order_id} = req.body
+    const isUpdated = await statusUpdateAsus({order: order_id, status: 'InvoiceUploaded', comment: ''})
+    return isUpdated.data
   } catch (error) {
     console.log(error, 'error updating factura status')
   }
 }
 
 module.exports = {
+  updateAsusOrderStatusFactura,
   updateAsusOrderStatus,
   getAllAsusOrders,
   getAllAsusOrdersFromDates

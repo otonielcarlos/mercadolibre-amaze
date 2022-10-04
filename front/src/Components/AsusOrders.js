@@ -2,11 +2,18 @@ import React, {useContext} from 'react'
 import './Orders.css'
 import {Context} from '../Context/Context'
 import {InputDates} from "../Components/InputDates"
+// import {image} from '..'
 // import {getTodayAndYesterday} from '../utils/utils'
 
 function AsusOrders(){
 
+  // const [isButtonDisabled, setIsButtonDisabled] = useState(false)
  const {asusOrders} = useContext(Context)
+
+function onClickButtonDisabled(e) {
+  e.currentTarget.disabled = true
+  console.log('button clicked')
+}
 
 const displayOrders = asusOrders.map((order, key) => {
   const perdida = Number(order.total_tienda) - Number(order.total_mercadopago)
@@ -28,6 +35,7 @@ const displayOrders = asusOrders.map((order, key) => {
       <td>{order.direccion}</td>
       <td>{order.document_type}</td>
       <td>{order.document_number}</td>
+      <td><button onClick={onClickButtonDisabled}><img alt="" src='https://amaze.com.pe/img/confirmation.png' style={{height: 15, width: 15} }></img></button></td>
     </tr>
   )
 })
@@ -55,6 +63,7 @@ const displayOrders = asusOrders.map((order, key) => {
         <th>Dirección</th>
         <th>Documento</th>
         <th>Número</th>
+        <th>Factura</th>
       </tr>
       {displayOrders}
     </tbody>

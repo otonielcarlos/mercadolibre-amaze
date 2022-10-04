@@ -2,6 +2,7 @@ const {default :axios} = require('axios')
 const {getTodayAndYesterday} = require('../../helpers/getTodayAndYesterday')
 const {getAsusOrders, completeAsusOrdersInfo, getAsusOrdersCompleted, getAsusOrdersCompletedFromDates} = require('../../database/asus/ordersDB')
 const {magentoHeaders} = require('../../headers/magentoHeaders')
+const { statusUpdateAsus } = require('./statusUpdateAsus')
 
 async function updateAllAsusOrdersInfo() {
   try {
@@ -57,6 +58,12 @@ async function getAsusInformationOrdersFromDates(yesterday, today) {
  return await getAsusOrdersCompletedFromDates(today, yesterday)
 
 }
+
+// async function updateAsusOrderStatusFactura(order_id) {
+//   const isUpdated = await statusUpdateAsus({order: order_id, status: 'invoiceUpdated', comment: ''})
+
+//   return isUpdated
+// }
 
 module.exports = {
   updateAllAsusOrdersInfo,
