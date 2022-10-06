@@ -2,6 +2,7 @@ import React, {useContext} from 'react'
 import './Orders.css'
 import {Context} from '../Context/Context'
 import {InputDates} from "../Components/InputDates"
+import axios from 'axios'
 // import {image} from '..'
 // import {getTodayAndYesterday} from '../utils/utils'
 
@@ -10,13 +11,32 @@ function AsusOrders(){
   // const [isButtonDisabled, setIsButtonDisabled] = useState(false)
  const {asusOrders} = useContext(Context)
 
-function onClickButtonDisabled(e) {
-  e.currentTarget.disabled = true
-  console.log('button clicked')
+async function onClickButtonDisabled(e) {
+  if(e.currentTarget.disabled) {
+    return
+  } else {
+
+    e.currentTarget.disabled = true
+    e.target.hidden = true
+    let data = {
+      order_id: e.target.className
+    }
+    await axios.post('http://localhost:4000/pe/v1/orders/asus/update/factura', data)
+    console.log(e.target.className)
+    console.log(e)
+
+  }
+  
 }
 
 const displayOrders = asusOrders.map((order, key) => {
   const perdida = Number(order.total_tienda) - Number(order.total_mercadopago)
+
+  const toBoolean = order.disabled === "true"
+
+  let colorButton = toBoolean ? '#198754' : '#DC3545'
+                      
+  // console.log(order.status)
   return (
     <tr key={key}>
       <td>{order.customerpo.toUpperCase()}</td>
@@ -35,7 +55,8 @@ const displayOrders = asusOrders.map((order, key) => {
       <td>{order.direccion}</td>
       <td>{order.document_type}</td>
       <td>{order.document_number}</td>
-      <td><button onClick={onClickButtonDisabled}><img alt="" src='https://amaze.com.pe/img/confirmation.png' style={{height: 15, width: 15} }></img></button></td>
+      <td  ><button disabled={toBoolean} style={{backgroundColor: colorButton}} className={order.order_id} onClick={onClickButtonDisabled} >Actualizar Pedido</button></td>
+      
     </tr>
   )
 })

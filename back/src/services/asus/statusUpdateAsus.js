@@ -2,7 +2,7 @@ const {getTodayAndTime} = require('../../helpers/getTodayAndYesterday')
 const {default: axios} = require('axios')
 const {getTokenAsus} = require('../../tokens/magento')
 
-async function statusUpdateAsus({order, status, comment}) {
+async function statusUpdateAsus({order, status, comment, notify}) {
 
   const token = await getTokenAsus()
   const postUrl = `https://pe.store.asus.com/index.php/rest/V1/orders/${order}/comments`
@@ -12,7 +12,7 @@ async function statusUpdateAsus({order, status, comment}) {
       comment: comment,
       created_at: `${day} ${time}`,
       parent_id: order,
-      is_customer_notified: 0,
+      is_customer_notified: notify,
       is_visible_on_front: 0,
       status: `${status}`,
     },

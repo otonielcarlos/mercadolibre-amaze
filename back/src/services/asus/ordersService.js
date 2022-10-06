@@ -1,6 +1,6 @@
 const {default :axios} = require('axios')
 const {getTodayAndYesterday} = require('../../helpers/getTodayAndYesterday')
-const {getAsusOrders, completeAsusOrdersInfo, getAsusOrdersCompleted, getAsusOrdersCompletedFromDates} = require('../../database/asus/ordersDB')
+const {getAsusOrders, completeAsusOrdersInfo, getAsusOrdersCompleted, getAsusOrdersCompletedFromDates, updateFacturaStatus} = require('../../database/asus/ordersDB')
 const {magentoHeaders} = require('../../headers/magentoHeaders')
 const { statusUpdateAsus } = require('./statusUpdateAsus')
 
@@ -10,9 +10,11 @@ async function updateAllAsusOrdersInfo() {
     const [today, yesterday] = getTodayAndYesterday()
     const config = await magentoHeaders()
     const all = await getAsusOrders(today, yesterday)
+    // @ts-ignore
     if(!all.length){
       console.log('nada por actualizar en Asus orders')
     } else {
+      // @ts-ignore
       for(let order of all){
         const url =`https://pe.store.asus.com/index.php/rest/V1/orders/${order.order_id}`
         const orderInfo = await axios.get(url, config)
@@ -59,13 +61,16 @@ async function getAsusInformationOrdersFromDates(yesterday, today) {
 
 }
 
-// async function updateAsusOrderStatusFactura(order_id) {
-//   const isUpdated = await statusUpdateAsus({order: order_id, status: 'invoiceUpdated', comment: ''})
+async function updateAsusOrderStatusFactura(order_id) {
+  const isUpdated = await statusUpdateAsus({order: order_id, status: 'invoiceUpdated', comment: 'Factura Enviada al correo ', notify: 1})
+  const isDisable = await updateFacturaStatus(order_id)
+  return 
+}
 
-//   return isUpdated
-// }
 
+// updateAllAsusOrdersInfo()
 module.exports = {
+  updateAsusOrderStatusFactura,
   updateAllAsusOrdersInfo,
   getAsusInformationOrders,
   getAsusInformationOrdersFromDates

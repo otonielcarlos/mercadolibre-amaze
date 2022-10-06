@@ -40,10 +40,17 @@ async function getAsusEntity(ingramOrder){
 }
 
 
+async function updateFacturaStatus(order_id) {
+const query = `UPDATE ingramorders_asus SET disabled = 'true' WHERE order_id = '${order_id}'`
+
+await db.query(query)
+}
+
 module.exports = {
   getAsusOrders,
   completeAsusOrdersInfo,
   getAsusOrdersCompleted,
   getAsusOrdersCompletedFromDates,
-  getAsusEntity
+  getAsusEntity,
+  updateFacturaStatus
 }
