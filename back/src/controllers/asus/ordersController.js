@@ -34,8 +34,7 @@ async function updateAsusOrderStatusFactura(req, res) {
     const {order_id} = req.body
     console.log(req.body, order_id)
     await ordersService.updateAsusOrderStatusFactura(order_id)
-    // const isUpdated = await statusUpdateAsus({order: order_id, status: 'InvoiceUploaded', comment: ''})
-    // return isUpdated.data
+    
   } catch (error) {
     console.log(error, 'error updating factura status')
   }
