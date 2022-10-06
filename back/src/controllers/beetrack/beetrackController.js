@@ -41,7 +41,7 @@ async function completeDelivery(req, res) {
         const ingramOrder = tags.find(tag => tag.name === "Nota de venta").value
         const order = await getAsusEntity(ingramOrder)
         console.log('entregado Asus pedido', order[0].order_id)
-        await statusUpdateAsus({order: order[0].order_id, status: 'Done', comment: 'Tu pedido ha sido entregado', notify: 0})
+        await statusUpdateAsus({order: order[0].order_id, status: 'Done', comment: 'Tu pedido ha sido entregado', notify: 1})
         
       } 
     }
