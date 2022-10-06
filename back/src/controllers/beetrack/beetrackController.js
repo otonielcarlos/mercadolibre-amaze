@@ -20,7 +20,7 @@ async function getDelivery(req, res) {
       if(OC === "ESHOPASUS"){
         const delivery = tags.find(tag => tag.name === "Delivery").value
         const ingramOrder = tags.find(tag => tag.name === "Nota de venta").value
-        await updateTrackingNumberAndStatus({delivery, ingramOrder})
+        await updateTrackingNumberAndStatus({delivery: delivery, ingramOrder: ingramOrder, comment: `Guía de rastreo para tu pedido: ${delivery}`, notify: 1})
       }
     }
     
@@ -40,7 +40,7 @@ async function completeDelivery(req, res) {
       if(OC === "ESHOPASUS"){
         const ingramOrder = tags.find(tag => tag.name === "Nota de venta").value
         const order = await getAsusEntity(ingramOrder)
-        await statusUpdateAsus({order: order[0].order_id, status: 'Done'})
+        await statusUpdateAsus({order: order[0].order_id, status: 'Done', comment: 'Pedido entregado', notify: 0})
         
       } 
     }

@@ -1,50 +1,69 @@
 const { statusUpdateAsus } = require('./statusUpdateAsus')
 const {updateTrackingNumberAndStatus} = require('./updateTracking')
-const orders =[{delivery: '8090483682',	ingramOrder:	'7091351288'},
-{delivery: '8090483683',	ingramOrder:	'7091441755'},
-{delivery: '8090479593',	ingramOrder:	'7091452763'},
-{delivery: '8090419761',	ingramOrder:	'7091454772'},
-{delivery: '8090193667',	ingramOrder:	'7091463796'},
-{delivery: '8090265168',	ingramOrder:	'7091483463'},
-{delivery: '8090265170',	ingramOrder:	'7091485939'},
-{delivery: '8090601745',	ingramOrder:	'7091520803'},
-{delivery: '8090600358',	ingramOrder:	'7091526298'},
-{delivery: '8090601139',	ingramOrder:	'7091536011'},
-{delivery: '8090602286',	ingramOrder:	'7091562183'},
-{delivery: '8090651986',	ingramOrder:	'7091500568'},
-{delivery: '8090649947',	ingramOrder:	'7091610565'},
-{delivery: '8090649434',	ingramOrder:	'7091611788'},
-{delivery: '8090649435',	ingramOrder:	'7091611920'},
-{delivery: '8090649948',	ingramOrder:	'7091624727'},
-{delivery: '8090706734',	ingramOrder:	'7091661576'},
-{delivery: '8090599211',	ingramOrder:	'7091684850'},
-{delivery: '8090806646',	ingramOrder:	'7091775388'},
-{delivery: '8090733848',	ingramOrder:	'7091717004'},
-{delivery: '8090910326',	ingramOrder:	'7091820126'},
-{delivery: '8090910327',	ingramOrder:	'7091825826'},
-{delivery: '8090733851',	ingramOrder:	'7091832241'},
-{delivery: '8090910328',	ingramOrder:	'7091834070'},
-{delivery: '8090880434',	ingramOrder:	'7091872924'},
-{delivery: '8090925500',	ingramOrder:	'7091942889'},
-{delivery: '8090926225',	ingramOrder:	'7091968788'},
-{delivery: '8091060646',	ingramOrder:	'7092071181'},
-{delivery: '8090507290',	ingramOrder:	'7092108922'},
-{delivery: '8090507291',	ingramOrder:	'7092121234'},
-{delivery: '8091146768',	ingramOrder:	'7092122155'},
-{delivery: '8091224782',	ingramOrder:	'7092123947'},
-{delivery: '8091224783',	ingramOrder:	'7092146386'},
-{delivery: '8091228212',	ingramOrder:	'7092157611'},
-{delivery: '8091107896',	ingramOrder:	'7092244729'},
-{delivery: '8091260965',	ingramOrder:	'7092251868'},
-{delivery: '8091260966',	ingramOrder:	'7092289274'},
-{delivery: '8091242878',	ingramOrder:	'7092289840'},
-{delivery: '8091260967',	ingramOrder:	'7092293618'},
-{delivery: '8091329658',	ingramOrder:	'7092282709'}]
+const orders =[
+  {delivery: '8090483682',	ingramOrder: '7091351288'},
+  {delivery: '8090483683',	ingramOrder: '7091441755'},
+  {delivery: '8090479593',	ingramOrder: '7091452763'},
+  {delivery: '8090419761',	ingramOrder: '7091454772'},
+  {delivery: '8090193667',	ingramOrder: '7091463796'},
+  {delivery: '8090265168',	ingramOrder: '7091483463'},
+  {delivery: '8090265170',	ingramOrder: '7091485939'},
+  {delivery: '8090601745',	ingramOrder: '7091520803'},
+  {delivery: '8090600358',	ingramOrder: '7091526298'},
+  {delivery: '8090601139',	ingramOrder: '7091536011'},
+  {delivery: '8090602286',	ingramOrder: '7091562183'},
+  {delivery: '8090651986',	ingramOrder: '7091500568'},
+  {delivery: '8090649947',	ingramOrder: '7091610565'},
+  {delivery: '8090649434',	ingramOrder: '7091611788'},
+  {delivery: '8090649435',	ingramOrder: '7091611920'},
+  {delivery: '8090649948',	ingramOrder: '7091624727'},
+  {delivery: '8090706734',	ingramOrder: '7091661576'},
+  {delivery: '8090599211',	ingramOrder: '7091684850'},
+  {delivery: '8090806646',	ingramOrder: '7091775388'},
+  {delivery: '8090733848',	ingramOrder: '7091717004'},
+  {delivery: '8090910326',	ingramOrder: '7091820126'},
+  {delivery: '8090910327',	ingramOrder: '7091825826'},
+  {delivery: '8090733851',	ingramOrder: '7091832241'},
+  {delivery: '8090910328',	ingramOrder: '7091834070'},
+  {delivery: '8090880434',	ingramOrder: '7091872924'},
+  {delivery: '8090925500',	ingramOrder: '7091942889'},
+  {delivery: '8090926225',	ingramOrder: '7091968788'},
+  {delivery: '8091060646',	ingramOrder: '7092071181'},
+  {delivery: '8090507290',	ingramOrder: '7092108922'},
+  {delivery: '8090507291',	ingramOrder: '7092121234'},
+  {delivery: '8091146768',	ingramOrder: '7092122155'},
+  {delivery: '8091224782',	ingramOrder: '7092123947'},
+  {delivery: '8091224783',	ingramOrder: '7092146386'},
+  {delivery: '8091228212',	ingramOrder: '7092157611'},
+  {delivery: '8091107896',	ingramOrder: '7092244729'},
+  {delivery: '8091260965',	ingramOrder: '7092251868'},
+  {delivery: '8091260966',	ingramOrder: '7092289274'},
+  {delivery: '8091242878',	ingramOrder: '7092289840'},
+  {delivery: '8091260967',	ingramOrder: '7092293618'},
+  {delivery: '8091329658',	ingramOrder: '7092282709'},
+  {delivery: '8091322149',	ingramOrder: '7092316519'},
+  {delivery: '8091363083',	ingramOrder: '7092355549'},
+  {delivery: '8090838989',	ingramOrder: '7092389037'},
+  {delivery: '8091419672',	ingramOrder: '7092390522'},
+  {delivery: '8091468515',	ingramOrder: '7092463322'},
+  {delivery: '8091516329',	ingramOrder: '7092515258'},
+  {delivery: '8091468516',	ingramOrder: '7092523889'},
+  {delivery: '8091564587',	ingramOrder: '7092574000'},
+  {delivery: '8091649915',	ingramOrder: '7092600649'},
+  {delivery: '8091578882',	ingramOrder: '7092609085'},
+  {delivery: '8091564571',	ingramOrder: '7092624160'},
+  {delivery: '8091654542',	ingramOrder: '7092628900'},
+  {delivery: '8091585148',	ingramOrder: '7092660586'},
+  {delivery: '8091711657',	ingramOrder: '7092702911'},
+  {delivery: '8091697001',	ingramOrder: '7092730229'},
+  {delivery: '8091734932',	ingramOrder: '7092735628'},
+  {delivery: '8091662428',	ingramOrder: '7092759447'},
+]
 async function manualUpdate() {
   for(let order of orders) {
     try {
       const {delivery, ingramOrder} = order
-      await updateTrackingNumberAndStatus({delivery: delivery, ingramOrder: ingramOrder})
+      await updateTrackingNumberAndStatus({delivery: delivery, ingramOrder: ingramOrder, comment:`Número de rastreo de tu pedido ${delivery}`, notify: 1})
 
     } catch (error) {
       console.log(error)
@@ -52,7 +71,7 @@ async function manualUpdate() {
   }
 
 }
-
+manualUpdate()
 const doneOrders = [
 {order: '11260', status: 'Done'},
 {order: '11254', status: 'Done'},
@@ -95,17 +114,17 @@ const doneOrders = [
 {order: '11838', status: 'Done'},
 {order: '11851', status: 'Done'}]
 
-async function manualUpdateDone() {
-  for(let or of doneOrders) {
-    try {
-      const {order, status} = or
-      await statusUpdateAsus({order: order, status: status})
+// async function manualUpdateDone() {
+//   for(let or of doneOrders) {
+//     try {
+//       const {order, status} = or
+//       await statusUpdateAsus({order: order, status: status})
 
-    } catch (error) {
-      console.log(error)
-    }
-  }
+//     } catch (error) {
+//       console.log(error)
+//     }
+//   }
 
-}
+// }
 
-manualUpdateDone()
+// manualUpdateDone()

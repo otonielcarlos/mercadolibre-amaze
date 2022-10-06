@@ -4,7 +4,7 @@ const {getAsusEntity} = require('../../database/asus/ordersDB')
 const {getTokenAsus} = require('../../tokens/magento')
 const {statusUpdateAsus} = require('./statusUpdateAsus')
 
-async function updateTrackingNumberAndStatus({delivery, ingramOrder}){
+async function updateTrackingNumberAndStatus({delivery, ingramOrder, comment, notify}){
   try {
   
   const token = await getTokenAsus()
@@ -30,10 +30,10 @@ async function updateTrackingNumberAndStatus({delivery, ingramOrder}){
                 }
               ]          
           }
-     
+     console.log(dataShip)
           try {
             const sendShip = await axios.post(baseUrl, dataShip,{headers: { 'Authorization': `Bearer ${token}`}})
-            const sendTransit = await statusUpdateAsus({order : order[0].order_id, status: 'inTransit', comment: '', notify: 0})
+            const sendTransit = await statusUpdateAsus({order : order[0].order_id, status: 'inTransit', comment: comment, notify: notify})
             console.log(order[0].order_id ,sendShip.data, sendTransit)
             
           } catch (error) {
