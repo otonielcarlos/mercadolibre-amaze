@@ -62,8 +62,8 @@ async function getAsusInformationOrdersFromDates(yesterday, today) {
 }
 
 async function updateAsusOrderStatusFactura(order_id) {
-  // await statusUpdateAsus({order: order_id, status: 'InvoiceUploaded', comment: 'Factura Enviada al correo ', notify: 0})
   await updateFacturaStatus(order_id)
+  await statusUpdateAsus({order: order_id, status: 'InvoiceUploaded', comment: 'Factura Enviada al correo ', notify: 0})
 
 }
 
