@@ -21,7 +21,7 @@ async function onClickButtonDisabled(e) {
     let data = {
       order_id: e.target.className
     }
-    await axios.post('http://localhost:4000/pe/v1/orders/asus/update/factura', data)
+    await axios.post('https://appleamaze.herokuapp.com/pe/v1/orders/asus/update/factura', data)
     console.log(e.target.className)
     console.log(e)
 
