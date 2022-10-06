@@ -62,7 +62,7 @@ async function getAsusInformationOrdersFromDates(yesterday, today) {
 }
 
 async function updateAsusOrderStatusFactura(order_id) {
-  const isUpdated = await statusUpdateAsus({order: order_id, status: 'invoiceUpdated', comment: 'Factura Enviada al correo ', notify: 1})
+  const isUpdated = await statusUpdateAsus({order: order_id, status: 'InvoiceUploaded', comment: 'Factura Enviada al correo ', notify: 1})
   const isDisable = await updateFacturaStatus(order_id)
   return 
 }
