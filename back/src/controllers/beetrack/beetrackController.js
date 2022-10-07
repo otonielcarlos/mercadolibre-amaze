@@ -1,8 +1,10 @@
 const { getAsusEntity } = require('../../database/asus/ordersDB')
+const { lookGoProOrder } = require('../../database/gopro/ordersDB')
 const usePromise = require('../../helpers/errorHandling')
 const ordersService = require('../../services/asus/ordersService')
 const { statusUpdateAsus } = require('../../services/asus/statusUpdateAsus')
 const {updateTrackingNumberAndStatus} = require('../../services/asus/updateTracking')
+const { deliveryGoProUpdate } = require('../../services/gopro/ordersService')
 const { getTokenAsus } = require('../../tokens/magento')
 require('dotenv').config()
 const {BEETRACK_AMAZE_CONTACT_ID} = process.env
@@ -21,6 +23,11 @@ async function getDelivery(req, res) {
         const delivery = tags.find(tag => tag.name === "Delivery").value
         const ingramOrder = tags.find(tag => tag.name === "Nota de venta").value
         await updateTrackingNumberAndStatus({delivery: delivery, ingramOrder: ingramOrder, comment: `Guía de rastreo para tu pedido: ${delivery}`, notify: 1})
+      } else if(OC === "ULTIMAMILLA") {
+        const ingramOrder = tags.find(tag => tag.name === "Nota de venta").value
+        const delivery = tags.find(tag => tag.name === "Delivery").value
+        const order = await lookGoProOrder(ingramOrder)
+        await deliveryGoProUpdate({order: order[0].order_id, dispatcher: dispatch_guide.guide, delivery: delivery})
       }
     }
     

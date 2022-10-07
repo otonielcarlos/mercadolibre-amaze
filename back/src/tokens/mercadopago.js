@@ -23,20 +23,8 @@ async function mercadopagoToken (isGoPro = true) {
 		} catch (error) {
 			console.log(error.response.data)
 		}
-	} else {
-	// 	try {
-	// 		const tokenData = await axios.post('https://api.mercadolibre.com/oauth/token', bodyMultimarcas, {
-	// 			headers: {
-	// 				Accept: 'application/json',
-	// 				'content-type': 'application/x-www-form-urlencoded',
-	// 			},
-	// 		})
-	// 		const token = tokenData.data.access_token
-	// 		console.log('token multimarcas')
-	// 		return token
-	// 	} catch (error) {
-	// 		console.log(error.response)
-	// 	}
-	}	
+	}
 }
+
+
 module.exports = {mercadopagoToken}
