@@ -7,7 +7,7 @@ const {IngramHeaders} = require('../../headers/ingramHeaders')
 const {getEstado} = require('../../helpers/getEstado')
 const { mercadopagoToken } = require('../../tokens/mercadopago')
 const {getTodayAndYesterday} = require('../../helpers/getTodayAndYesterday')
-const { newGoProOrder } = require('../../database/gopro/ordersDB')
+const { newGoProOrder, updateDeliveryGoPro, getGoProOrdersFromDB, updateOrderGoProInDB } = require('../../database/gopro/ordersDB')
 
 
 const api = new WooCommerceRestApi({
@@ -29,7 +29,7 @@ async function sendProcessingOrders() {
       for(let order of orders.data){
         const {id} = order
         await api.put(`orders/${id}`, updateOrder)
-        const {first_name, last_name, address_1, address_2, departamento, provincia, distrito} = order.shipping
+        const {first_name, last_name, address_1, address_2, departamento, provincia, distrito, date_created} = order.shipping
         const name = `${first_name} ${last_name}`
         const {phone} = order.billing
 
@@ -107,10 +107,13 @@ async function sendProcessingOrders() {
           ]
         }
 
+        const [fecha, hora] = date_created.split('T')
+
         let dataForDatabase = {
           order_id: id,
           customerpo: data['customerOrderNumber'],
-          nv: ''
+          nv: '',
+          date: `${fecha} ${hora}`
         }
         const config = await IngramHeaders()
        // @ts-ignore
@@ -129,74 +132,46 @@ async function sendProcessingOrders() {
   }
 }
 
-async function getGoProOrders() {
-  try {
-    const [today, yesterday] = getTodayAndYesterday()
-    const orders = await api.get('orders', {'status':'completed', 'after': `${yesterday}T13:00:00`, 'before': `${today}T12:59:00`})
-    const ingramConfig = await IngramHeaders()
-    const results = orders.data.map(order => {
-      const {id, shipping, billing, line_items, meta_data, total} = order
-      const transactionId = meta_data.find(meta=> meta.key === "_Mercado_Pago_Payment_IDs").value
-      const  [documento, valor] = meta_data
+async function updateGoProOrdersInfo() {
+  const tokenmp = await mercadopagoToken(true)
+  const orders = await getGoProOrdersFromDB()
+  // @ts-ignore
+  for(let order of orders) {
+    try {
+        let query = ''
+        const orderFromGoPro = await api.get(`orders/${order.order_id}`)
+        const {id, date_created, billing, meta_data, line_items, total} = orderFromGoPro.data
+        const documento = meta_data.find(meta => meta.key === "billing_tipo_documento").value
+        const document_number = meta_data.find(meta => meta.key === "billing_documento").value
+        const mercadopago_id = meta_data.find(meta => meta.key === "_Mercado_Pago_Payment_IDs").value.split(',').pop().trim()
+        const name = `${billing.first_name} ${billing.last_name}`
+        const direccion = `${billing.address_1} ${billing.address_2}, ${billing.distrito}, ${billing.provincia}, ${billing.departamento}, Perú. T: ${billing.phone}`
+        const skus = line_items.map(item => `${item.sku}`).join()
+        const qty = line_items.map(item => item.quantity).reduce((curr, total) => curr + total, 0)
+        const productNames = line_items.map(item => `${item.name}`).join()
+        const email = billing.email
+        const mercadopagoPayment = await axios.get(`https://api.mercadopago.com/v1/payments/${mercadopago_id}`, {headers: {'Authorization': `Bearer ${tokenmp}`}})
+        const netAmout  = mercadopagoPayment.data.transaction_details.net_received_amount
 
-      const productLists = line_items.map(line =>  {
-        return {
-          sku: line.sku,
-          name: line.name,
-          qty: line.quantity,
-        }
-      })
-      return {
-        'oc': `ULTIMAMILLA_${id}`, 
-        mpTransaction: transactionId,
-        storeTotal: Number(total),
-        nombre: `${shipping.first_name} ${shipping.last_name}`, 
-        correo: billing.email,
-        documento: documento.value,
-        numero: valor.value,
-        products: productLists,
+        query = `UPDATE gopro_orders SET mercadopago_id = '${mercadopago_id}', date = '${date_created}', total_tienda = '${total}', total_mp = '${netAmout}', quantity = ${qty}, skus = '${skus}', product_names = '${productNames}', name = '${name}', email = '${email}', address = '${direccion}', document_type = '${documento}', document_number = '${document_number}' WHERE order_id = '${id}';`
 
-      }
-    })
+        console.log(query)
+        await updateOrderGoProInDB(query)
 
-
-    const withIngramOrderNumber = results.map(async (order) => {
-      const url = `https://api.ingrammicro.com:443/resellers/v6/orders/search?customerOrderNumber=${order.oc}`
-      const ingramData = await axios.get(url, ingramConfig)
-      const {orders} = ingramData.data   //(order => order.subOrders.filter(sub => sub.subOrderStatus !== "REJECTED"))
-      const {subOrderNumber, subOrderTotal} = orders.map(subOrder => subOrder.subOrders)
-                        .filter(suborder => suborder.subOrderStatus !== "REJECTED")[0][0]
-      const data = {
-        ...order,
-        ingramOrder: subOrderNumber,
-        ingramTotal: subOrderTotal
-      }
-      
-      return data
-    })
-    const allOrdersWithIngram = await Promise.all(withIngramOrderNumber)
-    const allOrdersWithMercadopago = []
-    for(let order of allOrdersWithIngram){
-      try {
-        const url = `https://api.mercadopago.com/v1/payments/${order.mpTransaction}`
-        const token = await mercadopagoToken(true)
-        const config = {headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}`}}
-        const mercadopagoOrder = await axios.get(url, config)
-        const details = mercadopagoOrder.data.transaction_details
-        allOrdersWithMercadopago.push({
-          ...order,
-          mercadopago_neto: details.net_received_amount
-        })
       } catch (error) {
-        console.log(error.response.data)
+        console.log(error)
       }
     }
-    return allOrdersWithMercadopago
-  } catch (error) {
-    console.log(error)
-  }
 }
+
+async function deliveryGoProUpdate({order, dispatcher, delivery}) {
+  await updateDeliveryGoPro({order, dispatcher, delivery})
+}
+
+
+updateGoProOrdersInfo()
 module.exports = {
   sendProcessingOrders,
-  getGoProOrders
+  updateGoProOrdersInfo,
+  deliveryGoProUpdate
 }
