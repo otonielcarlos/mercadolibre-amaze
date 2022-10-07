@@ -106,7 +106,7 @@ async function sendProcessingOrders() {
               }
           ]
         }
-
+        console.log(data)
         const [fecha, hora] = date_created.split('T')
 
         let dataForDatabase = {
@@ -118,6 +118,7 @@ async function sendProcessingOrders() {
         const config = await IngramHeaders()
        // @ts-ignore
        const orderIngramRespose = await axios.post(INGRAM_ORDER_URL, data, config)
+       console.log(orderIngramRespose.data)
        const nv = orderIngramRespose.data.orders[0].ingramOrderNumber
         dataForDatabase['nv'] = nv
        await newGoProOrder(dataForDatabase)
