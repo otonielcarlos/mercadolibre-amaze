@@ -2,6 +2,7 @@ const usePromise = require('../../helpers/errorHandling')
 const ordersService = require('../../services/gopro/ordersService')
 
 async function sendProcessingOrdersToIM(req, res) {
+  console.log(req.body)
   const [data, error] = await usePromise(ordersService.sendProcessingOrders)
   res.status(200).json(data)
 }
