@@ -86,7 +86,7 @@ async function sendProcessingOrders() {
               "contact": `${name.substring(0,34)}`,
               "companyName": `${name.substring(0,34)}`,
               "name1": `${name.substring(0,34)}`,
-              "addressLine1": `${addressLine1}`,
+              "addressLine1": `${addressLine1.substring(0,34)}`,
               "addressLine2": `${addressLine2.substring(0,34)}`,
               "addressLine3": `${phone}`,
               "addressLine4": `${provincia.substring(0,9)}`,
@@ -121,7 +121,7 @@ async function sendProcessingOrders() {
        console.log(orderIngramRespose.data)
        const nv = orderIngramRespose.data.orders[0].ingramOrderNumber
         dataForDatabase['nv'] = nv
-       await newGoProOrder(dataForDatabase)
+       await newGoProOrder({order_id: dataForDatabase.order_id, customerpo: dataForDatabase.customerpo, nv: dataForDatabase.nv, date: dataForDatabase.date})
       }
         return {"message": "ordenes enviadas"} 
     } else {
