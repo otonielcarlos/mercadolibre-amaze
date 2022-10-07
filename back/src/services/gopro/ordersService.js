@@ -106,7 +106,7 @@ async function sendProcessingOrders() {
               }
           ]
         }
-        console.log(data)
+        // console.log(data)
 
         let dataForDatabase = {
           order_id: id,
@@ -118,7 +118,7 @@ async function sendProcessingOrders() {
         const config = await IngramHeaders()
        // @ts-ignore
        const orderIngramRespose = await axios.post(INGRAM_ORDER_URL, data, config)
-       console.log(orderIngramRespose.data)
+      //  console.log(orderIngramRespose.data)
        const nv = orderIngramRespose.data.orders[0].ingramOrderNumber
         dataForDatabase['nv'] = nv
        await newGoProOrder({order_id: dataForDatabase.order_id, customerpo: dataForDatabase.customerpo, nv: dataForDatabase.nv, date: dataForDatabase.date})
