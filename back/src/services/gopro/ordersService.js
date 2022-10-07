@@ -107,14 +107,14 @@ async function sendProcessingOrders() {
           ]
         }
         console.log(data)
-        const [fecha, hora] = date_created.split('T')
 
         let dataForDatabase = {
           order_id: id,
           customerpo: data['customerOrderNumber'],
           nv: '',
-          date: `${fecha} ${hora}`
+          date: date_created
         }
+        console.log(dataForDatabase)
         const config = await IngramHeaders()
        // @ts-ignore
        const orderIngramRespose = await axios.post(INGRAM_ORDER_URL, data, config)
