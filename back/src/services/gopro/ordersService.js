@@ -168,10 +168,15 @@ async function deliveryGoProUpdate({order, dispatcher, delivery}) {
   await updateDeliveryGoPro({order, dispatcher, delivery})
 }
 
+async function getGoProOrders() {
+  const [today, yesterday] = getTodayAndYesterday()
+  return await getGoProOrdersFromDB(today, yesterday)
+}
 
-updateGoProOrdersInfo()
+
 module.exports = {
   sendProcessingOrders,
   updateGoProOrdersInfo,
-  deliveryGoProUpdate
+  deliveryGoProUpdate,
+  getGoProOrders
 }
