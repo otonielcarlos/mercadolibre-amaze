@@ -2,7 +2,7 @@
 import React, {useContext} from 'react'
 import {Context} from '../Context/Context'
 
-function InputDates(){
+function InputDates(marca){
 
   const {onChangeDate, setDateForSearch, rangeDate} = useContext(Context)
   const {from, to} = rangeDate

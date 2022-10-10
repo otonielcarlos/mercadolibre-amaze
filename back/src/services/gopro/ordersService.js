@@ -7,7 +7,7 @@ const {IngramHeaders} = require('../../headers/ingramHeaders')
 const {getEstado} = require('../../helpers/getEstado')
 const { mercadopagoToken } = require('../../tokens/mercadopago')
 const {getTodayAndYesterday} = require('../../helpers/getTodayAndYesterday')
-const { newGoProOrder, updateDeliveryGoPro, getGoProOrdersFromDB, updateOrderGoProInDB } = require('../../database/gopro/ordersDB')
+const { newGoProOrder, updateDeliveryGoPro, getGoProOrdersFromDB, updateOrderGoProInDB, getGoProOrdersFromDates } = require('../../database/gopro/ordersDB')
 
 
 const api = new WooCommerceRestApi({
@@ -154,7 +154,7 @@ async function updateGoProOrdersInfo() {
         const mercadopagoPayment = await axios.get(`https://api.mercadopago.com/v1/payments/${mercadopago_id}`, {headers: {'Authorization': `Bearer ${tokenmp}`}})
         const netAmout  = mercadopagoPayment.data.transaction_details.net_received_amount
 
-        query = `UPDATE gopro_orders SET mercadopago_id = '${mercadopago_id}', date = '${date_created}', total_tienda = '${total}', total_mp = '${netAmout}', quantity = ${qty}, skus = '${skus}', product_names = '${productNames}', name = '${name}', email = '${email}', address = '${direccion}', document_type = '${documento}', document_number = '${document_number}' WHERE order_id = '${id}';`
+        query = `UPDATE gopro_orders SET mercadopago_id = '${mercadopago_id}', date = '${date_created}', total_tienda = '${total}', total_mercadopago = '${netAmout}', cantidad = ${qty}, skus = '${skus}', productos = '${productNames}', nombre = '${name}', email = '${email}', direccion = '${direccion}', document_type = '${documento}', document_number = '${document_number}' WHERE order_id = '${id}';`
 
         console.log(query)
         await updateOrderGoProInDB(query)
@@ -169,10 +169,14 @@ async function deliveryGoProUpdate({order, dispatcher, delivery}) {
   await updateDeliveryGoPro({order, dispatcher, delivery})
 }
 
+async function getGoProOrders(yesterday,today) {
+  return await getGoProOrdersFromDates(yesterday, today)
+}
 
-updateGoProOrdersInfo()
+
 module.exports = {
   sendProcessingOrders,
   updateGoProOrdersInfo,
-  deliveryGoProUpdate
+  deliveryGoProUpdate,
+  getGoProOrders
 }
