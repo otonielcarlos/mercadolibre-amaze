@@ -10,7 +10,14 @@ async function newGoProOrder({order_id, customerpo, nv, date}){
   return rows
 }
 async function getGoProOrdersFromDB(today, yesterday){
-  const query = `SELECT * FROM gopro_orders WHERE date BETWEEN '${yesterday}T13:00:00' AND '${today}T12:59:00' AND mercadopago_id IS NULL or mercadopago_id = ''`
+  // const query = `SELECT * FROM gopro_orders WHERE date BETWEEN '${yesterday}T13:00:00' AND '${today}T12:59:00' AND mercadopago_id IS NULL or mercadopago_id = ''`
+  const query = `SELECT * FROM gopro_orders WHERE mercadopago_id IS NULL or mercadopago_id = ''`
+  const [rows] = await db.query(query)
+
+  return rows
+}
+async function getGoProOrdersFromDates(yesterday, today){
+  const query = `SELECT * FROM gopro_orders WHERE date BETWEEN '${yesterday}T13:00:00' AND '${today}T12:59:00' AND mercadopago_id IS NOT NULL`
   // const query = `SELECT * FROM gopro_orders WHERE mercadopago_id IS NULL or mercadopago_id = ''`
   const [rows] = await db.query(query)
 
@@ -40,5 +47,6 @@ module.exports = {
   newGoProOrder,
   getGoProOrdersFromDB,
   lookGoProOrder,
-  updateOrderGoProInDB
+  updateOrderGoProInDB,
+  getGoProOrdersFromDates
 }
