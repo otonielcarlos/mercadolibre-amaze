@@ -58,7 +58,7 @@ const displayOrders = goproOrders.map((order, key) => {
 
   return(
   <div className='orders'>
-    <InputDates />
+    <InputDates marca="gopro"/>
   <table>
     <tbody>
       <tr>

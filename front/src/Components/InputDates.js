@@ -2,7 +2,7 @@
 import React, {useContext} from 'react'
 import {Context} from '../Context/Context'
 
-function InputDates(marca){
+function InputDates({marca}){
 
   const {onChangeDate, setDateForSearch, rangeDate} = useContext(Context)
   const {from, to} = rangeDate
@@ -20,7 +20,7 @@ function InputDates(marca){
       min="2022-01-01" max={to}
       onChange={onChangeDate}
       />
-      <button className='button-6' onClick={setDateForSearch}> Buscar</button>
+      <button className='button-6' onClick={() => setDateForSearch(marca)}> Buscar</button>
   </>)
 
 }

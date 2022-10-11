@@ -64,7 +64,7 @@ const displayOrders = asusOrders.map((order, key) => {
 
   return(
   <div className='orders'>
-    <InputDates />
+    <InputDates marca="asus"/>
   <table>
     <tbody>
       <tr>
