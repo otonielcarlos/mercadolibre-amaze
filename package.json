@@ -24,7 +24,7 @@
     "mocha": "^9.0.2",
     "mysql2": "^2.3.3",
     "nodejs-file-downloader": "^4.9.3",
-    "nodemailer": "^6.6.3",
+    "nodemailer": "^6.8.0",
     "nodemon": "^2.0.7",
     "pdfkit": "^0.13.0",
     "supertest": "^6.1.3"
