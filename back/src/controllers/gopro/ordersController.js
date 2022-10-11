@@ -11,8 +11,6 @@ async function getAllGoProOrdersFromDates(req, res) {
   const {from, to} = req.params 
   try {
     const data = await ordersService.getGoProOrders(from, to)
-    console.log(data)
-    // const [data, error] = await usePromise(ordersService.getGoProOrders)
     res.status(200).json(data)
     
   } catch (error) {

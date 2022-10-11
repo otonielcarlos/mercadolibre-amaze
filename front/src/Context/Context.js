@@ -14,29 +14,37 @@ function ContextProvider({children}){
   useEffect(() => {
     const {today, yesterday} = getTodayAndYesterday()
     async function getGoproOrdersWithDates(yesterday, today) {
-      const url = `http://localhost:4000/pe/v1/orders/gopro/all/${yesterday}/${today}`
-      console.log(url)
+      const url = `https://appleamaze.herokuapp.com/pe/v1/orders/gopro/all/${yesterday}/${today}`
       const goproOrders = await axios.get(url)
-      console.log(goproOrders.data)
       setGoproOrders(() => goproOrders.data)
 
     }
-    async function getAsusOrdersWithDates(today, yesterday){
-      
-      const asusOrders = await axios.get(`https://appleamaze.herokuapp.com/pe/v1/orders/asus/all/${yesterday}/${today}`)
 
+    async function getAsusOrdersWithDates(today, yesterday){
+      const asusOrders = await axios.get(`https://appleamaze.herokuapp.com/pe/v1/orders/asus/all/${yesterday}/${today}`)
       setAsusOrders(() => asusOrders.data)
     }
     getGoproOrdersWithDates(yesterday, today)
     getAsusOrdersWithDates(today, yesterday)
   },[])
 
-  async function setDateForSearch() {
+
+
+  async function setDateForSearch(marca) {
+    if(marca === "asus") {
     setAsusOrders(() => [])
     // @ts-ignore
     const {from, to} = rangeDate
-    const asusOrders = await axios.get(`https://appleamaze.herokuapp.com/pe/v1/orders/asus/all/${from}/${to}`)
+    const asusOrders = await axios.get(`https://appleamaze.herokuapp.com/pe/v1/orders/${marca}/all/${from}/${to}`)
     setAsusOrders(() => asusOrders.data)
+  } else if(marca === "gopro") {
+      setGoproOrders(() => [])
+      // @ts-ignore
+      const {from, to} = rangeDate
+      const goproOrders = await axios.get(`https://appleamaze.herokuapp.com/pe/v1/orders/${marca}/all/${from}/${to}`)
+      setGoproOrders(() => goproOrders.data)
+
+    }
   }
 
 

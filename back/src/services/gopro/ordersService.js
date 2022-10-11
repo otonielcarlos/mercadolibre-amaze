@@ -97,13 +97,17 @@ async function sendProcessingOrders() {
           "lines": lines,
           "additionalAttributes": [
               {
-                  "attributeName": "allowDuplicateCustomerOrderNumber",
-                  "attributeValue": "false"
+                "attributeName": "allowDuplicateCustomerOrderNumber",
+                "attributeValue": "false"
               },
               {
-                  "attributeName": "allowOrderOnCustomerHold",
-                  "attributeValue": "true"
-              }
+                "attributeName": "allowOrderOnCustomerHold",
+                "attributeValue": "true"
+              },
+              // {
+              //   "attributeName": "Z101",
+              //   "attributeValue": `${name.substring(0,34)}, ${addressLine1.substring(0,34)}, ${addressLine2.substring(0,34)} ${provincia.substring(0,9)}, ${distrito},  Peru T: ${phone}`
+              // }
           ]
         }
         // console.log(data)
@@ -156,11 +160,11 @@ async function updateGoProOrdersInfo() {
 
         query = `UPDATE gopro_orders SET mercadopago_id = '${mercadopago_id}', date = '${date_created}', total_tienda = '${total}', total_mercadopago = '${netAmout}', cantidad = ${qty}, skus = '${skus}', productos = '${productNames}', nombre = '${name}', email = '${email}', direccion = '${direccion}', document_type = '${documento}', document_number = '${document_number}' WHERE order_id = '${id}';`
 
-        console.log(query)
+        // console.log(query)
         await updateOrderGoProInDB(query)
 
       } catch (error) {
-        console.log(error)
+        console.log(error, 'error in updating info from gopro orders service')
       }
     }
 }
