@@ -33,7 +33,7 @@ const displayOrders = asusOrders.map((order, key) => {
   const perdida = Number(order.total_tienda) - Number(order.total_mercadopago)
 
   const toBoolean = order.disabled === "true"
-
+  const pointer = toBoolean ? '' : 'pointer'
   let colorButton = toBoolean ? '#198754' : '#DC3545'
                       
   // console.log(order.status)
@@ -55,7 +55,7 @@ const displayOrders = asusOrders.map((order, key) => {
       <td>{order.direccion}</td>
       <td>{order.document_type}</td>
       <td>{order.document_number}</td>
-      <td  ><button disabled={toBoolean} style={{backgroundColor: colorButton}} className={order.order_id} onClick={onClickButtonDisabled} >Actualizar Pedido</button></td>
+      <td><button disabled={toBoolean} style={{backgroundColor: colorButton, cursor: pointer}} className={order.order_id} onClick={onClickButtonDisabled}>Actualizar Pedido</button></td>
       
     </tr>
   )

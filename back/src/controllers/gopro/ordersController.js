@@ -18,7 +18,18 @@ async function getAllGoProOrdersFromDates(req, res) {
   }
 }
 
+async function updateGoProOrderStatusFactura(req, res) {
+  try {
+    const {order_id} = req.body
+    // console.log(order_id)
+    await ordersService.updateGoProOrderFactura(order_id)
+  } catch (error) {
+    
+  }
+}
+
 module.exports = {
   sendProcessingOrdersToIM,
-  getAllGoProOrdersFromDates
+  getAllGoProOrdersFromDates,
+  updateGoProOrderStatusFactura
 }

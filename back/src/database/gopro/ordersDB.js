@@ -4,7 +4,7 @@ const db = require('../db')
 const {getToday, getTodayAndYesterday} = require('../utilsdate')
 
 async function newGoProOrder({order_id, customerpo, nv, date}){
-  const query = `INSERT INTO gopro_orders(order_id, customerpo, nv, date) VALUES ('${order_id}', '${customerpo}', '${nv}', '${date}')`
+  const query = `INSERT INTO gopro_orders(order_id, customerpo, nv, date, disabled) VALUES ('${order_id}', '${customerpo}', '${nv}', '${date}', false)`
   const [rows] = await db.query(query)
 
   return rows
@@ -42,11 +42,18 @@ async function updateOrderGoProInDB(query) {
   await db.query(query)
 }
 
+async function updateFacturaGoPro(order_id) {
+  const query = `UPDATE gopro_orders SET disabled = 'true' WHERE order_id = '${order_id}';`
+  await db.query(query)
+  return
+}
+
 module.exports = {
   updateDeliveryGoPro,
   newGoProOrder,
   getGoProOrdersFromDB,
   lookGoProOrder,
   updateOrderGoProInDB,
-  getGoProOrdersFromDates
+  getGoProOrdersFromDates,
+  updateFacturaGoPro
 }

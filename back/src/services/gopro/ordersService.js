@@ -7,7 +7,7 @@ const {IngramHeaders} = require('../../headers/ingramHeaders')
 const {getEstado} = require('../../helpers/getEstado')
 const { mercadopagoToken } = require('../../tokens/mercadopago')
 const {getTodayAndYesterday} = require('../../helpers/getTodayAndYesterday')
-const { newGoProOrder, updateDeliveryGoPro, getGoProOrdersFromDB, updateOrderGoProInDB, getGoProOrdersFromDates } = require('../../database/gopro/ordersDB')
+const { newGoProOrder, updateDeliveryGoPro, getGoProOrdersFromDB, updateOrderGoProInDB, getGoProOrdersFromDates, updateFacturaGoPro } = require('../../database/gopro/ordersDB')
 
 
 const api = new WooCommerceRestApi({
@@ -177,10 +177,15 @@ async function getGoProOrders(yesterday,today) {
   return await getGoProOrdersFromDates(yesterday, today)
 }
 
+async function updateGoProOrderFactura(order_id) {
+  await updateFacturaGoPro(order_id)
+}
+
 
 module.exports = {
   sendProcessingOrders,
   updateGoProOrdersInfo,
   deliveryGoProUpdate,
-  getGoProOrders
+  getGoProOrders,
+  updateGoProOrderFactura
 }

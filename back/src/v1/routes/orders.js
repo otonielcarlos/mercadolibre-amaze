@@ -4,7 +4,7 @@ const {orderFromMercadolibreWithID,
   ordersFromMercadolibreToIM,
   getAllOrdersFromMercadolibreApple} = require('../../controllers/mercadolibre/ordersController')
 
-const {sendProcessingOrdersToIM, getAllGoProOrdersFromDates} = require('../../controllers/gopro/ordersController')
+const {sendProcessingOrdersToIM, getAllGoProOrdersFromDates, updateGoProOrderStatusFactura} = require('../../controllers/gopro/ordersController')
 const { getAllAsusOrders, getAllAsusOrdersFromDates, updateAsusOrderStatus, updateAsusOrderStatusFactura } = require('../../controllers/asus/ordersController')
 const {ordersFromLinioToIM} = require('../../controllers/linio/ordersController')
 
@@ -28,9 +28,10 @@ router.post('/gopro/new', sendProcessingOrdersToIM)
 
 router.get('/gopro/all/:from/:to', getAllGoProOrdersFromDates)
 
+router.post('/gopro/update/factura', updateGoProOrderStatusFactura)
+
 //GET ASUS ORDENES FROM INGRAM - MAGENTO - MERCADOPAGO
 router.get('/asus/all', getAllAsusOrders)
-
 
 router.get('/asus/all/:from/:to', getAllAsusOrdersFromDates)
 
