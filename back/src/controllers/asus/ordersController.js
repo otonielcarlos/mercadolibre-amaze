@@ -22,6 +22,7 @@ async function getAllAsusOrdersFromDates(req, res) {
 
 async function updateAsusOrderStatus(req, res) {
   try {
+    res.status(200).send()
     const {order, status} = req.body
     await statusUpdateAsus({order, status, comment: '', notify: 0})
   } catch (error) {

@@ -20,8 +20,8 @@ async function getAllGoProOrdersFromDates(req, res) {
 
 async function updateGoProOrderStatusFactura(req, res) {
   try {
+    res.status(200).send()
     const {order_id} = req.body
-    // console.log(order_id)
     await ordersService.updateGoProOrderFactura(order_id)
   } catch (error) {
     
