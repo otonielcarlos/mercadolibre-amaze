@@ -7,6 +7,7 @@ const {orderFromMercadolibreWithID,
 const {sendProcessingOrdersToIM, getAllGoProOrdersFromDates, updateGoProOrderStatusFactura} = require('../../controllers/gopro/ordersController')
 const { getAllAsusOrders, getAllAsusOrdersFromDates, updateAsusOrderStatus, updateAsusOrderStatusFactura } = require('../../controllers/asus/ordersController')
 const {ordersFromLinioToIM} = require('../../controllers/linio/ordersController')
+const {ordersFromFalabellaToIM} = require('../../controllers/falabella/ordersController')
 
 //GET TODOS LAS ORDENES MERCADOLIBRE
 router.get('/mercadolibre/apple/all', getAllOrdersFromMercadolibreApple)
@@ -19,6 +20,9 @@ router.post('/mercadolibre/apple', ordersFromMercadolibreToIM)
 
 // CALLBACK LINIO ORDENES
 router.post('/linio/new', ordersFromLinioToIM)
+
+//CALLBACK FALABELLA ORDENES
+router.post('/falabella/new', ordersFromFalabellaToIM)
 
 // WEBHOOK DE GOPRO   
 router.post('/gopro/new', sendProcessingOrdersToIM)
