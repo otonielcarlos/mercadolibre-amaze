@@ -6,6 +6,7 @@ async function updateStockFalabella() {
   // @ts-ignore
   const [url, hash] = getSignature(false, 'GetProducts')
   const productsUrl = 'https://sellercenter-api.falabella.com?' + url + '&Signature=' + hash
+  // console.log(productsUrl)
   const productsFalabella = await axios.get(productsUrl)
   const products = productsFalabella.data.SuccessResponse.Body.Products.Product.map(product => {
     const {SellerSku} = product
@@ -22,19 +23,18 @@ async function updateStockFalabella() {
     const {sku, stock} = item
     requestString += `<Product>
               <SellerSku>${sku}</SellerSku>
-              <Quantity>${stock > 50 ? 50 : stock}</Quantity>
+              <Quantity>${Number(stock) > 50 ? Number(50) : Number(stock)}</Quantity>
             </Product>`
   })
 
   const requestXML = `<Request>${requestString}</Request>`
-  console.log(requestXML)
-  console.log(productUpdateUrl)
-  // const responseXML = await axios.post(productUpdateUrl, requestXML, {headers: {'Content-Type': 'text/xml'}})
-  // // console.log('falabella stock updated at: ', responseXML.data.SuccessResponse.Head.Timestamp)
-  // console.log(responseXML.data.SuccessResponse)
+  // console.log(requestXML)
+  // console.log(productUpdateUrl)
+  const responseXML = await axios.post(productUpdateUrl, requestXML, {headers: {'accept': 'application/xml', 'content-type': 'application/x-www-form-urlencoded'}})
+  console.log('falabella stock updated at: ', responseXML.data.SuccessResponse.Head.Timestamp)
+
 }
 
-updateStockFalabella()
 module.exports = {
   updateStockFalabella
 }

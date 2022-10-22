@@ -4,9 +4,10 @@ const {sendOrderToIngramFalabella} = require('../../services/falabella/ordersSer
 
 async function ordersFromFalabellaToIM(req, res){
   res.status(200).send()
+  console.log(req.body)
   const orderId = req.body.payload.OrderId
   const [data, error] = await usePromise(sendOrderToIngramFalabella, orderId)
-  if(error) res.status(500)
+
 }
 
 module.exports = {
