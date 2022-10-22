@@ -31,7 +31,7 @@ async function updateStockFalabella() {
   // console.log(requestXML)
   // console.log(productUpdateUrl)
   const responseXML = await axios.post(productUpdateUrl, requestXML, {headers: {'accept': 'application/xml', 'content-type': 'application/x-www-form-urlencoded'}})
-  console.log('falabella stock updated at: ', responseXML.data.SuccessResponse.Head.Timestamp)
+  console.log('falabella stock updated')
 
 }
 
