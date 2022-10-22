@@ -27,14 +27,14 @@ async function updateStockFalabella() {
             </Product>`
   })
 
-  const requestXML = `<Request>${requestString}</Request>`
+  const requestXML = `<?xml version="1.0" encoding="UTF-8" ?><Request>${requestString}</Request>`
   // console.log(requestXML)
   // console.log(productUpdateUrl)
   const responseXML = await axios.post(productUpdateUrl, requestXML, {headers: {'accept': 'application/xml', 'content-type': 'application/x-www-form-urlencoded'}})
   console.log('falabella stock updated')
 
 }
-
+updateStockFalabella()
 module.exports = {
   updateStockFalabella
 }
