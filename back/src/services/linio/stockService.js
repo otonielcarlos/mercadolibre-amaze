@@ -22,7 +22,7 @@ async function updateStockLinio() {
     const {sku, stock} = item
     requestString += `<Product>
               <SellerSku>${sku}</SellerSku>
-              <Quantity>${stock > 20 ? 20 : stock}</Quantity>
+              <Quantity>${stock}</Quantity>
             </Product>`
   })
 
