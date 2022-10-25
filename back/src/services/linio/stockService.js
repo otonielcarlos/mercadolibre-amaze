@@ -11,7 +11,7 @@ async function updateStockLinio() {
     const {SellerSku} = product
     return `${SellerSku}`
   }).filter(sku => sku.length === 7)
-    .filter(sku => sku !== '')
+    .filter(sku => sku !== '' && sku !== '5331050')
   const [updateUrl, hashUpdate] = getSignature(false, 'ProductUpdate')
   const productUpdateUrl = 'https://sellercenter-api.linio.com.pe?' + updateUrl + '&Signature=' + hashUpdate
   const updatedProducts = await getDataReadyToUpdate(products)
