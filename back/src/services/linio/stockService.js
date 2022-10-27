@@ -12,7 +12,6 @@ async function updateStockLinio() {
     return `${SellerSku}`
   }).filter(sku => sku.length === 7)
     .filter(sku => sku !== '' && sku !== '5331050')
-    console.log(products)
   const [updateUrl, hashUpdate] = getSignature(false, 'ProductUpdate')
   const productUpdateUrl = 'https://sellercenter-api.linio.com.pe?' + updateUrl + '&Signature=' + hashUpdate
   const updatedProducts = await getDataReadyToUpdate(products)
@@ -27,11 +26,10 @@ async function updateStockLinio() {
             </Product>`
   })
 
-  // const requestXML = `<Request>${requestString}</Request>`
-  // const responseXML = await axios.post(productUpdateUrl, requestXML, {headers: {'Content-Type': 'text/xml'}})
-  // console.log('linio stock updated at: ', responseXML.data.SuccessResponse.Head.Timestamp)
+  const requestXML = `<Request>${requestString}</Request>`
+  const responseXML = await axios.post(productUpdateUrl, requestXML, {headers: {'Content-Type': 'text/xml'}})
+  console.log('linio stock updated at: ', responseXML.data.SuccessResponse.Head.Timestamp)
 }
-updateStockLinio()
 
 module.exports = {
   updateStockLinio
