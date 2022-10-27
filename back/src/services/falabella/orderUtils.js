@@ -33,7 +33,7 @@ function getSignature(orderId=false, event){
     return [productAction, hashProducts]
 
   } else if(event === 'ProductUpdate') {
-    const productAction = `Action=ProductUpdate&Filter=all&Format=XML&Timestamp=${encodedDate}&UserID=${FALABELLA_USER}&Version=1.0`
+    const productAction = `Action=ProductUpdate&Filter=all&Format=JSON&Timestamp=${encodedDate}&UserID=${FALABELLA_USER}&Version=1.0`
     const hashProducts = createHmac('sha256', `${SECRET_FALABELLA}`)
                         .update(productAction)
                         .digest('hex')
