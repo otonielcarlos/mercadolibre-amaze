@@ -21,10 +21,16 @@ async function updateStockFalabella() {
 
   productsdata?.forEach(item => {
     const {sku, stock} = item
-    requestString += `<Product>
-              <SellerSku>${sku}</SellerSku>
-              <Quantity>${Number(stock) > 50 ? Number(50) : Number(stock)}</Quantity>
-            </Product>`
+    requestString += ` 
+    <Product>
+      <SellerSku>${sku}</SellerSku>
+        <BusinessUnits>
+          <BusinessUnit>
+            <OperatorCode>fape</OperatorCode>
+            <Stock>${Number(stock) > 50 ? Number(50) : Number(stock)}</Stock>
+          </BusinessUnit>
+        </BusinessUnits>
+    </Product>`            
   })
 
   const requestXML = `<?xml version="1.0" encoding="UTF-8" ?><Request>${requestString}</Request>`
@@ -34,7 +40,6 @@ async function updateStockFalabella() {
   console.log('falabella stock updated')
 
 }
-updateStockFalabella()
 module.exports = {
   updateStockFalabella
 }
