@@ -1,6 +1,7 @@
 const {default:axios} = require('axios')
 const {getSignature} = require('./orderUtils')
 const {getDataReadyToUpdate} = require('../../helpers/getDataReadyToUpdate')
+const { response } = require('express')
 
 async function updateStockFalabella() {
   // @ts-ignore
@@ -37,9 +38,10 @@ async function updateStockFalabella() {
   // console.log(requestXML)
   // console.log(productUpdateUrl)
   const responseXML = await axios.post(productUpdateUrl, requestXML, {headers: {'accept': 'application/xml', 'content-type': 'application/x-www-form-urlencoded'}})
-  console.log('falabella stock updated')
+  console.log('falabella stock updated at:', responseXML.data.SuccessResponse.Head.Timestamp)
 
 }
+
 module.exports = {
   updateStockFalabella
 }
