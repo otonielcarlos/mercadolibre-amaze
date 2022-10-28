@@ -41,9 +41,18 @@ async function updateAsusOrderStatusFactura(req, res) {
   }
 }
 
+async function sendProcessingOrdersAsusToIM(req, res) {
+  try {
+    res.status(200).send()
+  } catch (error) {
+    
+  }
+}
+
 module.exports = {
   updateAsusOrderStatusFactura,
   updateAsusOrderStatus,
   getAllAsusOrders,
-  getAllAsusOrdersFromDates
+  getAllAsusOrdersFromDates,
+  sendProcessingOrdersAsusToIM
 }
