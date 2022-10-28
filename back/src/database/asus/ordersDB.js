@@ -72,6 +72,11 @@ async function getIngramSku(sku){
 
 }
 
+async function saveOrder (orderId, nv, customerpo, status, day) {
+	const query = `INSERT INTO ingramorders_asus(order_id, nv, customerpo, status, date, disabled) VALUES('${orderId}','${nv}', '${customerpo}','${status}','${day}', 'false')`;
+	await db.query(query)
+};
+
 module.exports = {
   getAsusOrders,
   completeAsusOrdersInfo,
@@ -81,5 +86,6 @@ module.exports = {
   updateFacturaStatus,
   checkAsusID,
   saveAsusId,
-  getIngramSku
+  getIngramSku,
+  saveOrder
 }

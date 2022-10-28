@@ -8,7 +8,8 @@ const { getAsusOrders,
         updateFacturaStatus,
         checkAsusID,
         saveAsusId,
-        getIngramSku
+        getIngramSku,
+        saveOrder
       } = require('../../database/asus/ordersDB')
 const {magentoHeaders} = require('../../headers/magentoHeaders')
 const { statusUpdateAsus } = require('./statusUpdateAsus')
@@ -233,7 +234,7 @@ async function sendAsusIdToIngram(order_id) {
         const saveDate = new Date()
         saveDate.setHours(saveDate.getHours() - 6)
         let day = saveDate.toISOString().split('.')[0]
-        // @ts-ignore
+
         await saveOrder(dataForIngramOrder.orderId,nv,dataForIngramOrder.customerponumber,dataForIngramOrder.status,day)
         } catch (error) {
             console.log(error)
