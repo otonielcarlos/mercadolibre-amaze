@@ -1,6 +1,6 @@
 const usePromise = require('../../helpers/errorHandling')
 const ordersService = require('../../services/asus/ordersService')
-const {statusUpdateAsus} = require('../../services/asus/statusUpdateAsus')
+const { statusUpdateAsus } = require('../../services/asus/statusUpdateAsus')
 
 // async function sendProcessingOrdersToIM(req, res) {
 //   const [data, error] = await usePromise(ordersService.sendProcessingOrders)
@@ -43,9 +43,12 @@ async function updateAsusOrderStatusFactura(req, res) {
 
 async function sendProcessingOrdersAsusToIM(req, res) {
   try {
-    res.status(200).send()
-  } catch (error) {
+    res.status(200).send('OK')
+    console.log(req.body)
+    await ordersService.sendAsusIdToIngram(req.body.order_id)
     
+  } catch (error) {
+    console.log(error)
   }
 }
 

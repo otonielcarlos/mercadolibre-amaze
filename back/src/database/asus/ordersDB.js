@@ -47,11 +47,39 @@ const [rows] = await db.query(query)
 console.log(rows)
 }
 
+async function checkAsusID(order_id) {
+  let query = `SELECT order_id FROM asus_orderid WHERE order_id = '${order_id}'`;
+  const [rows] = await db.query(query)
+    // @ts-ignore
+  if (rows.length > 0) {
+    return (true);
+  }
+  return false
+}
+
+async function saveAsusId(order_id, day) {
+	let query = `INSERT INTO asus_orderid VALUES ('$order_{id}', '${day}')`
+	const [rows] = await db.query(query)
+	console.log(`id ${order_id} guardado con éxito`)
+	return true
+}
+
+async function getIngramSku(sku){
+  let query = `SELECT * from asus_ingrampartnumbers WHERE asusPartNumber = '${sku}'`
+  const [rows] = await db.query(query)
+  console.log(rows)
+  return rows[0].ingramPartNumber
+
+}
+
 module.exports = {
   getAsusOrders,
   completeAsusOrdersInfo,
   getAsusOrdersCompleted,
   getAsusOrdersCompletedFromDates,
   getAsusEntity,
-  updateFacturaStatus
+  updateFacturaStatus,
+  checkAsusID,
+  saveAsusId,
+  getIngramSku
 }

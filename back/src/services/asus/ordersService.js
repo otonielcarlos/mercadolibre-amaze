@@ -1,8 +1,20 @@
 const {default :axios} = require('axios')
-const {getTodayAndYesterday} = require('../../helpers/getTodayAndYesterday')
-const {getAsusOrders, completeAsusOrdersInfo, getAsusOrdersCompleted, getAsusOrdersCompletedFromDates, updateFacturaStatus} = require('../../database/asus/ordersDB')
+const {getTodayAndYesterday, getTodayAndTime} = require('../../helpers/getTodayAndYesterday')
+const {getEstado} = require('../../helpers/getEstado')
+const { getAsusOrders,
+        completeAsusOrdersInfo,
+        getAsusOrdersCompleted,
+        getAsusOrdersCompletedFromDates,
+        updateFacturaStatus,
+        checkAsusID,
+        saveAsusId,
+        getIngramSku
+      } = require('../../database/asus/ordersDB')
 const {magentoHeaders} = require('../../headers/magentoHeaders')
 const { statusUpdateAsus } = require('./statusUpdateAsus')
+const { getTokenAsus, getTokenAsusStaging } = require('../../tokens/magento')
+const { IngramHeaders } = require('../../headers/ingramHeaders')
+
 
 async function updateAllAsusOrdersInfo() {
   try {
@@ -67,11 +79,176 @@ async function updateAsusOrderStatusFactura(order_id) {
 
 }
 
+async function sendAsusIdToIngram(order_id) {
+  let status = await checkAsusID(order_id)
+    if (!status) {
+      let [day] = await getTodayAndTime()
+      await saveAsusId(order_id, day)
+      // const tokenMagento = await getTokenAsus()
+      const tokenMagento = await getTokenAsusStaging()
+      try {
+        const urlOrders = `https://pestage.store.asus.com/index.php/rest/V1/orders/${order_id}`
+        let config = {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${tokenMagento}`,
+          },
+        }
+        // @ts-ignore
+        let orders = await axios.get(urlOrders, config)
+    
+        let newOrder = orders.data
+        let arrayOfProducts = []
+        let products = newOrder.items
+    
+        function getUniqueListBy(arr, key) {
+          return [...new Map(arr.map(item => [item[key], item])).values()]
+        }
+        let filteredItems = getUniqueListBy(products, 'sku')
+        filteredItems.forEach(product => {
+          arrayOfProducts.push({ quantity: product.qty_ordered, sku: product.sku, price: product.price })
+        })
+    
+        let entityId = newOrder.entity_id
+        let incrementId = newOrder.increment_id
+        let customerPo = newOrder.entity_id
+        let firstName = newOrder.extension_attributes.shipping_assignments[0].shipping.address.firstname
+        let lastName = newOrder.extension_attributes.shipping_assignments[0].shipping.address.lastname
+        let phoneNumber = newOrder.extension_attributes.shipping_assignments[0].shipping.address.telephone
+        let streetAddress1 = newOrder.extension_attributes.shipping_assignments[0].shipping.address.street[0]
+        let streetAddress2 = newOrder.extension_attributes.shipping_assignments[0].shipping.address.street[1]
+        let street = ''
+        if (typeof streetAddress2 !== 'undefined') {
+          street = `${streetAddress1} ${streetAddress2}`
+        } else {
+          street = `${streetAddress1}`
+        }
+    
+        const attributes = newOrder.extension_attributes.shipping_assignments[0].shipping.address.extension_attributes
+        let distrito = ''
+        if(attributes.hasOwnProperty('district')){
+            distrito = attributes.district.substring(0,9)
+        } else {
+            distrito = ''
+        }
+    
+        let city = newOrder.extension_attributes.shipping_assignments[0].shipping.address.city
+        let email = newOrder.extension_attributes.shipping_assignments[0].shipping.address.email
+        let postalcode = newOrder.extension_attributes.shipping_assignments[0].shipping.address.postcode
+        let region = newOrder.extension_attributes.shipping_assignments[0].shipping.address.region
+        let status = newOrder.status
+        let state = getEstado(region)
+    
+        let productsForIngram = []
+        let i = 1
+    
+        for(let prod of arrayOfProducts){
+          const ingramSku = await getIngramSku(prod.sku)
+          productsForIngram.push({
+            customerLineNumber: `${i}`,
+            ingramPartNumber: ingramSku,
+            quantity: prod.quantity,
+    
+          })
+          i += 1
+        }
+    
+        let firstname = firstName.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        let lastname = lastName.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        let address = street.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        let addressline1 = ''
+        let addressline2 = ''
+    
+        if (address.length > 35) {
+          addressline1 = address.slice(0, 35)
+          addressline2 = address.slice(35, address.length).substring(0, 34)
+        } else {
+          addressline1 = address
+          addressline2 = ''
+        }
+    
+        let fullName = `${firstname} ${lastname}`.substring(0, 34)
+    
+        let dataForIngramOrder = {
+          orderId: customerPo,
+          entityId: entityId,
+          incrementId: incrementId,
+          customerponumber: `ESHOPASUS_${incrementId}`,
+          name1: `${fullName}`,
+          name2: `${lastname}`,
+          addressline1: `${addressline1}`,
+          addressline2: `${addressline2}`,
+          phonenumber: `${phoneNumber}`,
+          city: `${city}`,
+          state: `${state}`,
+          email: `${email}`,
+          distrito: `${distrito}`,
+          postalcode: `${postalcode}`,
+          lines: productsForIngram,
+          status: `${status}`,
+        }
+        // console.log(dataForIngramOrder)
+
+        const baseUrl = 'https://api.ingrammicro.com:443/resellers/v6/orders'
+      
+        const data = {
+          "notes": "",
+          "customerOrderNumber": `${dataForIngramOrder.customerponumber}`,
+          "shipToInfo": {
+            "contact": `${dataForIngramOrder.name1}`,
+            "companyName": `${dataForIngramOrder.name1}`,
+            "name1": `${dataForIngramOrder.name1}`.substring(0,34),
+            "name2": `${dataForIngramOrder.name2}`.substring(0,34),
+            "addressLine1": `${dataForIngramOrder.addressline1}`.substring(0,34),
+            "addressLine2": `${dataForIngramOrder.addressline2}`.substring(0,34),
+            "addressLine3": `${dataForIngramOrder.distrito}`,
+            "addressLine4": `${dataForIngramOrder.phonenumber}`,
+            "city": `${dataForIngramOrder.city}`,
+            "state": `${dataForIngramOrder.state}`,
+            "countryCode": "PE"
+          },
+          "lines": dataForIngramOrder.lines,
+          "additionalAttributes": [
+            {
+              "attributeName": "allowDuplicateCustomerOrderNumber",
+              "attributeValue": "false"
+            },
+            {
+              "attributeName": "allowOrderOnCustomerHold",
+              "attributeValue": "true"
+            }
+            // {
+            //     "attributeName": "Z101",
+            //     "attributeValue": `${dataForIngramOrder.name1}, ${dataForIngramOrder.addressline1} ${dataForIngramOrder.addressline2} ${}`
+            // }
+          ]
+        }
+        const headersIngram = await IngramHeaders()
+        // @ts-ignore
+        let sendOrder = await axios.post(baseUrl, data, headersIngram )
+        
+        let nv = sendOrder.data.orders[0].ingramOrderNumber
+        
+        const saveDate = new Date()
+        saveDate.setHours(saveDate.getHours() - 6)
+        let day = saveDate.toISOString().split('.')[0]
+        // @ts-ignore
+        await saveOrder(dataForIngramOrder.orderId,nv,dataForIngramOrder.customerponumber,dataForIngramOrder.status,day)
+        } catch (error) {
+            console.log(error)
+        } 
+
+    } else {
+      console.log(order_id, ' ya existe')
+  }
+}
 
 // updateAllAsusOrdersInfo()
 module.exports = {
   updateAsusOrderStatusFactura,
   updateAllAsusOrdersInfo,
   getAsusInformationOrders,
-  getAsusInformationOrdersFromDates
+  getAsusInformationOrdersFromDates,
+  sendAsusIdToIngram
 }   
