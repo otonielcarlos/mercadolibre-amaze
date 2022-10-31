@@ -58,7 +58,7 @@ async function checkAsusID(order_id) {
 }
 
 async function saveAsusId(order_id, day) {
-	let query = `INSERT INTO asus_orderid VALUES ('$order_{id}', '${day}')`
+	let query = `INSERT INTO asus_orderid VALUES ('${order_id}', '${day}')`
 	const [rows] = await db.query(query)
 	console.log(`id ${order_id} guardado con éxito`)
 	return true
