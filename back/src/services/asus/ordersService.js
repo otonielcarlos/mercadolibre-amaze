@@ -85,10 +85,10 @@ async function sendAsusIdToIngram(order_id) {
     if (!status) {
       let [day] = await getTodayAndTime()
       await saveAsusId(order_id, day)
-      const tokenMagento = await getTokenAsus()
-      // const tokenMagento = await getTokenAsusStaging()
+      // const tokenMagento = await getTokenAsus()
+      const tokenMagento = await getTokenAsusStaging()
       try {
-        const urlOrders = `https://pe.store.asus.com/index.php/rest/V1/orders/${order_id}`
+        const urlOrders = `https://pestage.store.asus.com/index.php/rest/V1/orders/${order_id}`
         let config = {
           headers: {
             Accept: 'application/json',
