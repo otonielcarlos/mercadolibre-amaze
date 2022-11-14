@@ -6,7 +6,8 @@ const {INGRAM_ORDER_URL} = process.env
 
 function prepareDataForIngram(order, items){
   const {OrderNumber, Price} = order.SuccessResponse.Body.Orders.Order
-  const {FirstName, LastName, Phone, Phone2, Address1, Address2, Address3, Address4, City} = order.SuccessResponse.Body.Orders.Order.AddressShipping
+  const {FirstName, LastName, Phone, Phone2, Address1, Address2, Address3, Address4, Ward, Region} = order.SuccessResponse.Body.Orders.Order.AddressShipping
+  console.log(order.SuccessResponse.Body.Orders.Order.AddressShipping)
     let lines = []
     let i = 1
     let products = items.SuccessResponse.Body.OrderItems.OrderItem
@@ -40,9 +41,9 @@ function prepareDataForIngram(order, items){
   const address1 = Address1.substring(0,34)
 //   console.log(address1)
   const address2 = Address2.substring(0,34)
-  const estado = City.split(',')[1].trim()
-  const provincia = City.split(',')[0].trim()
-  const distrito = City.split(',')[2].trim()
+  const estado = Region
+  // const provincia = City
+  const distrito = Ward
   const state = getEstado(estado)
  
   const objectForIngram = {
@@ -98,13 +99,14 @@ async function sendOrderToIngramFalabella(orderId) {
     }
     
     const order = await axios.get(getUrl, headers)
+    // console.log(order.data)
     const items = await axios.get(itemsUrl, headers)
     
     const data = prepareDataForIngram(order.data, items.data)
     const config = await IngramHeaders()
 
     const ingramResponse = await axios.post(`${INGRAM_ORDER_URL}`, data, config)
-    console.log(ingramResponse.data.orders[0].ingramOrderNumber)
+    // console.log(ingramResponse.data.orders[0].ingramOrderNumber)
     return {request : data, ingram: ingramResponse.data}
 
   }
