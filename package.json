@@ -7,7 +7,8 @@
     "test": " mocha ./back/test/api.test.js",
     "start": "./back/server.js",
     "dev": "nodemon ./back/server",
-    "factura": "node ./back/src/factura/facturador.js"
+    "factura": "node ./back/src/factura/facturador.js",
+    "prices": "node ./back/crons/prices.js"
   },
   "author": "",
   "license": "ISC",

@@ -29,27 +29,33 @@ async function updateAllAsusOrdersInfo() {
     } else {
       // @ts-ignore
       for(let order of all){
-        const url =`https://pe.store.asus.com/index.php/rest/V1/orders/${order.order_id}`
-        const orderInfo = await axios.get(url, config)
-        const {base_grand_total, items, billing_address, extension_attributes, total_item_count} = orderInfo.data
-        const skus = items.map(item => `${item.sku},`).toString()
-        const productos = items.map(item => `${item.name},`).toString()
-        const mercadopagoInfo = JSON.parse(extension_attributes.payment_additional_info.find(info => info.key === "paymentResponse").value)
-          const allInfo = {
-          ...order,
-          total_tienda: base_grand_total,
-          total_mercadopago: mercadopagoInfo.transaction_details.net_received_amount,
-          mercadopago_id: `${mercadopagoInfo.id}`,
-          skus,
-          total_item_count,
-          productos,
-          nombre: `${billing_address.firstname} ${billing_address.lastname}`,
-          email: `${billing_address.email}`,
-          address: `${billing_address.street[0]}, ${billing_address.city}, ${billing_address.region}, Peru `,
-          document_type: extension_attributes.document_type,
-          document_number: extension_attributes.document_number,
+        try {
+          const url =`https://pe.store.asus.com/index.php/rest/V1/orders/${order.order_id}`
+          const orderInfo = await axios.get(url, config)
+          const {base_grand_total, items, billing_address, extension_attributes, total_item_count} = orderInfo.data
+          const skus = items.map(item => `${item.sku},`).toString()
+          const productos = items.map(item => `${item.name},`).toString()
+          console.log(order.order_id)
+          const mercadopagoInfo = JSON.parse(extension_attributes.payment_additional_info.find(info => info.key === "paymentResponse").value)
+            const allInfo = {
+            ...order,
+            total_tienda: base_grand_total,
+            total_mercadopago: mercadopagoInfo.transaction_details.net_received_amount,
+            mercadopago_id: `${mercadopagoInfo.id}`,
+            skus,
+            total_item_count,
+            productos,
+            nombre: `${billing_address.firstname} ${billing_address.lastname}`,
+            email: `${billing_address.email}`,
+            address: `${billing_address.street[0]}, ${billing_address.city}, ${billing_address.region}, Peru `,
+            document_type: extension_attributes.document_type,
+            document_number: extension_attributes.document_number,
+          }
+          arr = [... arr, allInfo]
+          
+        } catch (error) {
+          console.log('cant update', order.order_id)
         }
-        arr = [... arr, allInfo]
       }
 
       let query = ''

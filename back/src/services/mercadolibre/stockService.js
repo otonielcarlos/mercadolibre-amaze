@@ -162,5 +162,5 @@ async function getStockMercadolibreApple() {
   }
 }
 
-module.exports = {getStockMercadolibreApple}
+module.exports = { getStockMercadolibreApple }
 

@@ -8,13 +8,13 @@ const {createAndUpdateTokens} = require('../src/helpers/tokenHelpers')
 const { updateGoProOrdersInfo } = require('../src/services/gopro/ordersService')
 
 async function getStock() {
-  const [gopro,errorGopro] = await usePromise(updateStockGoPro)
-  const [mercadolibre,errorML] = await usePromise(getStockMercadolibreApple)
-  await usePromise(updateStockLinio)
-  await usePromise(updateStockFalabella)
+  // const [gopro,errorGopro] = await usePromise(updateStockGoPro)
+  // const [mercadolibre,errorML] = await usePromise(getStockMercadolibreApple)
+  // await usePromise(updateStockLinio)
+  // await usePromise(updateStockFalabella)
   await usePromise(updateAllAsusOrdersInfo)
-  await usePromise(createAndUpdateTokens)
-  await updateGoProOrdersInfo()
+  // await usePromise(createAndUpdateTokens)
+  // await updateGoProOrdersInfo()
 }
 
 getStock()
