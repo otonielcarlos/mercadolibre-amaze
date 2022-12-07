@@ -12,6 +12,7 @@ async function getAllAsusOrders(req, res) {
   if(error) res.status(400).json(error)
   res.status(200).json(data)
 }
+
 async function getAllAsusOrdersFromDates(req, res) {
   const {from, to} = req.params
   // const [data, error] = await usePromise(ordersService.getAsusInformationOrders)

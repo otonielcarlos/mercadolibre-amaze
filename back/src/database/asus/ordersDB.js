@@ -22,7 +22,7 @@ async function getAsusOrdersCompleted(today, yesterday){
 
   return rows
 }
-
+ // SELECT * FROM clientes WHERE id = ${id}
 async function getAsusOrdersCompletedFromDates(today, yesterday){
   const query = `SELECT * FROM ingramorders_asus WHERE date BETWEEN '${yesterday}T13:00:00' AND '${today}T12:59:00' AND mercadopago_id != ''`
   // const query = `SELECT * FROM ingramorders_asus WHERE date BETWEEN '${yesterday}T13:00:00' AND '${today}T12:59:00' AND mercadopago_id != ''`
