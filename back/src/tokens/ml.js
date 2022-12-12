@@ -24,11 +24,11 @@ const bodyMultimarcas = {
 }
 
 const body_1 = {
-	grant_type: 'authorization_code',
-	client_id: MERCADOLIBRE_CLIENT_ID,
-	client_secret: MERCADOLIBRE_CLIENT_SECRET,
-	code: '',
-	redirect_uri: MERCADOLIBRE_REDIRECT_URI,
+	"grant_type": "authorization_code",
+	"client_id": "MERCADOLIBRE_CLIENT_ID",
+	"client_secret": "MERCADOLIBRE_CLIENT_SECRET",
+	"code": "",
+	"redirect_uri": "MERCADOLIBRE_REDIRECT_URI",
 }
 
 
@@ -47,8 +47,8 @@ async function token (isApple = true) {
 			console.log('token apple')
 			return token
 		} catch (error) {
+			console.log(error.response.data, 'error en token apple')
 			return token(true)
-			//console.log(error.response.data, 'error en token apple')
 		}
 	} else {
 		try {
@@ -62,16 +62,18 @@ async function token (isApple = true) {
 			console.log('token multimarcas')
 			return token
 		} catch (error) {
-			return token(false)
 			console.log(error.response.data, 'error multimarcas token')
+			return token(false)
 		}
 	}	
 }
 
 async function getTokens(){
 	try {	
-			const tokenApple = await token(true)	
+			const tokenApple = await token(true)
+			console.log(tokenApple)	
 			const tokenMultimarcas = await token(false)	
+			console.log(tokenMultimarcas)	
 			return [tokenApple, tokenMultimarcas]
 	} catch (error) {
 			console.log('error en getTokens')
