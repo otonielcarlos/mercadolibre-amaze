@@ -12,8 +12,8 @@ async function getStock() {
   // const [mercadolibre,errorML] = await usePromise(getStockMercadolibreApple)
   // await usePromise(updateStockLinio)
   // await usePromise(updateStockFalabella)
-  // await usePromise(updateAllAsusOrdersInfo)
-  await usePromise(createAndUpdateTokens)
+  await usePromise(updateAllAsusOrdersInfo)
+  // await usePromise(createAndUpdateTokens)
   // await updateGoProOrdersInfo()
 }
 

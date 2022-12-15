@@ -62,6 +62,7 @@ async function updateAllAsusOrdersInfo() {
       arr.forEach(order => {
         query+= `UPDATE ingramorders_asus SET mercadopago_id = '${order.mercadopago_id}', total_tienda = '${order.total_tienda}', total_mercadopago = '${order.total_mercadopago}', skus = '${order.skus}', cantidad =  ${order.total_item_count}, productos = '${order.productos}',nombre = '${order.nombre}', email = '${order.email}', direccion = '${order.address}',document_type = '${order.document_type}', document_number = ${order.document_number} WHERE order_id = '${order.order_id}';\n`
       })
+
       await completeAsusOrdersInfo(query)
       console.log('done')
     }
