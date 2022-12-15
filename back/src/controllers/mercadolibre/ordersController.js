@@ -5,6 +5,7 @@ const messageService = require('../../services/mercadolibre/messagesService')
 const utils = require('../../database/utilsdate')
 
 async function orderFromMercadolibreWithID (req, res) {
+	console.log(req.params)
   const orderResponse = await ordersService.sendOrderToIngramWithId(req)
 	res.set('Content-Type', 'application/json')
   res.status(200).json(orderResponse)
