@@ -8,7 +8,8 @@
     "start": "./back/server.js",
     "dev": "nodemon ./back/server",
     "factura": "node ./back/src/factura/facturador.js",
-    "prices": "node ./back/crons/prices.js"
+    "prices": "node ./back/crons/prices.js",
+    "xiaomi": "node ./back/src/services/xiaomi/products.js"
   },
   "author": "",
   "license": "ISC",

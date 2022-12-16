@@ -52,6 +52,7 @@ async function token (isApple = true) {
 		}
 	} else {
 		try {
+			console.log(JSON.stringify(bodyMultimarcas))
 			const tokenData = await axios.post('https://api.mercadolibre.com/oauth/token', bodyMultimarcas, {
 				headers: {
 					Accept: 'application/json',
