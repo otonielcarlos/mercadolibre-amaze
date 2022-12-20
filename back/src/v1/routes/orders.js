@@ -3,7 +3,8 @@ const router = express.Router()
 
 const { orderFromMercadolibreWithID,
   ordersFromMercadolibreToIM,
-  getAllOrdersFromMercadolibreApple 
+  getAllOrdersFromMercadolibreApple,
+  ordersFromMultiMarcasToIM 
     } = require('../../controllers/mercadolibre/ordersController')
 
 const { sendProcessingOrdersToIM,
@@ -29,6 +30,9 @@ router.get('/mercadolibre/apple/:orderid', orderFromMercadolibreWithID)
 
 // CALLBACK DE MERCADOLIBRE ORDENES
 router.post('/mercadolibre/apple', ordersFromMercadolibreToIM)
+
+// CALLBACK DE MERCADOLIBRE ORDENES
+router.post('/mercadolibre/multimarcas', ordersFromMultiMarcasToIM)
 
 // CALLBACK LINIO ORDENES
 router.post('/linio/new', ordersFromLinioToIM)

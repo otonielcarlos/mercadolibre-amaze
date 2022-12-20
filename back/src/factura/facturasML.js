@@ -9,7 +9,7 @@ class Factura {
         try{
             const accessToken = await getTokens()
             return {
-                "Authorization": `Bearer ${ accessToken.mercadolibreapple }`,
+                "Authorization": `Bearer ${ accessToken.mercadolibremultimarcas }`,
             }
         } catch(err){
             console.log(err)
@@ -17,7 +17,7 @@ class Factura {
     }
 
     get path() {
-        return `/Users/user/Downloads/amazeapple 21Nov/`
+        return `/Users/user/Downloads/amazeMultimarcas18dic/`
     }
 
     DeleteFactura(factura, path) {
