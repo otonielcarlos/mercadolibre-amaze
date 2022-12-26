@@ -7,6 +7,7 @@ const {INGRAM_ORDER_URL} = process.env
 function prepareDataForIngram(order, items){
   const {OrderNumber, Price} = order.SuccessResponse.Body.Orders.Order
   const {FirstName, LastName, Phone, Phone2, Address1, Address2, Address3, Address4, City} = order.SuccessResponse.Body.Orders.Order.AddressShipping
+    
     let lines = []
     let i = 1
     let products = items.SuccessResponse.Body.OrderItems.OrderItem
@@ -100,16 +101,27 @@ async function sendOrderToIngramLinio(orderId) {
     const order = await axios.get(getUrl, headers)
     const items = await axios.get(itemsUrl, headers)
     
+
     const data = prepareDataForIngram(order.data, items.data)
     const config = await IngramHeaders()
-
+    
     const ingramResponse = await axios.post(`${INGRAM_ORDER_URL}`, data, config)
     console.log(ingramResponse.data.orders[0].ingramOrderNumber)
+    await saveOrderLinio(order.data)
     return {request : data, ingram: ingramResponse.data}
 
   }
   catch (error) {
     console.log(error)
+  }
+}
+
+async function saveOrderLinio(billing) {
+  try {
+    const {FirstName, LastName, Phone, Address1, Address2, Address3, Address4, CustomerEmail, Ward, Region, PostCode} = billing.SuccessResponse.Body.Orders.Order.AddressBilling
+    
+  } catch (error) {
+    
   }
 }
 
