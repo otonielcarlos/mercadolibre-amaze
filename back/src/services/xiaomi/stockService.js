@@ -1,5 +1,5 @@
 const {default:axios} = require('axios')
-const {getSkus, updateStock, updatePrevStock, getStockToUpdate} = require('../../database/xiaomi/stockDB')
+const {getSkus, updateStock, updatePrevStock, getStockToUpdate, getPrices} = require('../../database/xiaomi/stockDB')
 require('dotenv').config()
 const arrayChunk = require('array-chunk');
 const { IngramHeaders } = require('../../headers/ingramHeaders');
@@ -83,9 +83,39 @@ async function updateShopifyStock() {
   }
 }
 
-updateDBStock()
-// updateShopifyStock()
+async function putPrices() {
+  try {
+    const productPrices = await getPrices()
+    const config = {
+      headers: {
+        'X-Shopify-Access-Token': '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',
+        'Content-Type': 'application/json'
+      }
+    }
+    // console.log(productPrices)
+    for(let product of productPrices) {
+     const data = {
+        "product": {
+            "id": product.product_id,
+            "variants": [
+                {
+                    "id": product.variant_id,
+                    "price": `${product.price}`
+                }  
+            ]
+        }
+    }
+    // console.log(data)
+    const url = `https://xiaomistorepe.myshopify.com/admin/api/2022-04/products/${product.product_id}.json`
+    const res = await axios.put(url, data, config)
+    console.log(res.data.product.id)
+    }
 
+  } catch (error) {
+    console.log(error.response.data)
+  }
+}
+putPrices()
 module.exports = {
   updateDBStock, 
   updateShopifyStock

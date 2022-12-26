@@ -10,6 +10,13 @@ async function getSkus() {
   return rows
 }
 
+async function getPrices() {
+  const query = 'SELECT * FROM shopifyxiaomi'
+  const [rows] = await db.query(query)
+
+  return rows
+}
+
 async function updatePrevStock() {
   const query = 'UPDATE shopifyxiaomi SET prevStock = stock'
   await db.query(query)
@@ -32,5 +39,6 @@ module.exports = {
   getSkus,
   updateStock,
   updatePrevStock,
-  getStockToUpdate
+  getStockToUpdate,
+  getPrices
 }
