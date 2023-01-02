@@ -4,6 +4,7 @@ const db = require('../db')
 const {getToday, getTodayAndYesterday} = require('../utilsdate')
 
 async function getAsusOrders(today, yesterday){
+  // const query = `SELECT * FROM ingramorders_asus WHERE date BETWEEN '2022-12-28T13:00:00' AND '2022-12-29T12:59:00' AND mercadopago_id IS NULL or mercadopago_id = ''`
   const query = `SELECT * FROM ingramorders_asus WHERE date BETWEEN '${yesterday}T13:00:00' AND '${today}T12:59:00' AND mercadopago_id IS NULL or mercadopago_id = ''`
   const [rows] = await db.query(query)
 

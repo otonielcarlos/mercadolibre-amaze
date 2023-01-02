@@ -2,7 +2,7 @@ const {default:axios} = require('axios')
 const { getEstado  } = require('../../helpers/getEstado')
 const { IngramHeaders } = require('../../headers/ingramHeaders')
 const { getSignature } = require('./orderUtils')
-const { saveOrder, getOrdersFromLinioInDatabase } = require('../../database/linio/ordersDB')
+const { saveOrder, getOrdersFromLinioInDatabase, getLinioOrders, updateFacturaStatus } = require('../../database/linio/ordersDB')
 const {INGRAM_ORDER_URL} = process.env
 
 function prepareDataForIngram(order, items){
@@ -161,6 +161,21 @@ async function getOrdersFromLinio() {
   const orders = await getOrdersFromLinioInDatabase()
   return orders
 }
+async function linioOrdersFromDates(yesterday, today) {
+  const orders = await getLinioOrders(yesterday, today)
+  return orders
+}
+
+async function updateOrderStatusFactura(order_id) {
+  await updateFacturaStatus(order_id)
 
 
-module.exports = { prepareDataForIngram, sendOrderToIngramLinio, getOrdersFromLinio }
+}
+
+module.exports = { 
+  prepareDataForIngram,
+  sendOrderToIngramLinio,
+  getOrdersFromLinio,
+  linioOrdersFromDates,
+  updateOrderStatusFactura
+ }

@@ -9,6 +9,7 @@ function ContextProvider({children}){
   const [asusOrders, setAsusOrders] = useState([])
   const [goproOrders, setGoproOrders] = useState([])
   const [rangeDate, setRangeDate] = useState({})
+  const [linioOrders, setLinioOrders] = useState([])
 
   
   useEffect(() => {
@@ -24,8 +25,14 @@ function ContextProvider({children}){
       const asusOrders = await axios.get(`https://appleamaze.herokuapp.com/pe/v1/orders/asus/all/${yesterday}/${today}`)
       setAsusOrders(() => asusOrders.data)
     }
+
+    async function getLinioOrdersWithDates(yesterday, today){
+      const orders = await axios.get(`http://localhost:4000/pe/v1/orders/linio/all/${yesterday}/${today}`)
+      setLinioOrders(() => orders.data)
+    }
     getGoproOrdersWithDates(yesterday, today)
     getAsusOrdersWithDates(today, yesterday)
+    getLinioOrdersWithDates(yesterday, today)
   },[])
 
 
@@ -35,6 +42,7 @@ function ContextProvider({children}){
     setAsusOrders(() => [])
     // @ts-ignore
     const {from, to} = rangeDate
+    // const asusOrders = await axios.get(`https://appleamaze.herokuapp.com/pe/v1/orders/${marca}/all/${from}/${to}`)
     const asusOrders = await axios.get(`https://appleamaze.herokuapp.com/pe/v1/orders/${marca}/all/${from}/${to}`)
     setAsusOrders(() => asusOrders.data)
   } else if(marca === "gopro") {
@@ -44,6 +52,12 @@ function ContextProvider({children}){
       const goproOrders = await axios.get(`https://appleamaze.herokuapp.com/pe/v1/orders/${marca}/all/${from}/${to}`)
       setGoproOrders(() => goproOrders.data)
 
+    } else if(marca === "linio") {
+      setLinioOrders(() => [])
+// @ts-ignore
+      const {from, to} = rangeDate
+      const orders = await axios.get(`https://appleamaze.herokuapp.com/pe/v1/orders/${marca}/all/${from}/${to}`)
+      setLinioOrders(() => orders.data)
     }
   }
 
@@ -63,7 +77,8 @@ function ContextProvider({children}){
       onChangeDate, 
       setDateForSearch, 
       rangeDate,
-      goproOrders
+      goproOrders,
+      linioOrders
       }}>
       {children}
     </Context.Provider>

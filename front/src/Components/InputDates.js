@@ -5,12 +5,12 @@ import {Context} from '../Context/Context'
 function InputDates({marca}){
 
   const {onChangeDate, setDateForSearch, rangeDate} = useContext(Context)
-  const {from, to} = rangeDate
+  const { to} = rangeDate
   return (
     <>
       <label>Desde</label>
       <input type="date" id="start" name="from"
-      min="2022-08-01" max="2022-12-31"
+      // min="2022-08-01" max="2022-12-31"
       className='button-6'
       onChange={onChangeDate}
       />

@@ -8,6 +8,7 @@ import Navbar from "./Components/Navbar"
 
 import './App.css';
 import GoproOrders from "./Components/GoProOrders"
+import LinioOrders from "./Components/LinioOrders"
 function App() {
   return (
     <div>
@@ -20,6 +21,7 @@ function App() {
       {/* <Route  path="/orders-mercadolibre" element={<Orders />}></Route> */}
       <Route  path="/orders-asus" element={<AsusOrders />}></Route>
       <Route  path="/orders-gopro" element={<GoproOrders />}></Route>
+      <Route  path="/orders-linio" element={<LinioOrders />}></Route>
     </Switch>
     </div>
   )
