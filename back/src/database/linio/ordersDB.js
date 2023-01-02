@@ -31,7 +31,7 @@ async function getOrdersFromLinioInDatabase() {
   return rows
 }
 async function updateFacturaStatus(order_id) {
-  const query = `UPDATE ingramorders_linio SET disabled = 'true' WHERE order_id = '${order_id}'`
+  const query = `UPDATE ingramorders_liniope SET disabled = 'true' WHERE order_id = '${order_id}'`
   const [ rows ] = await db.query(query)
 
 }
