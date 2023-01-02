@@ -2,6 +2,7 @@ const {default:axios} = require('axios')
 const { getEstado  } = require('../../helpers/getEstado')
 const { IngramHeaders } = require('../../headers/ingramHeaders')
 const { getSignature } = require('./orderUtils')
+const { saveOrder } = require('../../database/linio/ordersDB')
 const {INGRAM_ORDER_URL} = process.env
 
 function prepareDataForIngram(order, items){
@@ -106,9 +107,11 @@ async function sendOrderToIngramLinio(orderId) {
     const config = await IngramHeaders()
     
     const ingramResponse = await axios.post(`${INGRAM_ORDER_URL}`, data, config)
-    console.log(ingramResponse.data.orders[0].ingramOrderNumber)
-    await saveOrderLinio(order.data)
+
+    const nv = ingramResponse.data.orders[0].ingramOrderNumber
+    await saveOrderLinio(order.data, items.data, nv)
     return {request : data, ingram: ingramResponse.data}
+    // return {request : data}
 
   }
   catch (error) {
@@ -116,12 +119,41 @@ async function sendOrderToIngramLinio(orderId) {
   }
 }
 
-async function saveOrderLinio(billing) {
+async function saveOrderLinio(billing, items, nv) {
   try {
-    const {FirstName, LastName, Phone, Address1, Address2, Address3, Address4, CustomerEmail, Ward, Region, PostCode} = billing.SuccessResponse.Body.Orders.Order.AddressBilling
-    
+    const {FirstName, LastName, Phone, Address1, Address2, Address3, Address4, CustomerEmail, Ward, Region} = billing.SuccessResponse.Body.Orders.Order.AddressBilling
+    const {InvoiceRequired, NationalRegistrationNumber, ItemsCount, Price, CreatedAt, OrderNumber, OrderId} = billing.SuccessResponse.Body.Orders.Order
+    let products = items.SuccessResponse.Body.OrderItems.OrderItem
+    let itemsSku = ''
+    let itemsNames = ''
+    if(Array.isArray(products)){
+        products.forEach(product => {
+          itemsSku += `${product.Sku}, `
+          itemsNames += `${product.Name}, `
+        })
+    } else {
+      itemsSku += `${products.Sku}`
+      itemsNames += `${products.Name}`
+    }
+    const addressInfo = [Address1, Address2, Address3, Address4, Ward, Region]
+    const name = `${FirstName} ${LastName}`
+    let address = ''
+    addressInfo.forEach((info) => {
+      if(info.length > 0) {
+        address += `${info}, `
+      }
+    })
+    const hasPhone = Phone.length > 0 ? Phone : 'N/A'
+    address += `Peru, T: ${hasPhone}`
+    const date = CreatedAt.split(' ')[0]
+    const customerPO = `LN_${OrderNumber}`
+    const requiereFactura = InvoiceRequired === "true" ? 'Sí' : ' No'
+    const orderData = {OrderId, name, address, nv, CustomerEmail, requiereFactura, NationalRegistrationNumber, ItemsCount, Price, date, customerPO, itemsSku, itemsNames}
+    await saveOrder(orderData)
+
+
   } catch (error) {
-    
+    console.log(error, 'error grabando orden de LinioPE en Base de Datos')
   }
 }
 
