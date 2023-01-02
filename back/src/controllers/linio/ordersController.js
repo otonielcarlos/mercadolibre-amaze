@@ -1,5 +1,5 @@
 const usePromise = require( "../../helpers/errorHandling")
-const {sendOrderToIngramLinio} = require('../../services/linio/ordersService')
+const {sendOrderToIngramLinio, getOrdersFromLinio} = require('../../services/linio/ordersService')
 
 
 async function ordersFromLinioToIM(req, res){
@@ -9,6 +9,17 @@ async function ordersFromLinioToIM(req, res){
   if(error) res.status(500)
 }
 
+async function allOrdersFromLinio(req, res) {
+  try {
+    const allOrders = await getOrdersFromLinio()
+    // console.log(allOrders)
+    res.status(200).json(allOrders)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 module.exports = {
-  ordersFromLinioToIM
+  ordersFromLinioToIM,
+  allOrdersFromLinio
 }

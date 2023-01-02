@@ -41,17 +41,17 @@ const [rows] = await db.query(query)
 console.log(rows)
 }
 
-
-
-
-// async function saveOrder (orderId, nv, customerpo, status, day) {
-// 	const query = `INSERT INTO ingramorders_liniope(order_id, nv, customerpo, status, date, disabled) VALUES('${orderId}','${nv}', '${customerpo}','${status}','${day}', 'false')`;
-// 	await db.query(query)
-// };
 async function saveOrder ({OrderId, name, address, nv, CustomerEmail, requiereFactura, NationalRegistrationNumber, ItemsCount, Price, date, customerPO, itemsSku, itemsNames}) {
 	const query = `INSERT INTO ingramorders_liniope VALUES('${OrderId}','${customerPO}','${nv}', '${Price}','${itemsSku}','${ItemsCount}', '${itemsNames}', '${name}', '${CustomerEmail}', '${address}', '${date}', '${requiereFactura}', '${NationalRegistrationNumber}','false')`;
 	await db.query(query)
 };
+
+async function getOrdersFromLinioInDatabase() {
+  const query = 'SELECT * FROM ingramorders_liniope'
+  const [ rows ] = await db.query(query)
+
+  return rows
+}
 
 module.exports = {
   getAsusOrders,
@@ -59,5 +59,6 @@ module.exports = {
   getAsusOrdersCompleted,
   getAsusOrdersCompletedFromDates,
   updateFacturaStatus,
-  saveOrder
+  saveOrder,
+  getOrdersFromLinioInDatabase
 }

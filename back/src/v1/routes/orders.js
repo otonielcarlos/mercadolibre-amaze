@@ -19,7 +19,7 @@ const { getAllAsusOrders,
    sendProcessingOrdersAsusToIM
         } = require('../../controllers/asus/ordersController')
 
-const { ordersFromLinioToIM } = require('../../controllers/linio/ordersController')
+const { ordersFromLinioToIM, allOrdersFromLinio } = require('../../controllers/linio/ordersController')
 const { ordersFromFalabellaToIM } = require('../../controllers/falabella/ordersController')
 
 //GET TODOS LAS ORDENES MERCADOLIBRE
@@ -36,6 +36,9 @@ router.post('/mercadolibre/apple', ordersFromMercadolibreToIM)
 
 // CALLBACK LINIO ORDENES
 router.post('/linio/new', ordersFromLinioToIM)
+
+//GET ALL ORDERS LINIO
+router.get('/linio/all', allOrdersFromLinio)
 
 //CALLBACK FALABELLA ORDENES
 router.post('/falabella/new', ordersFromFalabellaToIM)
