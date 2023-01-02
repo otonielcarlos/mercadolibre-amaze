@@ -27,7 +27,7 @@ function ContextProvider({children}){
     }
 
     async function getLinioOrdersWithDates(yesterday, today){
-      const orders = await axios.get(`http://localhost:4000/pe/v1/orders/linio/all/${yesterday}/${today}`)
+      const orders = await axios.get(`https://appleamaze.herokuapp.com/pe/v1/orders/linio/all/${yesterday}/${today}`)
       setLinioOrders(() => orders.data)
     }
     getGoproOrdersWithDates(yesterday, today)
