@@ -57,10 +57,11 @@ async function updateAllAsusOrdersInfo() {
           console.log('cant update', order.order_id)
         }
       }
-
       let query = ''
       arr.forEach(order => {
-        query+= `UPDATE ingramorders_asus SET mercadopago_id = '${order.mercadopago_id}', total_tienda = '${order.total_tienda}', total_mercadopago = '${order.total_mercadopago}', skus = '${order.skus}', cantidad =  ${order.total_item_count}, productos = '${order.productos}',nombre = '${order.nombre}', email = '${order.email}', direccion = '${order.address}',document_type = '${order.document_type}', document_number = ${order.document_number} WHERE order_id = '${order.order_id}';\n`
+        const doc_type = order.document_type === undefined ? 'N/A' : order.document_type
+        const doc_num = order.document_number === undefined ? 0 : order.document_number
+        query+= `UPDATE ingramorders_asus SET mercadopago_id = '${order.mercadopago_id}', total_tienda = '${order.total_tienda}', total_mercadopago = '${order.total_mercadopago}', skus = '${order.skus}', cantidad =  ${order.total_item_count}, productos = '${order.productos}',nombre = '${order.nombre}', email = '${order.email}', direccion = '${order.address}',document_type = '${doc_type}', document_number = ${doc_num} WHERE order_id = '${order.order_id}';\n`
       })
 
       await completeAsusOrdersInfo(query)
