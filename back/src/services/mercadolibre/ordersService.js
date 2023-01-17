@@ -100,14 +100,14 @@ async function getOrderDate(resource, account = 'APPLE'){
 
     return dataProps
       } catch (error) {
-        console.log(error)
+        console.log(error.response.data)
   }
   }
 
 async function sendOrderToIngramWithId(req){
   let order = req.params.orderid
 	try {	
-		const isApple = req.params.orderid.includes('MLAPPLE')
+		const isApple = req.params.orderid === 'MLAPPLE'
 		
 		if(isApple){
 
@@ -119,13 +119,14 @@ async function sendOrderToIngramWithId(req){
 	} else {
 
     const id = order.slice(3)
+    console.log(id)
     const orderRes = await sendOrderToIngram(id, 'MULTIMARCAS')
     
     return orderRes
 
 		}
 	} catch (error) {
-		console.log('error', error)
+		console.log('error', error.response.data)
 	}
 }
 
