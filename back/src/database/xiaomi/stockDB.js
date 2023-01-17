@@ -33,6 +33,13 @@ async function getStockToUpdate() {
   return rows
 }
 
+async function searchSku(sku) {
+  const query = `SELECT ingramPartNumber FROM shopifyxiaomi WHERE xiaomiPartNumber = '${sku}'`
+  const [rows] = await db.query(query)
+
+  return rows
+}
+
 
 
 module.exports = {
@@ -40,5 +47,6 @@ module.exports = {
   updateStock,
   updatePrevStock,
   getStockToUpdate,
-  getPrices
+  getPrices,
+  searchSku
 }
