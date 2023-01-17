@@ -146,12 +146,18 @@ async function updateGoProOrdersInfo() {
         let query = ''
         const orderFromGoPro = await api.get(`orders/${order.order_id}`)
         const {id, date_created, billing, meta_data, line_items, total} = orderFromGoPro.data
-        const documento = meta_data.find(meta => meta.key === "billing_tipo_documento").value
-        const document_number = meta_data.find(meta => meta.key === "billing_documento").value
+
+        const documento_dni = meta_data.find(meta => meta.key === "_billing_dni").value
+        const documento_ruc = meta_data.find(meta => meta.key === "_billing_pe_ruc").value
+        const hasDNI = documento_dni !== '' ? 'DNI' : 'N/A'
+        const hasRUC = documento_ruc !== '' ? 'RUC' : 'N/A'
+        const documento = `${hasDNI} - ${hasRUC}`
+
+        const document_number = `DNI: ${documento_dni}\n RUC: ${documento_ruc}`
         const mercadopago_id = meta_data.find(meta => meta.key === "_Mercado_Pago_Payment_IDs").value.split(',').pop().trim()
         const name = `${billing.first_name} ${billing.last_name}`
         const direccion = `${billing.address_1} ${billing.address_2}, ${billing.distrito}, ${billing.provincia}, ${billing.departamento}, Perú. T: ${billing.phone}`
-        const skus = line_items.map(item => `${item.sku}`).join()
+        const skus = line_items.map(item => `${item.sku}`).join('\n')
         const qty = line_items.map(item => item.quantity).reduce((curr, total) => curr + total, 0)
         const productNames = line_items.map(item => `${item.name}`).join()
         const email = billing.email
