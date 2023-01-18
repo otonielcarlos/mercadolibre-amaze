@@ -18,7 +18,7 @@ async function getOrderFromShopify(body){
         zip,
         } = body.shipping_address
 
-
+        console.log(JSON.stringify(body.shipping_address))
   const state = getEstado(province)
   const skusIngram = []
 
@@ -38,13 +38,15 @@ async function getOrderFromShopify(body){
       "quantity": quantity
   }
   })
+
+    const nameFull = name.substring(0,34)
     const data = {
       "customerOrderNumber": `XIAOMI_${order_number}`,
       "notes": "",
       "shipToInfo": {
-        "contact": `${name.substring(0,34)}`,
-        "companyName": `${name.substring(0,34)}`,
-        "name1": `${name.substring(0,34)}`,
+        "contact": nameFull,
+        "companyName": nameFull,
+        "name1": nameFull,
         "addressLine1": `${address1.substring(0,34)}`,
         "addressLine2": `${newAddress2.substring(0,34)}`,
         "addressLine3": `${phone}`,
