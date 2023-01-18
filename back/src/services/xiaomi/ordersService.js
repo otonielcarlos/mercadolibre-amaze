@@ -27,8 +27,8 @@ async function getOrderFromShopify(body){
   for(let products of body.line_items) {
     const {sku, quantity} = products
     const isSku = await searchSku(sku)
-    console.log(isSku)
-    skusIngram.push({sku: isSku, quantity: quantity})
+
+    skusIngram.push({sku: isSku[0].ingramPartNumber, quantity: quantity})
   }
   console.log(JSON.stringify(body.line_items))
   const lines = skusIngram.map((line, idx) => {
