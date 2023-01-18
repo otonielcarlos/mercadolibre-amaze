@@ -21,7 +21,9 @@ async function getOrderFromShopify(body){
 
   const state = getEstado(province)
   const skusIngram = []
-  
+
+  const newAddress2 = address2 === '' ? '' : address2 
+
   for(let products of body.line_items) {
     const {sku, quantity, price} = products
     const isSku = await searchSku(sku)
@@ -44,7 +46,7 @@ async function getOrderFromShopify(body){
         "companyName": `${name.substring(0,34)}`,
         "name1": `${name.substring(0,34)}`,
         "addressLine1": `${address1.substring(0,34)}`,
-        "addressLine2": `${address2.substring(0,34)}`,
+        "addressLine2": `${newAddress2.substring(0,34)}`,
         "addressLine3": `${phone}`,
         "city": `${city}`,
         "state": `${state}`,
