@@ -14,13 +14,14 @@ function OrderEntry(){
   
   async function getCustomerpo(customerpo){ 
     try {
-      console.log(customerpo)
+
 
       for(let order of customerpo){
         console.log(order)
+        // const url = `http://localhost:4000/pe/v1/orders/mercadolibre/apple/${order}`
         const url = `https://appleamaze.herokuapp.com/pe/v1/orders/mercadolibre/apple/${order}`
-        console.log(url)
-          const orderResponse = await axios.get(url , {headers:{ 'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8;application/json' }})
+        // console.log(url)
+          const orderResponse = await axios.get(url , {headers:{ 'Content-Type' : 'application/json' }})
           // @ts-ignore
           setListOfResponses((prev) => [...prev, orderResponse.data])
       }

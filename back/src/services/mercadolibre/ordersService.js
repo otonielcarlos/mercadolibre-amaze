@@ -106,23 +106,26 @@ async function getOrderDate(resource, account = 'APPLE'){
 
 async function sendOrderToIngramWithId(req){
   let order = req.params.orderid
-	try {	
-		const isApple = req.params.orderid === 'MLAPPLE'
-		
-		if(isApple){
+  // console.log('order',order)
 
-		const id = order.slice(8)
-		const orderRes = await sendOrderToIngram(id, 'APPLE')
-		console.log(orderRes)
-    return orderRes
+	try {	
+		const isApple = order.split('_')[0]
+		// const isApple = req.params.orderid === 'MLAPPLE'
+		
+		if(isApple === 'MLAPPLE'){
+
+      const id = order.slice(8)
+      const orderRes = await sendOrderToIngram(id, 'APPLE')
+      console.log(orderRes)
+      return orderRes
 		
 	} else {
 
-    const id = order.slice(3)
-    console.log(id)
-    const orderRes = await sendOrderToIngram(id, 'MULTIMARCAS')
-    
-    return orderRes
+      const id = order.slice(3)
+      console.log(id)
+      const orderRes = await sendOrderToIngram(id, 'MULTIMARCAS')
+      
+      return orderRes
 
 		}
 	} catch (error) {
