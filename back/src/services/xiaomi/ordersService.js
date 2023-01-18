@@ -7,6 +7,7 @@ const {SHOPIFY_ACCESS_TOKEN_XIAOMI} = process.env
 
 
 async function getOrderFromShopify(body){
+  console.log(JSON.stringify(body))
   const {id, order_number} = body 
   const po = String(id)
   const {name,  
@@ -18,7 +19,6 @@ async function getOrderFromShopify(body){
         zip,
         } = body.shipping_address
 
-        console.log(JSON.stringify(body.shipping_address))
   const state = getEstado(province)
   const skusIngram = []
 
@@ -29,7 +29,7 @@ async function getOrderFromShopify(body){
     const isSku = await searchSku(sku)
     skusIngram.push({sku: isSku, quantity: quantity})
   }
-  
+  console.log(JSON.stringify(body.line_items))
   const lines = skusIngram.map((line, idx) => {
     const {sku, quantity} = line
     return  {
