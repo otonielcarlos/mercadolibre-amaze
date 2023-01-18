@@ -22,7 +22,7 @@ async function getOrderFromShopify(body){
   const state = getEstado(province)
   const skusIngram = []
 
-  const newAddress2 = address2 === '' ? '' : address2 
+  const newAddress2 = address2 === null ? '' : address2 
 
   for(let products of body.line_items) {
     const {sku, quantity, price} = products
