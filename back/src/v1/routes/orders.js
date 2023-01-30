@@ -9,7 +9,8 @@ const { orderFromMercadolibreWithID,
 
 const { sendProcessingOrdersToIM,
    getAllGoProOrdersFromDates,
-   updateGoProOrderStatusFactura 
+   updateGoProOrderStatusFactura,
+   getOrderWithID 
       } = require('../../controllers/gopro/ordersController')
 
 const { getAllAsusOrders,
@@ -52,6 +53,8 @@ router.post('/linio/update/factura', updateLinioOrderStatusFactura)
 router.post('/falabella/new', ordersFromFalabellaToIM)
 
 // WEBHOOK DE GOPRO   
+router.get('/gopro/:order_id', getOrderWithID)
+
 router.post('/gopro/new', sendProcessingOrdersToIM)
 
 router.get('/gopro/all/:from/:to', getAllGoProOrdersFromDates)

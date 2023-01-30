@@ -1,5 +1,20 @@
+const { getOrdersFromLinioInDatabase } = require('../../database/linio/ordersDB')
 const usePromise = require('../../helpers/errorHandling')
 const ordersService = require('../../services/gopro/ordersService')
+const {getOrdersFromGoProInDatabase} = require('../../database/gopro/ordersDB')
+
+async function getOrderWithID(req, res) {
+  try {
+    const {order_id} = req.params
+    console.log(order_id)
+    const order = await getOrdersFromGoProInDatabase(order_id)
+    res.status(200).json(order)
+  } catch (error) {
+    res.status(404).send({
+      "message": "error"
+    })
+  }
+}
 
 async function sendProcessingOrdersToIM(req, res) {
   console.log(req.body)
@@ -31,5 +46,6 @@ async function updateGoProOrderStatusFactura(req, res) {
 module.exports = {
   sendProcessingOrdersToIM,
   getAllGoProOrdersFromDates,
-  updateGoProOrderStatusFactura
+  updateGoProOrderStatusFactura,
+  getOrderWithID
 }

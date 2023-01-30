@@ -9,6 +9,7 @@ import Navbar from "./Components/Navbar"
 import './App.css';
 import GoproOrders from "./Components/GoProOrders"
 import LinioOrders from "./Components/LinioOrders"
+import GoProCheckOrder from './Components/GoProCheckOrder'
 function App() {
   return (
     <div>
@@ -20,8 +21,11 @@ function App() {
       exact path="/" element={<OrderEntry />}></Route>
       {/* <Route  path="/orders-mercadolibre" element={<Orders />}></Route> */}
       <Route  path="/orders-asus" element={<AsusOrders />}></Route>
-      <Route  path="/orders-gopro" element={<GoproOrders />}></Route>
+      <Route  
+// @ts-ignore
+      exact path="/orders-gopro" element={<GoproOrders />}></Route>
       <Route  path="/orders-linio" element={<LinioOrders />}></Route>
+      <Route  path="/orders-gopro-check" element={<GoProCheckOrder />}></Route>
     </Switch>
     </div>
   )

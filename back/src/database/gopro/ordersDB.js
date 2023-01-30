@@ -48,6 +48,13 @@ async function updateFacturaGoPro(order_id) {
   return
 }
 
+async function getOrdersFromGoProInDatabase(order_id) {
+  const query = `SELECT * FROM gopro_orders WHERE order_id = '${order_id}'`
+  const [rows] = await db.query(query)
+
+  return rows[0]
+}
+
 module.exports = {
   updateDeliveryGoPro,
   newGoProOrder,
@@ -55,5 +62,6 @@ module.exports = {
   lookGoProOrder,
   updateOrderGoProInDB,
   getGoProOrdersFromDates,
-  updateFacturaGoPro
+  updateFacturaGoPro,
+  getOrdersFromGoProInDatabase
 }
