@@ -22,7 +22,7 @@ async function getDelivery(req, res) {
       if(OC === "ESHOPASUS"){
         const delivery = tags.find(tag => tag.name === "Delivery").value
         const ingramOrder = tags.find(tag => tag.name === "Nota de venta").value
-        await updateTrackingNumberAndStatus({delivery: delivery, ingramOrder: ingramOrder, comment: `Guía de rastreo para tu pedido: ${delivery}`, notify: 1})
+        await updateTrackingNumberAndStatus({delivery: delivery, ingramOrder: ingramOrder, comment: `Guía de rastreo para tu pedido: ${delivery} en:\n https://amaze.com.pe/rastrea-tu-pedido/`, notify: 1})
       } else if(OC === "ULTIMAMILLA") {
         const ingramOrder = tags.find(tag => tag.name === "Nota de venta").value
         const delivery = tags.find(tag => tag.name === "Delivery").value

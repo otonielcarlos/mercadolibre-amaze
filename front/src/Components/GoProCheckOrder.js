@@ -112,8 +112,6 @@ const fecha = order.date.split('T')[0]
                 </Col>
             </Row>
        <Row>
-       {/* <div id="beetrack_widget" lang="es" api-key="GD3mFb3t9GxfSIOFI6a-Lw"></div> <script type="text/javascript" charset="UTF-8" language="javascript" src="https://beetrack-general.s3-us-west-2.amazonaws.com/widget/GD3mFb3t9GxfSIOFI6a-Lw.json"></script> <script async src="https://app.beetrack.cl/javascript_widget/beetrack_widget.js"></script> */}
-
        </Row>
     </TabContainer>
 );
