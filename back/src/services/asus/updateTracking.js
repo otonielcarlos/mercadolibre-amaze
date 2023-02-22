@@ -25,12 +25,12 @@ async function updateTrackingNumberAndStatus({delivery, ingramOrder, comment, no
               "tracks": [
                 {
                   "track_number": `${delivery}`,
-                  "title": "Tracking Number",
+                  "title": "Numero de seguimiento",
                   "carrier_code": "custom"
                 }
               ]          
           }
-    //  console.log(dataShip)
+          
           try {
             const sendShip = await axios.post(baseUrl, dataShip,{headers: { 'Authorization': `Bearer ${token}`}})
             const sendTransit = await statusUpdateAsus({order : order[0].order_id, status: 'inTransit', comment: comment, notify: notify})
