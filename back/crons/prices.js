@@ -1,11 +1,13 @@
 const {getStockMercadolibreApple} = require('../src/services/mercadolibre/stockService')
 const {updateStockGoPro} = require('../src/services/gopro/stockService')
 const {updateStockLinio} = require('../src/services/linio/stockService')
+const {updateDBStock, updateShopifyStock} = require('../src/services/xiaomi/stockService')
 const {updateStockFalabella} = require('../src/services/falabella/stockService')
 const {updateAllAsusOrdersInfo} = require('../src/services/asus/ordersService')
 const usePromise = require('../src/helpers/errorHandling')
 const {createAndUpdateTokens} = require('../src/helpers/tokenHelpers')
 const { updateGoProOrdersInfo } = require('../src/services/gopro/ordersService')
+
 
 async function getStock() {
   const [gopro,errorGopro] = await usePromise(updateStockGoPro)
@@ -15,6 +17,8 @@ async function getStock() {
   await usePromise(updateAllAsusOrdersInfo)
   await usePromise(createAndUpdateTokens)
   await updateGoProOrdersInfo()
+  await usePromise(updateDBStock)
+  await usePromise(updateShopifyStock)
 }
 
 getStock()

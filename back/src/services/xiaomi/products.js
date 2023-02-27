@@ -1,35 +1,733 @@
-const {default: axios} = require('axios')
-require('dotenv')
-const {SHOPIFY_ACCESS_TOKEN_XIAOMI} = process.env
 
-
-async function getProducts() {
-  try {
-    const urlDesc = 'https://s5.aconvert.com/convert/p3r68-cdx67/jfudi-xtsl7.json'
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Shopify-Access-Token': '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'
-      }
-    }
-    
-    const productos = await axios.get(urlDesc)
-    for(let product of productos.data) {
-      const url = `https://xiaomistorepe.myshopify.com/admin/api/2022-10/products/${product.product_id}.json`
-      const body = {
-        "product": {
-          "id": Number(product.product_id),
-          "body_html": `${product.body_html}`
-        }
-      }
-      // console.log(body)
-      const isUpdated = await axios.put(url, body, config)
-      console.log(isUpdated.data.product.id)
-    }
-
-
-  } catch (error) {
-    console.log(error.repsonse)
+const records = [
+  {
+    "product_id": "7956277395691",
+    "variant_id": "43632424648939",
+    "xiaomiPartNumber": "34374",
+    "ingramPartNumber": "5688922",
+    "price": "2749",
+    "discount": "2399",
+    "inventory_id": "45727524159723",
+    "stock": "32",
+    "prevStock": "32",
+    "tags": "Proyectores & Streaming"
+  },
+  {
+    "product_id": "7956276084971",
+    "variant_id": "43632423403755",
+    "xiaomiPartNumber": "28309",
+    "ingramPartNumber": "5688904",
+    "price": "269",
+    "discount": "219",
+    "inventory_id": "45727522914539",
+    "stock": "37",
+    "prevStock": "37",
+    "tags": "Cámaras de seguridad"
+  },
+  {
+    "product_id": "7956276805867",
+    "variant_id": "43632424124651",
+    "xiaomiPartNumber": "33663",
+    "ingramPartNumber": "5688917",
+    "price": "1319",
+    "discount": "",
+    "inventory_id": "45727523635435",
+    "stock": "0",
+    "prevStock": "0",
+    "tags": "Aspiradoras"
+  },
+  {
+    "product_id": "7956275888363",
+    "variant_id": "43632423207147",
+    "xiaomiPartNumber": "34484",
+    "ingramPartNumber": "5688923",
+    "price": "949",
+    "discount": "",
+    "inventory_id": "45727522717931",
+    "stock": "0",
+    "prevStock": "0",
+    "tags": "Aspiradoras"
+  },
+  {
+    "product_id": "7956276936939",
+    "variant_id": "43632424255723",
+    "xiaomiPartNumber": "37504",
+    "ingramPartNumber": "5688938",
+    "price": "1779",
+    "discount": "",
+    "inventory_id": "45727523766507",
+    "stock": "0",
+    "prevStock": "0",
+    "tags": "Aspiradoras"
+  },
+  {
+    "product_id": "7956277002475",
+    "variant_id": "43632424321259",
+    "xiaomiPartNumber": "34370",
+    "ingramPartNumber": "5688921",
+    "price": "1779",
+    "discount": "",
+    "inventory_id": "45727523832043",
+    "stock": "0",
+    "prevStock": "0",
+    "tags": "Aspiradoras"
+  },
+  {
+    "product_id": "7956277100779",
+    "variant_id": "43632424386795",
+    "xiaomiPartNumber": "28314",
+    "ingramPartNumber": "5688905",
+    "price": "219",
+    "discount": "",
+    "inventory_id": "45727523897579",
+    "stock": "0",
+    "prevStock": "0",
+    "tags": "Cocina"
+  },
+  {
+    "product_id": "7956277428459",
+    "variant_id": "43632424681707",
+    "xiaomiPartNumber": "28671",
+    "ingramPartNumber": "5688906",
+    "price": "1399",
+    "discount": "949",
+    "inventory_id": "45727524192491",
+    "stock": "20",
+    "prevStock": "20",
+    "tags": "Aspiradoras"
+  },
+  {
+    "product_id": "7956276248811",
+    "variant_id": "43632423567595",
+    "xiaomiPartNumber": "36251",
+    "ingramPartNumber": "5688935",
+    "price": "1699",
+    "discount": "",
+    "inventory_id": "45727523078379",
+    "stock": "0",
+    "prevStock": "0",
+    "tags": "Aspiradoras"
+  },
+  {
+    "product_id": "7956277690603",
+    "variant_id": "43632424976619",
+    "xiaomiPartNumber": "33495",
+    "ingramPartNumber": "5688915",
+    "price": "389",
+    "discount": "",
+    "inventory_id": "45727524487403",
+    "stock": "0",
+    "prevStock": "0",
+    "tags": "Proyectores & Streaming"
+  },
+  {
+    "product_id": "7956275724523",
+    "variant_id": "43632423010539",
+    "xiaomiPartNumber": "35847",
+    "ingramPartNumber": "5688930",
+    "price": "259",
+    "discount": "179",
+    "inventory_id": "45727522521323",
+    "stock": "315",
+    "prevStock": "315",
+    "tags": "Proyectores & Streaming"
+  },
+  {
+    "product_id": "7956275462379",
+    "variant_id": "43632422781163",
+    "xiaomiPartNumber": "30310",
+    "ingramPartNumber": "5688909",
+    "price": "79",
+    "discount": "59",
+    "inventory_id": "45727522291947",
+    "stock": "100",
+    "prevStock": "100",
+    "tags": "Routers"
+  },
+  {
+    "product_id": "7956277330155",
+    "variant_id": "43632424583403",
+    "xiaomiPartNumber": "33592",
+    "ingramPartNumber": "5688916",
+    "price": "599",
+    "discount": "",
+    "inventory_id": "45727524094187",
+    "stock": "0",
+    "prevStock": "0",
+    "tags": "Routers"
+  },
+  {
+    "product_id": "7956276347115",
+    "variant_id": "43632423698667",
+    "xiaomiPartNumber": "34289",
+    "ingramPartNumber": "5688920",
+    "price": "1199",
+    "discount": "949",
+    "inventory_id": "45727523209451",
+    "stock": "8",
+    "prevStock": "8",
+    "tags": "Routers"
+  },
+  {
+    "product_id": "7956275921131",
+    "variant_id": "43632423239915",
+    "xiaomiPartNumber": "35756",
+    "ingramPartNumber": "5688927",
+    "price": "299",
+    "discount": "",
+    "inventory_id": "45727522750699",
+    "stock": "0",
+    "prevStock": "0",
+    "tags": "Routers"
+  },
+  {
+    "product_id": "7956275986667",
+    "variant_id": "43632423305451",
+    "xiaomiPartNumber": "29048",
+    "ingramPartNumber": "5688908",
+    "price": "269",
+    "discount": "",
+    "inventory_id": "45727522816235",
+    "stock": "0",
+    "prevStock": "0",
+    "tags": "Cámaras de seguridad"
+  },
+  {
+    "product_id": "7956277559531",
+    "variant_id": "43632424812779",
+    "xiaomiPartNumber": "34958",
+    "ingramPartNumber": "5688924",
+    "price": "399",
+    "discount": "349",
+    "inventory_id": "45727524323563",
+    "stock": "30",
+    "prevStock": "30",
+    "tags": "Cuidado Personal"
+  },
+  {
+    "product_id": "7956277592299",
+    "variant_id": "43632424878315",
+    "xiaomiPartNumber": "27105",
+    "ingramPartNumber": "5688903",
+    "price": "179",
+    "discount": "",
+    "inventory_id": "45727524389099",
+    "stock": "0",
+    "prevStock": "0",
+    "tags": "Cuidado Personal"
+  },
+  {
+    "product_id": "7956275429611",
+    "variant_id": "43632422748395",
+    "xiaomiPartNumber": "38581",
+    "ingramPartNumber": "5688940",
+    "price": "279",
+    "discount": "219",
+    "inventory_id": "45727522259179",
+    "stock": "14",
+    "prevStock": "14",
+    "tags": "Cuidado Personal"
+  },
+  {
+    "product_id": "7956277297387",
+    "variant_id": "43632424550635",
+    "xiaomiPartNumber": "24876",
+    "ingramPartNumber": "5688898",
+    "price": "165",
+    "discount": "139",
+    "inventory_id": "45727524061419",
+    "stock": "15",
+    "prevStock": "15",
+    "tags": "Cuidado Personal"
+  },
+  {
+    "product_id": "7956277657835",
+    "variant_id": "43632424943851",
+    "xiaomiPartNumber": "24994",
+    "ingramPartNumber": "5688899",
+    "price": "69",
+    "discount": "",
+    "inventory_id": "45727524454635",
+    "stock": "0",
+    "prevStock": "0",
+    "tags": "Iluminación"
+  },
+  {
+    "product_id": "7956275200235",
+    "variant_id": "43632422486251",
+    "xiaomiPartNumber": "34167",
+    "ingramPartNumber": "5688919",
+    "price": "49",
+    "discount": "79",
+    "inventory_id": "45727521997035",
+    "stock": "120",
+    "prevStock": "120",
+    "tags": "Sensores"
+  },
+  {
+    "product_id": "7956276871403",
+    "variant_id": "43632424190187",
+    "xiaomiPartNumber": "35131",
+    "ingramPartNumber": "5688926",
+    "price": "49",
+    "discount": "",
+    "inventory_id": "45727523700971",
+    "stock": "0",
+    "prevStock": "0",
+    "tags": "Sensores"
+  },
+  {
+    "product_id": "7956277723371",
+    "variant_id": "43632425009387",
+    "xiaomiPartNumber": "22002",
+    "ingramPartNumber": "5688774",
+    "price": "79",
+    "discount": "69",
+    "inventory_id": "45727524520171",
+    "stock": "36",
+    "prevStock": "36",
+    "tags": "Sensores"
+  },
+  {
+    "product_id": "7956275233003",
+    "variant_id": "43632422519019",
+    "xiaomiPartNumber": "28990",
+    "ingramPartNumber": "5688907",
+    "price": "429",
+    "discount": "349",
+    "inventory_id": "45727522029803",
+    "stock": "80",
+    "prevStock": "80",
+    "tags": "Cámaras de seguridad"
+  },
+  {
+    "product_id": "7956276052203",
+    "variant_id": "43632423370987",
+    "xiaomiPartNumber": "40586",
+    "ingramPartNumber": "5688948",
+    "price": "499",
+    "discount": "369",
+    "inventory_id": "45727522881771",
+    "stock": "10",
+    "prevStock": "10",
+    "tags": "Mascotas"
+  },
+  {
+    "product_id": "7956275593451",
+    "variant_id": "43632422879467",
+    "xiaomiPartNumber": "40590",
+    "ingramPartNumber": "5688949",
+    "price": "299",
+    "discount": "",
+    "inventory_id": "45727522390251",
+    "stock": "8",
+    "prevStock": "8",
+    "tags": "Mascotas"
+  },
+  {
+    "product_id": "7956275855595",
+    "variant_id": "43632423174379",
+    "xiaomiPartNumber": "35115",
+    "ingramPartNumber": "5688925",
+    "price": "249",
+    "discount": "169",
+    "inventory_id": "45727522685163",
+    "stock": "28",
+    "prevStock": "28",
+    "tags": "Accesorios"
+  },
+  {
+    "product_id": "7956275265771",
+    "variant_id": "43632422551787",
+    "xiaomiPartNumber": "24270",
+    "ingramPartNumber": "5688896",
+    "price": "79",
+    "discount": "",
+    "inventory_id": "45727522062571",
+    "stock": "0",
+    "prevStock": "0",
+    "tags": "Cargadores"
+  },
+  {
+    "product_id": "7956275396843",
+    "variant_id": "43632422682859",
+    "xiaomiPartNumber": "26923",
+    "ingramPartNumber": "5688902",
+    "price": "79",
+    "discount": "69",
+    "inventory_id": "45727522193643",
+    "stock": "0",
+    "prevStock": "0",
+    "tags": "Cargadores"
+  },
+  {
+    "product_id": "7956277625067",
+    "variant_id": "43632424911083",
+    "xiaomiPartNumber": "26922",
+    "ingramPartNumber": "5688901",
+    "price": "109",
+    "discount": "109",
+    "inventory_id": "45727524421867",
+    "stock": "35",
+    "prevStock": "35",
+    "tags": "Cargadores"
+  },
+  {
+    "product_id": "7956276314347",
+    "variant_id": "43632423633131",
+    "xiaomiPartNumber": "34108",
+    "ingramPartNumber": "5688918",
+    "price": "239",
+    "discount": "209",
+    "inventory_id": "45727523143915",
+    "stock": "60",
+    "prevStock": "60",
+    "tags": "Cargadores"
+  },
+  {
+    "product_id": "7956276904171",
+    "variant_id": "43632424222955",
+    "xiaomiPartNumber": "24792",
+    "ingramPartNumber": "5688897",
+    "price": "179",
+    "discount": "159",
+    "inventory_id": "45727523733739",
+    "stock": "10",
+    "prevStock": "10",
+    "tags": "Cargadores"
+  },
+  {
+    "product_id": "7956275364075",
+    "variant_id": "43632422650091",
+    "xiaomiPartNumber": "26552",
+    "ingramPartNumber": "5688900",
+    "price": "99",
+    "discount": "89",
+    "inventory_id": "45727522160875",
+    "stock": "15",
+    "prevStock": "15",
+    "tags": "Cargadores"
+  },
+  {
+    "product_id": "7956277526763",
+    "variant_id": "43632424780011",
+    "xiaomiPartNumber": "31569",
+    "ingramPartNumber": "5688914",
+    "price": "49",
+    "discount": "49",
+    "inventory_id": "45727524290795",
+    "stock": "84",
+    "prevStock": "84",
+    "tags": "Cargadores"
+  },
+  {
+    "product_id": "7956276281579",
+    "variant_id": "43632423600363",
+    "xiaomiPartNumber": "40033",
+    "ingramPartNumber": "5688947",
+    "price": "99",
+    "discount": "",
+    "inventory_id": "45727523111147",
+    "stock": "0",
+    "prevStock": "0",
+    "tags": "Cargadores"
+  },
+  {
+    "product_id": "7956275495147",
+    "variant_id": "43632422813931",
+    "xiaomiPartNumber": "16084",
+    "ingramPartNumber": "5688772",
+    "price": "125",
+    "discount": "",
+    "inventory_id": "45727522324715",
+    "stock": "0",
+    "prevStock": "0",
+    "tags": "Accesorios"
+  },
+  {
+    "product_id": "7956277035243",
+    "variant_id": "43632424354027",
+    "xiaomiPartNumber": "30802",
+    "ingramPartNumber": "5688911",
+    "price": "429",
+    "discount": "",
+    "inventory_id": "45727523864811",
+    "stock": "0",
+    "prevStock": "0",
+    "tags": "Cocina"
+  },
+  {
+    "product_id": "7956276773099",
+    "variant_id": "43632424091883",
+    "xiaomiPartNumber": "31492",
+    "ingramPartNumber": "5688913",
+    "price": "179",
+    "discount": "159",
+    "inventory_id": "45727523602667",
+    "stock": "35",
+    "prevStock": "35",
+    "tags": "Aspiradoras"
+  },
+  {
+    "product_id": "7956275626219",
+    "variant_id": "43632422912235",
+    "xiaomiPartNumber": "39481",
+    "ingramPartNumber": "5688944",
+    "price": "429",
+    "discount": "",
+    "inventory_id": "45727522423019",
+    "stock": "0",
+    "prevStock": "0",
+    "tags": "Cocina"
+  },
+  {
+    "product_id": "7956275953899",
+    "variant_id": "43632423272683",
+    "xiaomiPartNumber": "39191",
+    "ingramPartNumber": "5688943",
+    "price": "159",
+    "discount": "",
+    "inventory_id": "45727522783467",
+    "stock": "0",
+    "prevStock": "0",
+    "tags": "Cocina"
+  },
+  {
+    "product_id": "7956275560683",
+    "variant_id": "43632422846699",
+    "xiaomiPartNumber": "21907",
+    "ingramPartNumber": "5688773",
+    "price": "99",
+    "discount": "90",
+    "inventory_id": "45727522357483",
+    "stock": "199",
+    "prevStock": "199",
+    "tags": "Cuidado Personal"
+  },
+  {
+    "product_id": "7956276117739",
+    "variant_id": "43632423436523",
+    "xiaomiPartNumber": "30807",
+    "ingramPartNumber": "5688912",
+    "price": "2199",
+    "discount": "",
+    "inventory_id": "45727522947307",
+    "stock": "0",
+    "prevStock": "0",
+    "tags": "Transporte"
+  },
+  {
+    "product_id": "7956276150507",
+    "variant_id": "43632423469291",
+    "xiaomiPartNumber": "30510",
+    "ingramPartNumber": "5688910",
+    "price": "2699",
+    "discount": "",
+    "inventory_id": "45727522980075",
+    "stock": "0",
+    "prevStock": "0",
+    "tags": "Transporte"
+  },
+  {
+    "product_id": "7956277756139",
+    "variant_id": "43632425042155",
+    "xiaomiPartNumber": "24034",
+    "ingramPartNumber": "5688895",
+    "price": "2099",
+    "discount": "",
+    "inventory_id": "45727524552939",
+    "stock": "0",
+    "prevStock": "0",
+    "tags": "Transporte"
+  },
+  {
+    "product_id": "7956275691755",
+    "variant_id": "43632422977771",
+    "xiaomiPartNumber": "35792",
+    "ingramPartNumber": "5688929",
+    "price": "1999",
+    "discount": "",
+    "inventory_id": "45727522488555",
+    "stock": "0",
+    "prevStock": "0",
+    "tags": "Transporte"
+  },
+  {
+    "product_id": "7956275331307",
+    "variant_id": "43632422617323",
+    "xiaomiPartNumber": "38949",
+    "ingramPartNumber": "5688941",
+    "price": "3299",
+    "discount": "",
+    "inventory_id": "45727522128107",
+    "stock": "0",
+    "prevStock": "0",
+    "tags": "Transporte"
+  },
+  {
+    "product_id": "7956276183275",
+    "variant_id": "43632423502059",
+    "xiaomiPartNumber": "36103",
+    "ingramPartNumber": "5688933",
+    "price": "119",
+    "discount": "",
+    "inventory_id": "45727523012843",
+    "stock": "0",
+    "prevStock": "0",
+    "tags": "Audifonos"
+  },
+  {
+    "product_id": "7956276216043",
+    "variant_id": "43632423534827",
+    "xiaomiPartNumber": "36104",
+    "ingramPartNumber": "5688934",
+    "price": "119",
+    "discount": "",
+    "inventory_id": "45727523045611",
+    "stock": "0",
+    "prevStock": "0",
+    "tags": "Audifonos"
+  },
+  {
+    "product_id": "7956276019435",
+    "variant_id": "43632423338219",
+    "xiaomiPartNumber": "38561",
+    "ingramPartNumber": "5688939",
+    "price": "229",
+    "discount": "179",
+    "inventory_id": "45727522849003",
+    "stock": "50",
+    "prevStock": "50",
+    "tags": "Audifonos"
+  },
+  {
+    "product_id": "7956275790059",
+    "variant_id": "43632423076075",
+    "xiaomiPartNumber": "35912",
+    "ingramPartNumber": "5688931",
+    "price": "319",
+    "discount": "199",
+    "inventory_id": "45727522586859",
+    "stock": "3",
+    "prevStock": "3",
+    "tags": "Smart Watch"
+  },
+  {
+    "product_id": "7956275822827",
+    "variant_id": "43632423141611",
+    "xiaomiPartNumber": "35915",
+    "ingramPartNumber": "5688932",
+    "price": "319",
+    "discount": "199",
+    "inventory_id": "45727522652395",
+    "stock": "40",
+    "prevStock": "40",
+    "tags": "Smart Watch"
+  },
+  {
+    "product_id": "7956275298539",
+    "variant_id": "43632422584555",
+    "xiaomiPartNumber": "36266",
+    "ingramPartNumber": "5688936",
+    "price": "499",
+    "discount": "299",
+    "inventory_id": "45727522095339",
+    "stock": "40",
+    "prevStock": "40",
+    "tags": "Audifonos"
+  },
+  {
+    "product_id": "7956275757291",
+    "variant_id": "43632423043307",
+    "xiaomiPartNumber": "39873",
+    "ingramPartNumber": "5688946",
+    "price": "259",
+    "discount": "",
+    "inventory_id": "45727522554091",
+    "stock": "400",
+    "prevStock": "400",
+    "tags": "Smart Band"
+  },
+  {
+    "product_id": "7956277166315",
+    "variant_id": "43632424419563",
+    "xiaomiPartNumber": "35784",
+    "ingramPartNumber": "5688928",
+    "price": "799",
+    "discount": "549",
+    "inventory_id": "45727523930347",
+    "stock": "30",
+    "prevStock": "30",
+    "tags": "Smart Watch"
+  },
+  {
+    "product_id": "7956275658987",
+    "variant_id": "43632422945003",
+    "xiaomiPartNumber": "36607",
+    "ingramPartNumber": "5688937",
+    "price": "949",
+    "discount": "749",
+    "inventory_id": "45727522455787",
+    "stock": "20",
+    "prevStock": "20",
+    "tags": "Smart Watch"
+  },
+  {
+    "product_id": "7956276838635",
+    "variant_id": "43632424157419",
+    "xiaomiPartNumber": "38951",
+    "ingramPartNumber": "5688942",
+    "price": "329",
+    "discount": "269",
+    "inventory_id": "45727523668203",
+    "stock": "20",
+    "prevStock": "20",
+    "tags": "Audifonos"
+  },
+  {
+    "product_id": "7956277362923",
+    "variant_id": "43632424616171",
+    "xiaomiPartNumber": "39500",
+    "ingramPartNumber": "5688945",
+    "price": "349",
+    "discount": "",
+    "inventory_id": "45727524126955",
+    "stock": "196",
+    "prevStock": "196",
+    "tags": "Smart Band"
   }
+]
+require('dotenv').config()
+const {SHOPIFY_ACCESS_TOKEN_XIAOMI} = process.env
+const {default:axios} = require('axios')
+// {
+//   "product_id": "7956277395691",
+//   "variant_id": "43632424648939",
+//   "xiaomiPartNumber": "34374",
+//   "ingramPartNumber": "5688922",
+//   "price": "2749",
+//   "discount": "2399",
+//   "inventory_id": "45727524159723",
+//   "stock": "32",
+//   "prevStock": "32",
+//   "tags": "Proyectores & Streaming"
+// }
+async function updateProductTags() {
+  try {
+  for (let record of records) {
+    const url = `https://xiaomistorepe.myshopify.com/admin/api/2022-04/products/${record.product_id}.json`
+    let data = {
+      "product": {
+          "id": record.product_id,
+          "tags": record.tags
+      }
+  }
+    const isUpdated = await axios.put(url, data, {headers: {'X-Shopify-Access-Token': SHOPIFY_ACCESS_TOKEN_XIAOMI}})
+    console.log(isUpdated.data)
+
+  }
+} catch (error) {
+    console.log(error)
 }
-getProducts()
+}
+updateProductTags()

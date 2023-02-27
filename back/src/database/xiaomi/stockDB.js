@@ -11,7 +11,7 @@ async function getSkus() {
 }
 
 async function getPrices() {
-  const query = 'SELECT * FROM shopifyxiaomi'
+  const query = 'SELECT * FROM shopifyxiaomi WHERE discount IS NOT NULL'
   const [rows] = await db.query(query)
 
   return rows
@@ -27,7 +27,7 @@ async function updateStock(query) {
 }
 
 async function getStockToUpdate() {
-  const query = 'SELECT inventory_id, stock from shopifyxiaomi WHERE stock != prevStock'
+  const query = 'SELECT inventory_id, stock, product_id, variant_id from shopifyxiaomi'
   const [rows] = await db.query(query)
 
   return rows
