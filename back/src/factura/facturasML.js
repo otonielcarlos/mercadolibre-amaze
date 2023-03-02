@@ -17,7 +17,7 @@ class Factura {
     }
 
     get path() {
-        return `/Users/user/Downloads/amaze_facturas31ene/`
+        return `/Users/user/Downloads/amaze_facturas28feb/`
     }
 
     DeleteFactura(factura, path) {

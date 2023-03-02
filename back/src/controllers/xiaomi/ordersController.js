@@ -10,10 +10,13 @@ async function sendNewOrderXiaomi(req, res) {
     if(sendOrder.length === 0){
       await saveOrderInDB(req.body.id)
       const newBody = await orderService.getOrderDetailsShopify(req.body.id)
-      const {data} = await orderService.getOrderFromShopify(newBody)
-      console.log(JSON.stringify(data))
-      const responseIngram = await orderService.sendOrderToIngram(data)
-      console.log(JSON.stringify(responseIngram))
+
+      if(newBody.financial_status === 'paid'){ 
+        const {data} = await orderService.getOrderFromShopify(newBody)
+        console.log(JSON.stringify(data))
+        const responseIngram = await orderService.sendOrderToIngram(data)
+        console.log(JSON.stringify(responseIngram))
+      }
     } else {
       console.log('order already in Ingram', req.body.order_number)
     }

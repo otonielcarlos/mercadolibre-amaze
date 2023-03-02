@@ -2,9 +2,14 @@ const {default: axios} = require('axios')
 const { IngramHeaders } = require('../../headers/ingramHeaders')
 const {getEstado} = require('../../helpers/getEstado')
 const { searchSku } = require('../../database/xiaomi/stockDB')
+const { saveCompleteOrderInfo, updateIngramOrderNumber } = require('../../database/xiaomi/ordersDB')
 require('dotenv').config()
 const {SHOPIFY_ACCESS_TOKEN_XIAOMI} = process.env
-
+const config = {
+  headers:{
+    'X-Shopify-Access-Token' : `${SHOPIFY_ACCESS_TOKEN_XIAOMI}`
+  }
+}
 
 async function getOrderFromShopify(body){
   // console.log(JSON.stringify(body))
@@ -16,9 +21,10 @@ async function getOrderFromShopify(body){
         phone,
         city,
         province,
+        company,
         zip,
         } = body.shipping_address
-
+  const total = body.current_subtotal_price
   const state = getEstado(province)
   const skusIngram = []
 
@@ -69,6 +75,7 @@ async function getOrderFromShopify(body){
   }
     
     // console.log(data)
+    saveCompleteOrderInfo({...data, total_tienda: total, id: id, ...body, document_number: company})
     console.log(JSON.stringify(data))
     return {data}
     }
@@ -79,6 +86,12 @@ async function getOrderFromShopify(body){
       const headers = await IngramHeaders()
       // console.log(JSON.stringify(headers))
       const responseIngram = await axios.post(url, requestBody, headers)
+      const dataForDb = {
+        ingramOrder: responseIngram.data.orders[0].ingramOrderNumber,
+        customerPo: responseIngram.data.customerOrderNumber,
+
+      }
+      await updateIngramOrderNumber(dataForDb)
       const data = {
         customerpo: responseIngram.data.customerOrderNumber,
         ingramOrderNumber: responseIngram.data.orders[0].ingramOrderNumber,
@@ -95,11 +108,6 @@ async function getOrderFromShopify(body){
   async function getOrderDetailsShopify(orderid){
     try {
       const url = `https://xiaomistorepe.myshopify.com/admin/api/2022-04/orders/${orderid}.json`
-      const config = {
-        headers:{
-          'X-Shopify-Access-Token' : `${SHOPIFY_ACCESS_TOKEN_XIAOMI}`
-        }
-      }
       const shopifyOrder = await axios.get(url, config)
       return shopifyOrder.data.order
     } catch (error) {
@@ -107,8 +115,30 @@ async function getOrderFromShopify(body){
     }
   }
 
+  async function deliveryXiaomiUpdate(orderBody){
+    const url = `https://xiaomistorepe.myshopify.com/admin/api/2022-04/orders/${orderBody.order}/fulfillments.json`
+    const data = {
+      "fulfillment": {
+          "location_id": 71718273259,
+          "tracking_number": `${orderBody.delivery}`,
+          "tracking_url": "https://amaze.com.pe/rastrea-tu-pedido/",
+          "tracking_company": "Other",
+          "notify_customer": false,
+          "line_items": orderBody.lines
+      }   
+  }
+  try {
+    console.log(data)
+    const updateData = await axios.post(url, data, config)
+    return updateData.data
+  } catch (error) {
+    console.log('no se puede actualizar', error.response.data)
+  }
+  
+  }
 module.exports = {
   getOrderFromShopify,
   sendOrderToIngram,
-  getOrderDetailsShopify
+  getOrderDetailsShopify,
+  deliveryXiaomiUpdate
 }
