@@ -14,7 +14,7 @@ const {BEETRACK_AMAZE_CONTACT_ID, SHOPIFY_ACCESS_TOKEN_XIAOMI} = process.env
 
 
 async function getDelivery(req, res) {
-  // res.status(200).send()
+  res.status(200).send()
   // console.log(req.body)
   
   try {
@@ -48,7 +48,7 @@ async function getDelivery(req, res) {
         // const line_items = order[0].line_items.map(item => {})
         console.log(lines, delivery)
         const result = await deliveryXiaomiUpdate({order: order[0].order_id, lines, delivery: delivery})
-        res.status(200).json(result)
+        // res.status(200).json(result)
       }
     }
     
