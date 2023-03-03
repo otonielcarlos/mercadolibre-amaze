@@ -51,9 +51,8 @@ async function getDelivery(req, res) {
         // res.status(200).json(result)
       }
     }
-    
   } catch (error) {
-    console.log('error en getDelivery Controller', error)
+    console.log('error en getDelivery Controller')
   }
 }
 
