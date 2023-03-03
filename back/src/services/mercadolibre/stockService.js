@@ -14,6 +14,7 @@ async function getStockMercadolibreApple() {
 
     // GET ALL ACTIVE ITEMS WITH AND WITHOUT VARIATIONS
     const accessToken = await getTokens()
+    console.log(accessToken)
     const itemsData = await axios.get(`${MERCADOLIBRE_URL_ACTIVE_ITEMS}`, {headers: {'Authorization': `Bearer ${accessToken.mercadolibreapple}`}})
     const ATTRIBUTE_SELLER_SKU = "SELLER_SKU"
     const {results, scroll_id, paging} = itemsData.data
