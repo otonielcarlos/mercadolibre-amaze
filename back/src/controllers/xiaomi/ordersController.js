@@ -10,7 +10,7 @@ async function sendNewOrderXiaomi(req, res) {
     if(sendOrder.length === 0){
       await saveOrderInDB(req.body.id)
       const newBody = await orderService.getOrderDetailsShopify(req.body.id)
-
+      console.log(newBody.financial_status)
       if(newBody.financial_status === 'paid'){ 
         const {data} = await orderService.getOrderFromShopify(newBody)
         console.log(JSON.stringify(data))
@@ -18,7 +18,7 @@ async function sendNewOrderXiaomi(req, res) {
         console.log(JSON.stringify(responseIngram))
       }
     } else {
-      console.log('financial status not paid ', req.body.order_number)
+      console.log('financial status not paid')
     }
   } catch (error) {
     console.log(error)
