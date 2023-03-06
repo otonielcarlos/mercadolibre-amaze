@@ -18,7 +18,7 @@ async function sendNewOrderXiaomi(req, res) {
         console.log(JSON.stringify(responseIngram))
       }
     } else {
-      console.log('order already in Ingram', req.body.order_number)
+      console.log('financial status not paid ', req.body.order_number)
     }
   } catch (error) {
     console.log(error)

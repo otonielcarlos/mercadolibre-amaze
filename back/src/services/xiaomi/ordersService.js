@@ -47,8 +47,9 @@ async function getOrderFromShopify(body){
   })
 
     const nameFull = name.substring(0,34)
+    const customerOrder = `XIAOMI_${order_number}`
     const data = {
-      "customerOrderNumber": `XIAOMI_${order_number}`,
+      "customerOrderNumber": customerOrder,
       "notes": "",
       "shipToInfo": {
         "contact": nameFull,
@@ -75,7 +76,7 @@ async function getOrderFromShopify(body){
   }
     
     // console.log(data)
-    saveCompleteOrderInfo({...data, total_tienda: total, id: id, ...body, document_number: company})
+    saveCompleteOrderInfo({...data, total_tienda: total, id: id, ...body, document_number: company, customerPo: customerOrder})
     console.log(JSON.stringify(data))
     return {data}
     }

@@ -26,7 +26,7 @@ async function saveCompleteOrderInfo(order) {
 }
 
 async function updateIngramOrderNumber(order) {
-  let query = `UPDATE shopify_xiaomi_orders SET ingramOrder = '${order.ingramOrder}' WHERE order_id = '${order.customerPo}'`
+  let query = `UPDATE shopify_xiaomi_orders SET ingramOrder = '${order.ingramOrder}' WHERE customerPo = '${order.customerPo}'`
 
   await db.query(query)
 }
