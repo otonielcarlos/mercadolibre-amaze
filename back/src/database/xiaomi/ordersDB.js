@@ -20,7 +20,8 @@ async function saveCompleteOrderInfo(order) {
   const productoSku = order.lines.map(product => `${product.ingramPartNumber}\n`).join(', ')
 
   let query = `UPDATE shopify_xiaomi_orders SET customerPo = '${order.customerPo}', total_tienda = '${order.total_tienda}', skus = '${productoSku}', 
-  productos = '${productosNombre}', nombre = '${order.billing_address.name}', direccion = '${address}', email = '${order.contact_email}', document_number = '${order.document_number}', date = '${order.processed_at}' WHERE order_id = '${order.id}';`
+  productos = '${productosNombre}', nombre = '${order.billing_address.name}', direccion = '${address}', email = '${order.contact_email}', document_number = '${order.document_number}', 
+  phone = '${order.phone}', date = '${order.processed_at}' WHERE order_id = '${order.id}';`
 
   await db.query(query)
 }
