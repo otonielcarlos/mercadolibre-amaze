@@ -13,7 +13,7 @@ const config = {
 
 async function getOrderFromShopify(body){
   // console.log(JSON.stringify(body))
-  const {id, order_number} = body 
+  const {id, order_number, processed_at}  = body 
   const po = String(id)
   const {name,  
         address1, 
@@ -76,7 +76,7 @@ async function getOrderFromShopify(body){
   }
     
     // console.log(data)
-    saveCompleteOrderInfo({...data, total_tienda: total, id: id, ...body, document_number: company, customerPo: customerOrder})
+    saveCompleteOrderInfo({...data, total_tienda: total, id: id, ...body, document_number: company, customerPo: customerOrder, date: processed_at})
     console.log(JSON.stringify(data))
     return {data}
     }
