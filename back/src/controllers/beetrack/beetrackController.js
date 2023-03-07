@@ -19,7 +19,6 @@ async function getDelivery(req, res) {
   
   try {
     const {dispatch_guide, tags} = req.body
-    console.log(req.body)
     if(dispatch_guide.contact_identifier === BEETRACK_AMAZE_CONTACT_ID){
       const isAsus = tags.find(tag => tag.name === "OC").value
       const OC = isAsus.split('_')[0]
@@ -27,7 +26,7 @@ async function getDelivery(req, res) {
         const delivery = tags.find(tag => tag.name === "Delivery").value
         const ingramOrder = tags.find(tag => tag.name === "Nota de venta").value
         await updateTrackingNumberAndStatus({delivery: delivery, ingramOrder: ingramOrder, comment: `Guía de rastreo para tu pedido: ${delivery} en:\n https://amaze.com.pe/rastrea-tu-pedido/`, notify: 1})
-
+        
       } else if(OC === "ULTIMAMILLA") {
         const ingramOrder = tags.find(tag => tag.name === "Nota de venta").value
         const delivery = tags.find(tag => tag.name === "Delivery").value
@@ -35,6 +34,7 @@ async function getDelivery(req, res) {
         await deliveryGoProUpdate({order: order[0].order_id, dispatcher: dispatch_guide.guide, delivery: delivery})
         
       } else if(OC === "XIAOMI") {
+        console.log(req.body)
         const ingramOrder = tags.find(tag => tag.name === "Nota de venta").value
         const delivery = tags.find(tag => tag.name === "Delivery").value
         const order = await getShopifyOrderID(ingramOrder)
