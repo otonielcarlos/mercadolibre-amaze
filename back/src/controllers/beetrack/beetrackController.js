@@ -27,11 +27,13 @@ async function getDelivery(req, res) {
         const delivery = tags.find(tag => tag.name === "Delivery").value
         const ingramOrder = tags.find(tag => tag.name === "Nota de venta").value
         await updateTrackingNumberAndStatus({delivery: delivery, ingramOrder: ingramOrder, comment: `Guía de rastreo para tu pedido: ${delivery} en:\n https://amaze.com.pe/rastrea-tu-pedido/`, notify: 1})
+
       } else if(OC === "ULTIMAMILLA") {
         const ingramOrder = tags.find(tag => tag.name === "Nota de venta").value
         const delivery = tags.find(tag => tag.name === "Delivery").value
         const order = await lookGoProOrder(ingramOrder)
         await deliveryGoProUpdate({order: order[0].order_id, dispatcher: dispatch_guide.guide, delivery: delivery})
+        
       } else if(OC === "XIAOMI") {
         const ingramOrder = tags.find(tag => tag.name === "Nota de venta").value
         const delivery = tags.find(tag => tag.name === "Delivery").value
@@ -48,11 +50,11 @@ async function getDelivery(req, res) {
         // const line_items = order[0].line_items.map(item => {})
         console.log(lines, delivery)
         const result = await deliveryXiaomiUpdate({order: order[0].order_id, lines, delivery: delivery})
-        // res.status(200).json(result)
+        res.status(200).json(result)
       }
     }
   } catch (error) {
-    console.log('error en getDelivery Controller')
+    console.log('error en getDelivery Controller', error)
   }
 }
 

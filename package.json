@@ -9,7 +9,7 @@
     "dev": "nodemon ./back/server",
     "factura": "node ./back/src/factura/facturador.js",
     "prices": "node ./back/crons/prices.js",
-    "xiaomi": "node ./back/src/services/xiaomi/stockService.js"
+    "xiaomi": "node ./back/src/services/xiaomi/fillDB.js"
   },
   "author": "",
   "license": "ISC",
