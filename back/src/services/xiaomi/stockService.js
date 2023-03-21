@@ -60,35 +60,46 @@ async function updateDBStock(){
 }
 
 async function updateShopifyStock() {
-  const inventoryIds = await getStockToUpdate()
-  // console.log(inventoryIds)
-  let updateUrl = 'https://xiaomistorepe.myshopify.com/admin/api/2022-04/inventory_levels/set.json'
-  
-  // @ts-ignore 
-  for(let item of inventoryIds){
-    let updateUrlpublish = `https://xiaomistorepe.myshopify.com/admin/api/2022-04/variants/${item.variationid}.json`
+  const inventoryIds = await getStockToUpdate();
+  let updateUrl = 'https://xiaomistorepe.myshopify.com/admin/api/2022-04/inventory_levels/set.json';
+
+  let delay = 500; // 500 ms de espera entre llamadas para no exceder 2 llamadas por segundo
+
+  async function processItem(item) {
+    let updateUrlpublish = `https://xiaomistorepe.myshopify.com/admin/api/2022-04/variants/${item.variationid}.json`;
     try {
-      const isPublished = Number(item.stock) > 0
+      const isPublished = Number(item.stock) > 0;
       let dataInventoryId = {
         "location_id": 71718273259,
         "inventory_item_id": item.inventory_id,
         "available": Number(item.stock),
-      }
+      };
       const dataPublish = {
         "variant": {
           "id": item.variationid,
           "published": isPublished
         }
-      }
-      
-      const isUpdated = await axios.post(updateUrl, dataInventoryId, {headers: {'X-Shopify-Access-Token': SHOPIFY_ACCESS_TOKEN_XIAOMI}})
-      // const isProductPublish = await axios.post(updateUrlpublish, dataPublish, {headers: {'X-Shopify-Access-Token': SHOPIFY_ACCESS_TOKEN_XIAOMI}})
-      console.log(isUpdated.data.inventory_level.inventory_item_id ,isUpdated.data.inventory_level.available)
+      };
+
+      const isUpdated = await axios.post(updateUrl, dataInventoryId, {headers: {'X-Shopify-Access-Token': SHOPIFY_ACCESS_TOKEN_XIAOMI}});
+      console.log(isUpdated.data.inventory_level.inventory_item_id, isUpdated.data.inventory_level.available);
     } catch (error) {
-      console.log('not updating', item, error.response.data)
+      console.log('not updating', item, error.response.data);
     }
   }
+
+  for (let i = 0; i < inventoryIds.length; i++) {
+    setTimeout(async () => {
+      await processItem(inventoryIds[i]);
+    }, i * delay);
+  }
 }
+
+
+
+
+
+
 
 async function putPrices() {
   try {

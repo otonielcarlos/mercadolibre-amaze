@@ -9,13 +9,16 @@
     "dev": "nodemon ./back/server",
     "factura": "node ./back/src/factura/facturador.js",
     "prices": "node ./back/crons/prices.js",
-    "xiaomi": "node ./back/src/services/xiaomi/fillDB.js"
+    "xiaomi": "node ./back/src/services/xiaomi/fillDB.js",
+    "reporte": "node ./back/src/reportes/multimarcas/ordenes.js",
+    "labels": "node ./back/src/helpers/getMercadoLibreShippingLables.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@shopify/shopify-api": "^6.0.1",
     "@woocommerce/woocommerce-rest-api": "^1.0.1",
+    "archiver": "^5.3.1",
     "array-chunk": "^1.0.0",
     "axios": "^0.21.4",
     "basic-ftp": "^4.6.6",
@@ -25,11 +28,14 @@
     "form-data": "^4.0.0",
     "ftps": "^1.1.1",
     "mocha": "^9.0.2",
+    "moment-timezone": "^0.5.41",
     "mysql2": "^2.3.3",
     "nodejs-file-downloader": "^4.9.3",
     "nodemailer": "^6.8.0",
     "nodemon": "^2.0.7",
+    "pdf-lib": "^1.17.1",
     "pdfkit": "^0.13.0",
-    "supertest": "^6.1.3"
+    "supertest": "^6.1.3",
+    "util": "^0.12.5"
   }
 }

@@ -2,7 +2,7 @@ const {default: axios} = require('axios')
 const { IngramHeaders } = require('../../headers/ingramHeaders')
 const {getEstado} = require('../../helpers/getEstado')
 const { searchSku } = require('../../database/xiaomi/stockDB')
-const { saveCompleteOrderInfo, updateIngramOrderNumber } = require('../../database/xiaomi/ordersDB')
+const { saveCompleteOrderInfo, updateIngramOrderNumber, saveOrderInDB } = require('../../database/xiaomi/ordersDB')
 require('dotenv').config()
 const {SHOPIFY_ACCESS_TOKEN_XIAOMI} = process.env
 const config = {
@@ -76,6 +76,7 @@ async function getOrderFromShopify(body){
   }
     
     // console.log(data)
+    saveOrderInDB(id)
     saveCompleteOrderInfo({...data, total_tienda: total, id: id, ...body, document_number: company, customerPo: customerOrder, phone, date: processed_at})
     console.log(JSON.stringify(data))
     return {data}
@@ -92,6 +93,7 @@ async function getOrderFromShopify(body){
         customerPo: responseIngram.data.customerOrderNumber,
 
       }
+
       await updateIngramOrderNumber(dataForDb)
       const data = {
         customerpo: responseIngram.data.customerOrderNumber,
@@ -124,7 +126,7 @@ async function getOrderFromShopify(body){
           "tracking_number": `${orderBody.delivery}`,
           "tracking_url": "https://amaze.com.pe/rastrea-tu-pedido/",
           "tracking_company": "Other",
-          "notify_customer": false,
+          "notify_customer": true,
           "line_items": orderBody.lines
       }   
   }

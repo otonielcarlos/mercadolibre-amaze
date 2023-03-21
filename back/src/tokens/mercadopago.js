@@ -2,6 +2,7 @@
 const {default: axios} = require('axios')
 require('dotenv').config()
 const {CLIENT_SECRET_MERCADOPAGO_GOPRO, CLIENT_ID_MERCADOPAGO_GOPRO, REFRESH_TOKEN_GOPRO} = process.env
+
 const bodyGoPro = {
   "client_secret": CLIENT_SECRET_MERCADOPAGO_GOPRO,
   "client_id":CLIENT_ID_MERCADOPAGO_GOPRO,

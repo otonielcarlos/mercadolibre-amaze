@@ -44,7 +44,6 @@ async function token (isApple = true) {
 				},
 			})
 			const token = tokenData.data.access_token
-			console.log('token apple')
 			return token
 		} catch (error) {
 			console.log(error.response.data, 'error en token apple')
@@ -52,7 +51,7 @@ async function token (isApple = true) {
 		}
 	} else {
 		try {
-			console.log(JSON.stringify(bodyMultimarcas))
+			// console.log(JSON.stringify(bodyMultimarcas))
 			const tokenData = await axios.post('https://api.mercadolibre.com/oauth/token', bodyMultimarcas, {
 				headers: {
 					Accept: 'application/json',
@@ -60,7 +59,7 @@ async function token (isApple = true) {
 				},
 			})
 			const token = tokenData.data.access_token
-			console.log('token multimarcas')
+			// console.log('token multimarcas')
 			return token
 		} catch (error) {
 			console.log(error.response.data, 'error multimarcas token')
@@ -72,9 +71,7 @@ async function token (isApple = true) {
 async function getTokens(){
 	try {	
 			const tokenApple = await token(true)
-			console.log(tokenApple)	
 			const tokenMultimarcas = await token(false)	
-			console.log(tokenMultimarcas)	
 			return [tokenApple, tokenMultimarcas]
 	} catch (error) {
 			console.log('error en getTokens')
