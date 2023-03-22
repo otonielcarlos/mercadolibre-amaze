@@ -14,7 +14,7 @@ const {BEETRACK_AMAZE_CONTACT_ID, SHOPIFY_ACCESS_TOKEN_XIAOMI} = process.env
 const sendRequest = require('../../helpers/email')
 
 async function getDelivery(req, res) {
-  // res.status(200).send()
+  res.status(200).send()
   // console.log(req.body)
   
   try {
