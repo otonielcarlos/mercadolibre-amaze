@@ -34,7 +34,7 @@ async function getDelivery(req, res) {
         await deliveryGoProUpdate({order: order[0].order_id, dispatcher: dispatch_guide.guide, delivery: delivery})
         
       } else if(OC === "XIAOMI") {
-        sendRequest(req.body)
+        // sendRequest(req.body)
         const ingramOrder = tags.find(tag => tag.name === "Nota de venta").value
         const delivery = tags.find(tag => tag.name === "Delivery").value
         const order = await getShopifyOrderID(ingramOrder)
