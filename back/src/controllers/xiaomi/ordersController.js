@@ -3,7 +3,7 @@ const {isOrderInDB, saveOrderInDB, getDBTracking} = require('../../database/xiao
 
 async function getOrderWithShopifyId(req, res) {
   try {
-    const {data} = await orderService.getOrderFromShopify(req.params.order_id)
+    const {data} = await orderService.getOrderDetailsShopify(req.params.order_id)
     res.status(200).send(data)
   } catch (error) {
     console.log(error)
