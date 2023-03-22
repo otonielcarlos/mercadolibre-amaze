@@ -4,12 +4,11 @@ const {isOrderInDB, saveOrderInDB} = require('../../database/xiaomi/ordersDB')
 async function sendNewOrderXiaomi(req, res) {
   try {
     res.status(200).send()
-    console.log(req.body.id)
     // @ts-ignore
     // if(sendOrder.length === 0){
       const newBody = await orderService.getOrderDetailsShopify(req.body.id)
       if(newBody.financial_status === 'paid') {
-        const sendOrder = await isOrderInDB(req.body.id)
+        // const sendOrder = await isOrderInDB(req.body.id)
         // @ts-ignore
         if(sendOrder.length !== 0 && sendOrder[0].ingramOrder !== null) return console.log('order already sent')
         const {data} = await orderService.getOrderFromShopify(newBody)

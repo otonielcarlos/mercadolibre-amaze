@@ -1,7 +1,7 @@
 const { getAsusEntity } = require('../../database/asus/ordersDB')
 const {default: axios} = require('axios')
 const { lookGoProOrder } = require('../../database/gopro/ordersDB')
-const { getShopifyOrderID } = require('../../database/xiaomi/ordersDB')
+const { getShopifyOrderID, updateLimaTracking, isOrderInDB } = require('../../database/xiaomi/ordersDB')
 const usePromise = require('../../helpers/errorHandling')
 const ordersService = require('../../services/asus/ordersService')
 const { statusUpdateAsus } = require('../../services/asus/statusUpdateAsus')
@@ -38,19 +38,21 @@ async function getDelivery(req, res) {
         const ingramOrder = tags.find(tag => tag.name === "Nota de venta").value
         const delivery = tags.find(tag => tag.name === "Delivery").value
         const order = await getShopifyOrderID(ingramOrder)
-        const url = `https://xiaomistorepe.myshopify.com/admin/api/2022-04/orders/${order[0].order_id}.json`
-        console.log(url)
-        const config = {
-          headers:{
-            'X-Shopify-Access-Token' : `${SHOPIFY_ACCESS_TOKEN_XIAOMI}`
+        if(order[0].tracking.length === 0) {
+          const url = `https://xiaomistorepe.myshopify.com/admin/api/2022-04/orders/${order[0].order_id}.json`
+          const config = {
+            headers:{
+              'X-Shopify-Access-Token' : `${SHOPIFY_ACCESS_TOKEN_XIAOMI}`
+            }
           }
+          const orderId = await axios.get(url, config)
+          const lines = orderId.data.order.line_items.map(line => {return {id: line.id}})
+          const result = await deliveryXiaomiUpdate({order: order[0].order_id, lines, delivery: delivery})
+          sendRequest(`${order[0].order_id}, actualizado ${delivery}`)
+          updateLimaTracking({order: order[0].order_id, delivery: delivery})
+        } else {
+          console.log('delivery ', delivery, ' ya fue actualizado ', order[0].order_id)
         }
-        const orderId = await axios.get(url, config)
-        const lines = orderId.data.order.line_items.map(line => {return {id: line.id}})
-        // const line_items = order[0].line_items.map(item => {})
-        console.log(lines, delivery)
-        const result = await deliveryXiaomiUpdate({order: order[0].order_id, lines, delivery: delivery})
-        sendRequest(`${order[0].order_id}, actualizado ${delivery}`)
       }
     }
   } catch (error) {
@@ -86,3 +88,20 @@ module.exports = {
 }
 
 
+(
+'XIAOMI_1076',
+'XIAOMI_1077',
+'XIAOMI_1094',
+'XIAOMI_1096',
+'XIAOMI_1100',
+'XIAOMI_1101',
+'XIAOMI_1102',
+'XIAOMI_1104',
+'XIAOMI_1106',
+'XIAOMI_1108',
+'XIAOMI_1109',
+'XIAOMI_1111',
+'XIAOMI_1112',
+'XIAOMI_1116',
+'XIAOMI_1117',
+)

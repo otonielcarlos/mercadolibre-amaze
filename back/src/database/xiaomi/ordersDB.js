@@ -43,6 +43,12 @@ async function getShopifyOrderID(ingramOrder) {
 
   return rows
 }
+async function updateLimaTracking(order) {
+  let query =  `UPDATE shopify_xiaomi_orders SET tracking = '${order.delivery}' ingramOrder = '${order.ingramOrder}'`
+  const [rows] = await db.query(query)
+
+  return rows
+}
 
 module.exports = {
   isOrderInDB,
@@ -50,5 +56,6 @@ module.exports = {
   saveCompleteOrderInfo,
   updateIngramOrderNumber,
   updatefulfillmentBeetrack,
-getShopifyOrderID
+  getShopifyOrderID,
+  updateLimaTracking
 }
