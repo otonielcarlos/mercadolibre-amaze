@@ -1,6 +1,15 @@
 const orderService = require('../../services/xiaomi/ordersService')
 const {isOrderInDB, saveOrderInDB, getDBTracking} = require('../../database/xiaomi/ordersDB')
 
+async function getOrderWithShopifyId(req, res) {
+  try {
+    const {data} = await orderService.getOrderFromShopify(req.body)
+    res.status(200).send(data)
+  } catch (error) {
+    console.log(error)
+  } 
+}
+
 async function sendNewOrderXiaomi(req, res) {
   try {
     res.status(200).send()
@@ -42,5 +51,6 @@ async function getTrackingXiaomi(req, res) {
 
 module.exports = {
   sendNewOrderXiaomi,
-  getTrackingXiaomi
+  getTrackingXiaomi,
+  getOrderWithShopifyId
 }

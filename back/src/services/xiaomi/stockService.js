@@ -66,7 +66,6 @@ async function updateShopifyStock() {
   let delay = 500; // 500 ms de espera entre llamadas para no exceder 2 llamadas por segundo
 
   async function processItem(item) {
-    let updateUrlpublish = `https://xiaomistorepe.myshopify.com/admin/api/2022-04/variants/${item.variationid}.json`;
     try {
       const isPublished = Number(item.stock) > 0;
       let dataInventoryId = {
@@ -74,15 +73,10 @@ async function updateShopifyStock() {
         "inventory_item_id": item.inventory_id,
         "available": Number(item.stock),
       };
-      const dataPublish = {
-        "variant": {
-          "id": item.variationid,
-          "published": isPublished
-        }
-      };
 
-      const isUpdated = await axios.post(updateUrl, dataInventoryId, {headers: {'X-Shopify-Access-Token': SHOPIFY_ACCESS_TOKEN_XIAOMI}});
-      console.log(isUpdated.data.inventory_level.inventory_item_id, isUpdated.data.inventory_level.available);
+
+      await axios.post(updateUrl, dataInventoryId, {headers: {'X-Shopify-Access-Token': SHOPIFY_ACCESS_TOKEN_XIAOMI}});
+      // console.log(isUpdated.data.inventory_level.inventory_item_id, isUpdated.data.inventory_level.available);
     } catch (error) {
       console.log('not updating', item, error.response.data);
     }
@@ -167,30 +161,6 @@ async function getShopifyProducts(){
   }
 }
 
-//function to disable products out of stock in shopify
-// async function disableProducts(){
-//   try {
-//     const config = {
-//       headers: {
-
-//         'X-Shopify-Access-Token': SHOPIFY_ACCESS_TOKEN_XIAOMI,
-//         'Content-Type': 'application/json'
-//       }
-//     }
-//     const url = 'https://xiaomistorepe.myshopify.com/admin/api/2022-04/products.json?limit=250'
-//     const response = await axios.get(url, config)
-//     const products = response.data.products
-//     let shopifyProducts = []
-//     console.log(products.length)
-//     for(let product of products){
-//       const product_id = product.id
-//       const variant_id = product.variants[0].id
-
-
-// updateDBStock()
-// updateShopifyStock()
-// putPrices()
-// getShopifyProducts()
 module.exports = {
   updateDBStock, 
   updateShopifyStock
