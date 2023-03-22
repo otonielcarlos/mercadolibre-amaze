@@ -50,7 +50,15 @@ async function updateLimaTracking(order) {
   return rows
 }
 
+async function getDBTracking(customerpo) {
+  let query = `SELECT * FROM shopify_xiaomi_orders WHERE customerPo LIKE '%${customerpo}%'`
+  const [rows] = await db.query(query)
+
+  return rows[0]
+}
+
 module.exports = {
+  getDBTracking,
   isOrderInDB,
   saveOrderInDB,
   saveCompleteOrderInfo,

@@ -1,5 +1,5 @@
 const orderService = require('../../services/xiaomi/ordersService')
-const {isOrderInDB, saveOrderInDB} = require('../../database/xiaomi/ordersDB')
+const {isOrderInDB, saveOrderInDB, getDBTracking} = require('../../database/xiaomi/ordersDB')
 
 async function sendNewOrderXiaomi(req, res) {
   try {
@@ -26,6 +26,21 @@ async function sendNewOrderXiaomi(req, res) {
     console.log(error)
   }
 }
+
+
+async function getTrackingXiaomi(req, res) {
+  try {
+    const order = await getDBTracking(req.params.customerpo) 
+    if(typeof order === 'undefined') return res.status(404).send({orden: 'no encontrada'})
+    res.status(200).json(order)
+  } catch(error) {
+    console.log(error)
+  }
+}
+
+
+
 module.exports = {
-  sendNewOrderXiaomi
+  sendNewOrderXiaomi,
+  getTrackingXiaomi
 }

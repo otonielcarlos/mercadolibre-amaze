@@ -26,7 +26,7 @@ const { ordersFromLinioToIM,
     updateLinioOrderStatusFactura
  } = require('../../controllers/linio/ordersController')
 const { ordersFromFalabellaToIM } = require('../../controllers/falabella/ordersController')
-const { sendNewOrderXiaomi } = require('../../controllers/xiaomi/ordersController')
+const { sendNewOrderXiaomi, getTrackingXiaomi } = require('../../controllers/xiaomi/ordersController')
 
 //GET TODOS LAS ORDENES MERCADOLIBRE
 router.get('/mercadolibre/apple/all', getAllOrdersFromMercadolibreApple)
@@ -72,7 +72,13 @@ router.post('/asus/update', updateAsusOrderStatus)
 
 router.post('/asus/update/factura', updateAsusOrderStatusFactura)
 
+
+//XIAOMI
+
 router.post('/xiaomi/new', sendNewOrderXiaomi)
+
+router.get('/xiaomi/tracking/:customerpo', getTrackingXiaomi)
+
 
 module.exports = router
 
