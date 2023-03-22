@@ -38,7 +38,8 @@ router.get('/mercadolibre/apple/:orderid', orderFromMercadolibreWithID)
 router.post('/mercadolibre/apple', ordersFromMercadolibreToIM)
 
 // CALLBACK DE MERCADOLIBRE ORDENES
-// router.post('/mercadolibre/multimarcas', ordersFromMultiMarcasToIM)
+router.post('/mercadolibre/multimarcas', (req, res) => { console.log(req.body)
+    res.status(200).send() })
 
 // CALLBACK LINIO ORDENES
 router.post('/linio/new', ordersFromLinioToIM)
