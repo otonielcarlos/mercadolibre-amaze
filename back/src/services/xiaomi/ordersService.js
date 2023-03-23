@@ -76,8 +76,8 @@ async function getOrderFromShopify(body){
   }
     
     // console.log(data)
-    saveOrderInDB(id)
-    saveCompleteOrderInfo({...data, total_tienda: total, id: id, ...body, document_number: company, customerPo: customerOrder, phone, date: processed_at})
+    await saveOrderInDB(id)
+    await saveCompleteOrderInfo({...data, total_tienda: total, id: id, ...body, document_number: company, customerPo: customerOrder, phone, date: processed_at})
     console.log(JSON.stringify(data))
     return {data}
     }
