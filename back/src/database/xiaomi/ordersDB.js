@@ -38,7 +38,7 @@ async function updatefulfillmentBeetrack(order) {
 }
 
 async function getShopifyOrderID(ingramOrder) {
-  let query =  `SELECT order_id FROM shopify_xiaomi_orders WHERE ingramOrder = '${ingramOrder}'`
+  let query =  `SELECT * FROM shopify_xiaomi_orders WHERE ingramOrder = '${ingramOrder}'`
   const [rows] = await db.query(query)
 
   return rows
