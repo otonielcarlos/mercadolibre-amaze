@@ -44,7 +44,7 @@ async function getShopifyOrderID(ingramOrder) {
   return rows
 }
 async function updateLimaTracking(order) {
-  let query =  `UPDATE shopify_xiaomi_orders SET tracking = '${order.delivery}' ingramOrder = '${order.ingramOrder}'`
+  let query =  `UPDATE shopify_xiaomi_orders SET tracking_number = '${order.delivery}', fullfilment_id = '${order.fullfilment}' WHERE ingramOrder = '${order.ingramOrder}'`
   const [rows] = await db.query(query)
 
   return rows

@@ -131,7 +131,7 @@ async function getOrderFromShopify(body){
       }   
   }
   try {
-    console.log(data)
+    // console.log(data)
     const updateData = await axios.post(url, data, config)
     return updateData.data
   } catch (error) {

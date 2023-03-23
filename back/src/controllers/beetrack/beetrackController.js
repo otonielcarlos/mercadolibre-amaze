@@ -38,7 +38,8 @@ async function getDelivery(req, res) {
         const ingramOrder = tags.find(tag => tag.name === "Nota de venta").value
         const delivery = tags.find(tag => tag.name === "Delivery").value
         const order = await getShopifyOrderID(ingramOrder)
-        if(order[0].tracking.length === 0) {
+        console.log(order)
+        if(order[0].tracking_number === null) {
           const url = `https://xiaomistorepe.myshopify.com/admin/api/2022-04/orders/${order[0].order_id}.json`
           const config = {
             headers:{
@@ -48,8 +49,9 @@ async function getDelivery(req, res) {
           const orderId = await axios.get(url, config)
           const lines = orderId.data.order.line_items.map(line => {return {id: line.id}})
           const result = await deliveryXiaomiUpdate({order: order[0].order_id, lines, delivery: delivery})
-          sendRequest(`${order[0].order_id}, actualizado ${delivery}`)
-          updateLimaTracking({order: order[0].order_id, delivery: delivery})
+          // res.status(200).json(result)
+          // sendRequest(`${order[0].order_id}, actualizado ${delivery}`)
+          updateLimaTracking({ingramOrder: ingramOrder, delivery: delivery, fullfilment: result.fulfillment.id})
         } else {
           console.log('delivery ', delivery, ' ya fue actualizado ', order[0].order_id)
         }
@@ -86,4 +88,3 @@ module.exports = {
   getDelivery,
   completeDelivery
 }
-
