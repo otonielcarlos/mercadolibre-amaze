@@ -38,7 +38,7 @@ async function getDelivery(req, res) {
         const ingramOrder = tags.find(tag => tag.name === "Nota de venta").value
         const delivery = tags.find(tag => tag.name === "Delivery").value
         const order = await getShopifyOrderID(ingramOrder)
-        console.log(order)
+        // console.log(order)
         if(order[0].tracking_number === null) {
           const url = `https://xiaomistorepe.myshopify.com/admin/api/2022-04/orders/${order[0].order_id}.json`
           const config = {
@@ -88,3 +88,36 @@ module.exports = {
   getDelivery,
   completeDelivery
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
